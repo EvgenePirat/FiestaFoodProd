@@ -47,8 +47,7 @@ namespace Business.Services
         {
             var userInfoToUpdate = await _unitOfWork.CustomerInfoRepository.GetCustomerInfoById(model.Id, ct)
                                    ?? throw new CustomerInfoArgumentException("Customer Info with this id not exist");
-
-            userInfoToUpdate.City = model.City;
+            
             userInfoToUpdate.Address = model.Address;
             userInfoToUpdate.PhoneNumber = model.PhoneNumber;
 

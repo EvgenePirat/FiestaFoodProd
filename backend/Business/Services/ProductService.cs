@@ -1,14 +1,10 @@
-﻿using System.Diagnostics;
-using AutoMapper;
-using Business.CustomExceptions;
+﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Models.Dishes;
 using Business.Models.Filter;
 using Business.Models.Pagination;
-using Business.Models.Products;
-using CustomExceptions.BrandCustomExceptions;
 using CustomExceptions.CategoryCustomExceptions;
-using CustomExceptions.FileCustomExceptions;
-using CustomExceptions.ProviderCustomExceptions;
+using CustomExceptions.DishCustomExceptions;
 using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
@@ -16,14 +12,14 @@ using FileStorageHandler.Interfaces;
 
 namespace Business.Services
 {
-    public class ProductService : IProductService
+    public class DishService : IDishService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
 
-        public ProductService(IUnitOfWork unitOfWork,IMapper mapper, IDirectoryService directoryService, IFileService fileService)
+        public DishService(IUnitOfWork unitOfWork,IMapper mapper, IDirectoryService directoryService, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -31,156 +27,135 @@ namespace Business.Services
             _fileService = fileService;
         }
 
-        public async Task<ProductModel> AddProductAsync(AddProductModel model, CancellationToken ct)
+        public async Task<DishModel> AddDishAsync(AddDishModel model, CancellationToken ct)
         {
-            var mappedModel = await CheckProductEntityExist(model, ct);
+            var mappedModel = await CheckDishEntityExist(model, ct);
 
-            // Initialize default defaultPath for product
+            // Initialize default defaultPath for Dish
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
             // Create a folders by path
             await _directoryService.CreateFolderAsync(defaultPath, ct);
 
             mappedModel.PhotoPaths = defaultPath;
-            _unitOfWork.ProductRepository.Add(mappedModel);
+            _unitOfWork.DishRepository.Add(mappedModel);
 
             await _unitOfWork.SaveAsync(ct);
 
             if (model.Files is not null && model.Files.Any())
                 await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
-            return _mapper.Map<ProductModel>(mappedModel);
+            return _mapper.Map<DishModel>(mappedModel);
         }
 
         /// <summary>
-        /// Implementation business logic for get product with id
+        /// Implementation business logic for get Dish with id
         /// </summary>
         /// <param name="id">Id for search in bd</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Returns product if exist or throw exception</returns>
-        /// <exception cref="ProductArgumentException">If product not found</exception>
-        public async Task<ProductModel> GetProductByIdAsync(Guid id, CancellationToken ct)
+        /// <returns>Returns Dish if exist or throw exception</returns>
+        /// <exception cref="DishArgumentException">If Dish not found</exception>
+        public async Task<DishModel> GetDishByIdAsync(int id, CancellationToken ct)
         {
-            var product = await _unitOfWork.ProductRepository.GetProductById(id, ct)
-                          ?? throw new ProductArgumentException("Product with this id not found");
-            var mappedProduct = _mapper.Map<ProductModel>(product);
-            return mappedProduct;
+            var Dish = await _unitOfWork.DishRepository.GetDishById(id, ct)
+                          ?? throw new DishArgumentException("Dish with this id not found");
+            var mappedDish = _mapper.Map<DishModel>(Dish);
+            return mappedDish;
         }
 
-        public async Task<PagedProductModel> GetProductsByCategoryAsync(int categoryId, PaginationModel model, CancellationToken ct)
+        public async Task<PagedDishModel> GetDishesByCategoryAsync(int categoryId, PaginationModel model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<PaginationDb>(model);
-            var result = await _unitOfWork.ProductRepository.GetProductByCategory(categoryId, mappedModel, ct);
+            var result = await _unitOfWork.DishRepository.GetDishByCategory(categoryId, mappedModel, ct);
 
-            return new PagedProductModel
+            return new PagedDishModel
             {
-                Products = _mapper.Map<IEnumerable<ProductModel>>(result.Result),
+                Dishes = _mapper.Map<IEnumerable<DishModel>>(result.Result),
                 TotalPages = result.TotalPages,
             };
         }
 
-        public async Task<PagedProductModel> GetFilteredProductsAsync(FilterModel filter, CancellationToken ct)
+        public async Task<PagedDishModel> GetFilteredDishesAsync(FilterModel filter, CancellationToken ct)
         {
             var mappedFilter = _mapper.Map<FilterState>(filter);
-            var result = await _unitOfWork.ProductRepository.GetProductsByQueryAsync(mappedFilter, ct);
+            var result = await _unitOfWork.DishRepository.GetDishesByQueryAsync(mappedFilter, ct);
             
-            return new PagedProductModel
+            return new PagedDishModel
             {
-                Products = _mapper.Map<IEnumerable<ProductModel>>(result.Result),
+                Dishes = _mapper.Map<IEnumerable<DishModel>>(result.Result),
                 TotalPages = result.TotalPages
             };
         }
 
-        public async Task<ProductModel> UpdateProductAsync(UpdateProductModel model, CancellationToken ct)
+        public async Task<DishModel> UpdateDishAsync(UpdateDishModel model, CancellationToken ct)
         {
-            var productToUpdate = await CheckProductEntityExist(model, ct);
-            var productName = productToUpdate.Name;
-            var defaultPath = string.IsNullOrEmpty(productToUpdate.PhotoPaths)
-                ? await _directoryService.GetDefaultPathAsync(productToUpdate, ct)
-                : productToUpdate.PhotoPaths;
+            var dishToUpdate = await CheckDishEntityExist(model, ct);
+            var dishName = dishToUpdate.Name;
+            var defaultPath = string.IsNullOrEmpty(dishToUpdate.PhotoPaths)
+                ? await _directoryService.GetDefaultPathAsync(dishToUpdate, ct)
+                : dishToUpdate.PhotoPaths;
 
-            if (productToUpdate.Name != model.Name)
+            if (dishToUpdate.Name != model.Name)
             {
                 await _directoryService.RenameFolderAsync(defaultPath, model.Name, ct);
-                productToUpdate.Name = model.Name;
+                dishToUpdate.Name = model.Name;
 
-                // Get new default path for product
-                defaultPath = await _directoryService.GetDefaultPathAsync(productToUpdate, ct);
+                // Get new default path for Dish
+                defaultPath = await _directoryService.GetDefaultPathAsync(dishToUpdate, ct);
                 if (string.IsNullOrEmpty(defaultPath))
                     throw new DirectoryNotFoundException("Exception with directory (not found)");
-                productToUpdate.PhotoPaths = defaultPath;
+                dishToUpdate.PhotoPaths = defaultPath;
             }
 
-            productToUpdate.Description = model.Description;
-            productToUpdate.Price = model.Price;
-            productToUpdate.CategoryId = model.CategoryId;
-            productToUpdate.ProviderId = model.ProviderId;
-            productToUpdate.BrandId = model.BrandId;
+            dishToUpdate.Description = model.Description;
+            dishToUpdate.Price = model.Price;
+            dishToUpdate.CategoryId = model.CategoryId;
 
             try
             {
-                _unitOfWork.ProductRepository.Update(productToUpdate);
+                _unitOfWork.DishRepository.Update(dishToUpdate);
                 await _unitOfWork.SaveAsync(ct);
                 if (model.Files is not null && model.Files.Any())
                     await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
             }
             catch
             {
-                if (productToUpdate.Name != model.Name)
-                    await _directoryService.RenameFolderAsync(defaultPath, productName, ct);
-                throw new ProviderArgumentException("An error occurred while updating the product.");
+                if (dishToUpdate.Name != model.Name)
+                    await _directoryService.RenameFolderAsync(defaultPath, dishName, ct);
+                throw new DishArgumentException("An error occurred while updating the Dish.");
             }
 
-            return _mapper.Map<ProductModel>(productToUpdate);;
+            return _mapper.Map<DishModel>(dishToUpdate);;
         }
 
-        public async Task DeleteProductByIdAsync(Guid id, CancellationToken ct)
+        public async Task DeleteDishByIdAsync(int id, CancellationToken ct)
         {
-            var product = await _unitOfWork.ProductRepository.GetProductById(id, ct)
-                        ?? throw new ProductArgumentException("Product with this id not found");
-            _unitOfWork.ProductRepository.Delete(product);
+            var Dish = await _unitOfWork.DishRepository.GetDishById(id, ct)
+                        ?? throw new DishArgumentException("Dish with this id not found");
+            _unitOfWork.DishRepository.Delete(Dish);
 
-            await _directoryService.DeleteFolderByPathAsync(product.PhotoPaths, ct);
+            await _directoryService.DeleteFolderByPathAsync(Dish.PhotoPaths, ct);
 
             await _unitOfWork.SaveAsync(ct);
         }
 
-        private async Task<Product> CheckProductEntityExist(AddProductModel model, CancellationToken ct)
+        private async Task<Dish> CheckDishEntityExist(AddDishModel model, CancellationToken ct)
         {
-            var mappedModel = _mapper.Map<Product>(model);
-
-            if (model.ProviderId is not null)
-                mappedModel.Provider = await _unitOfWork.ProviderRepository.GetByIdAsync((Guid)model.ProviderId, ct) ??
-                                       throw new ProviderArgumentException($"Provider with this {model.ProviderId} not exist");
-
-            if (model.BrandId is not null)
-                mappedModel.Brand = await _unitOfWork.BrandRepository.GetById((Guid)model.BrandId, ct)
-                                    ?? throw new BrandArgumentException($"Brand with this {model.BrandId} not exist");
+            var mappedModel = _mapper.Map<Dish>(model);
 
             mappedModel.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
-                           ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
+                                   ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
 
             return mappedModel;
         }
 
-        private async Task<Product> CheckProductEntityExist(UpdateProductModel model, CancellationToken ct)
+        private async Task<Dish> CheckDishEntityExist(UpdateDishModel model, CancellationToken ct)
         {
-            var product = await _unitOfWork.ProductRepository.GetProductById(model.Id, ct)
-                                  ?? throw new ProductArgumentException("Product with this id not found");
-            if (model.ProviderId is not null)
-            {
-                product.Provider = await _unitOfWork.ProviderRepository.GetByIdAsync((Guid)model.ProviderId, ct) ??
-                                 throw new ProviderArgumentException($"Provider with this {model.ProviderId} not exist");
-            }
+            var Dish = await _unitOfWork.DishRepository.GetDishById(model.Id, ct)
+                                  ?? throw new DishArgumentException("Dish with this id not found");
 
-            if (model.BrandId is not null)
-            {
-                product.Brand = await _unitOfWork.BrandRepository.GetById((Guid)model.BrandId, ct)
-                              ?? throw new BrandArgumentException($"Brand with this {model.BrandId} not exist");
-            }
+            Dish.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
+                            ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
 
-            product.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
-                           ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
-
-            return product;
+            return Dish;
         }
     }
 }

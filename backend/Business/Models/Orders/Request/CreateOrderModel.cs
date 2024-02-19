@@ -8,6 +8,6 @@ namespace Business.Models.Orders.Request
         public Guid? CustomerInfoId { get; set; }
         public CreateCustomerInfoModel? CustomerInfo { get; set; }
         public CreateOrderDetailModel OrderDetail { get; set; }
-        public IEnumerable<Guid> ProductIds { get; set; }
+        public IEnumerable<int> ProductIds { get; set; }
     }
 }

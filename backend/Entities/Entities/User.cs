@@ -8,7 +8,6 @@ namespace Entities.Entities
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
-
         [StringLength(30, MinimumLength = 8)]
         public string Password { get; set; }
         public Role Role { get; set; }

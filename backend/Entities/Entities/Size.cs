@@ -2,8 +2,9 @@
 {
     public class Size
     {
-        public ulong Id { get; set; }
-        public string ProductType { get; set; }
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+        public string SizeName { get; set; }
     }
 }

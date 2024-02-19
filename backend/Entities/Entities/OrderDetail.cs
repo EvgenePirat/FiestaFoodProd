@@ -8,7 +8,7 @@ namespace Entities.Entities
         public Guid Id { get; set; }
         public OrderState OrderState { get; set; }
         public bool IsPaid { get; set; }
-        //public Guid PaymentInfoId { get; set; }
-        //public virtual PaymentInfo PaymentInfo { get; set; }
+        public Guid PaymentInfoId { get; set; }
+        public PaymentInfo PaymentInfo { get; set; }
     }
 }

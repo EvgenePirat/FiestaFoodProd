@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Business.Models.Dishes;
 using Business.Models.Pagination;
-using Business.Models.Products;
+using WebApi.Models.DishesDto.Request;
+using WebApi.Models.DishesDto.Response;
 using WebApi.Models.PaginationsDto;
-using WebApi.Models.ProductsDto.Request;
-using WebApi.Models.ProductsDto.Response;
 
 namespace WebApi.Mappers
 {
@@ -11,11 +11,11 @@ namespace WebApi.Mappers
     {
         public ProductDtoProfile()
         {
-            CreateMap<AddProductDto, AddProductModel>();
-            CreateMap<ProductModel, ProductDto>();
+            CreateMap<AddDishDto, AddDishModel>();
+            CreateMap<DishModel, DishDto>();
             CreateMap<PaginationDto, PaginationModel>();
-            CreateMap<UpdateProductDto, UpdateProductModel>();
-            CreateMap<PagedProductModel, PagedProductDto>();
+            CreateMap<UpdateDishDto, UpdateDishModel>();
+            CreateMap<PagedDishModel, PagedDishDto>();
         }
     }
 }

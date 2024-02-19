@@ -12,10 +12,8 @@ namespace Business.DependencyResolvers
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ProductService>().As<IProductService>();
+            builder.RegisterType<DishService>().As<IDishService>();
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
-            builder.RegisterType<BrandService>().As<IBrandService>();
-            builder.RegisterType<ProviderService>().As<IProviderService>();
             builder.RegisterType<CategoryService>().As<ICategoryService>();
             builder.RegisterType<CustomerInfoService>().As<ICustomerInfoService>();
             builder.RegisterType<UserService>().As<IUserService>();

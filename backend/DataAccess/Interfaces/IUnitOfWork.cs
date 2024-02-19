@@ -4,9 +4,7 @@ namespace DataAccess.Interfaces
 {
     public interface IUnitOfWork
     {
-        IProductRepository ProductRepository { get; }
-        IBrandRepository BrandRepository { get; }
-        IProviderRepository ProviderRepository { get; }
+        IDishRepository DishRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         ICustomerInfoRepository CustomerInfoRepository { get; }
         IUserRepository UserRepository { get; }

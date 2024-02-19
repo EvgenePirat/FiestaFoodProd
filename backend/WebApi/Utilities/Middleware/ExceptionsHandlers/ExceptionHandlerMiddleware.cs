@@ -1,12 +1,8 @@
 ﻿using System.Net;
-using Business.CustomExceptions;
-using CustomExceptions.BrandCustomExceptions;
 using CustomExceptions.CustomerInfoCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using CustomExceptions.OrderDetailCustomExceptions;
-using CustomExceptions.ProviderCustomExceptions;
 using CustomExceptions.UserCustomException;
-using Entities.Entities;
 
 namespace WebApi.Utilities.Middleware.ExceptionsHandlers
 {
@@ -43,10 +39,7 @@ namespace WebApi.Utilities.Middleware.ExceptionsHandlers
                 KeyNotFoundException _ => new ExceptionResponse(HttpStatusCode.NotFound, "The request key not found."),
                 UnauthorizedAccessException _ => new ExceptionResponse(HttpStatusCode.Unauthorized, "Unauthorized."),
                 CustomerInfoArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
-                BrandArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
                 UserArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
-                ProductArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
-                ProviderArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
                 OperationCanceledException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderDetailArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),

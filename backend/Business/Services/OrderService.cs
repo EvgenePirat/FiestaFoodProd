@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.CustomerInfos.Request;
 using Business.Models.Filter;
-using Business.Models.OrderDetails.Request;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
 using CustomExceptions.CustomerInfoCustomException;
@@ -47,8 +45,8 @@ namespace Business.Services
                 order.OrderDetail = orderDetail;
                 order.OrderDetail.OrderState = OrderState.Pending;
 
-                order.Products = await GetOrderProductsAsync(model.ProductIds, ct);
-                order.Price = order.Products.Sum(pr => pr.Price);
+                order.Dishes = await GetOrderDishesAsync(model.ProductIds, ct);
+                order.Price = order.Dishes.Sum(pr => pr.Price);
 
                 _unitOfWork.OrderRepository.Add(order);
                 await _unitOfWork.SaveAsync(ct);
@@ -87,8 +85,8 @@ namespace Business.Services
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
                             ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
 
-                order.Products = await GetOrderProductsAsync(model.ProductIds, ct);
-                order.Price = order.Products.Sum(pr => pr.Price);
+                order.Dishes = await GetOrderDishesAsync(model.ProductIds, ct);
+                order.Price = order.Dishes.Sum(pr => pr.Price);
 
                 if (model.CustomerInfo is not null)
                 {
@@ -121,9 +119,9 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
         }
 
-        private async Task<IEnumerable<Product>> GetOrderProductsAsync(IEnumerable<Guid> productIds, CancellationToken ct)
+        private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> productIds, CancellationToken ct)
         {
-            var products = await _unitOfWork.ProductRepository.GetProductsByIds(productIds, ct)
+            var products = await _unitOfWork.DishRepository.GetDishesByIds(productIds, ct)
                            ?? throw new OrderArgumentException($"Products with ids: {string.Join(", ", productIds)} not exist");
 
             var existingProductIds = products.Select(pr => pr.Id);

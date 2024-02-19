@@ -125,10 +125,9 @@ namespace FileStorageHandler.Services
                         await CreateFolderAsync(path, ct);
                     return path;
                 }
-                case Product product:
+                case Dish product:
                 {
-                    var path = product.Color is not null ? Path.Combine(_projectDirectory, "Products", product.Name, product.Color.ColorName) 
-                        : Path.Combine("Products", product.Name);
+                    var path = Path.Combine(_projectDirectory, "Products", product.Name);
                     if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                         await CreateFolderAsync(path, ct);
                     return path;

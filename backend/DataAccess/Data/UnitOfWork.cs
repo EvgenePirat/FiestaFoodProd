@@ -12,17 +12,9 @@ namespace DataAccess.Data
             _context = context;
         }
 
-        private IProductRepository _productRepository;
-        public IProductRepository ProductRepository =>
-            _productRepository ??= new ProductRepository(_context);
-
-        private IBrandRepository _brandRepository;
-        public IBrandRepository BrandRepository =>
-            _brandRepository ??= new BrandRepository(_context);
-
-        private IProviderRepository _providerRepository;
-        public IProviderRepository ProviderRepository =>
-            _providerRepository ??= new ProviderRepository(_context);
+        private IDishRepository _dishRepository;
+        public IDishRepository DishRepository =>
+            _dishRepository ??= new DishRepository(_context);
 
         private ICategoryRepository _categoryRepository;
         public ICategoryRepository CategoryRepository => 

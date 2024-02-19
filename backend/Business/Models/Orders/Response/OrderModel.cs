@@ -1,6 +1,6 @@
 ﻿using Business.Models.CustomerInfos.Response;
+using Business.Models.Dishes;
 using Business.Models.OrderDetails.Response;
-using Business.Models.Products;
 
 namespace Business.Models.Orders.Response
 {
@@ -10,6 +10,6 @@ namespace Business.Models.Orders.Response
         public CustomerInfoModel CustomerInfo { get; set; }
         public double Price { get; set; }
         public OrderDetailModel OrderDetail { get; set; }
-        public IEnumerable<ProductModel> Products { get; set; }
+        public IEnumerable<DishModel> Products { get; set; }
     }
 }
