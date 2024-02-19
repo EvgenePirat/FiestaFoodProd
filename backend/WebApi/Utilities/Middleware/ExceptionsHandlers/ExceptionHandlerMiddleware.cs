@@ -1,0 +1,61 @@
+﻿using System.Net;
+using Business.CustomExceptions;
+using CustomExceptions.BrandCustomExceptions;
+using CustomExceptions.CustomerInfoCustomException;
+using CustomExceptions.OrderCustomExceptions;
+using CustomExceptions.OrderDetailCustomExceptions;
+using CustomExceptions.ProviderCustomExceptions;
+using CustomExceptions.UserCustomException;
+using Entities.Entities;
+
+namespace WebApi.Utilities.Middleware.ExceptionsHandlers
+{
+    public class ExceptionHandlerMiddleware
+    {
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlerMiddleware> _logger;
+
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
+        {
+            _next = next;
+            _logger = logger;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(context, ex);
+            }
+        }
+
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            _logger.LogError(exception, "An unexpected error occurred.");
+
+            var response = exception switch
+            {
+                ApplicationException _ => new ExceptionResponse(HttpStatusCode.BadRequest, "Application exception occurred."),
+                KeyNotFoundException _ => new ExceptionResponse(HttpStatusCode.NotFound, "The request key not found."),
+                UnauthorizedAccessException _ => new ExceptionResponse(HttpStatusCode.Unauthorized, "Unauthorized."),
+                CustomerInfoArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                BrandArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                UserArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                ProductArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                ProviderArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                OperationCanceledException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
+                OrderArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
+                OrderDetailArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
+                _ => new ExceptionResponse(HttpStatusCode.InternalServerError, "Internal server error. Please retry later.")
+            }; ;
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)response.StatusCode;
+            await context.Response.WriteAsJsonAsync(response);
+        }
+    }
+}
