@@ -36,6 +36,11 @@ namespace DataAccess.Data
         public IOrderDetailRepository OrderDetailRepository => 
             _orderDetailRepository ??= new OrderDetailRepository(_context);
 
+        private IIngredientsRepository _ingredientsRepository;
+        public IIngredientsRepository IngredientsRepository =>
+            _ingredientsRepository ??= new IngredientsRepository(_context);
+        
+
         public async Task SaveAsync(CancellationToken ct)
         {
             await _context.SaveChangesAsync(cancellationToken: ct);

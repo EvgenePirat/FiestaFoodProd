@@ -6,6 +6,6 @@ namespace Business.Models.Orders.Request
     {
         public Guid Id { get; set; }
         public UpdateCustomerInfoModel? CustomerInfo { get; set; }
-        public IEnumerable<int> ProductIds { get; set; }
+        public IEnumerable<int> DishesId { get; set; }
     }
 }

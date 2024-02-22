@@ -37,6 +37,7 @@ namespace Business.Services
             await _directoryService.CreateFolderAsync(defaultPath, ct);
 
             mappedModel.PhotoPaths = defaultPath;
+
             _unitOfWork.DishRepository.Add(mappedModel);
 
             await _unitOfWork.SaveAsync(ct);
@@ -149,13 +150,13 @@ namespace Business.Services
 
         private async Task<Dish> CheckDishEntityExist(UpdateDishModel model, CancellationToken ct)
         {
-            var Dish = await _unitOfWork.DishRepository.GetDishById(model.Id, ct)
+            var dish = await _unitOfWork.DishRepository.GetDishById(model.Id, ct)
                                   ?? throw new DishArgumentException("Dish with this id not found");
 
-            Dish.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
+            dish.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
                             ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
 
-            return Dish;
+            return dish;
         }
     }
 }

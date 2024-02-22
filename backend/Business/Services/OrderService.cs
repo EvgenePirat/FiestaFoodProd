@@ -45,7 +45,7 @@ namespace Business.Services
                 order.OrderDetail = orderDetail;
                 order.OrderDetail.OrderState = OrderState.Pending;
 
-                order.Dishes = await GetOrderDishesAsync(model.ProductIds, ct);
+                order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
                 order.Price = order.Dishes.Sum(pr => pr.Price);
 
                 _unitOfWork.OrderRepository.Add(order);
@@ -85,7 +85,7 @@ namespace Business.Services
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
                             ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
 
-                order.Dishes = await GetOrderDishesAsync(model.ProductIds, ct);
+                order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
                 order.Price = order.Dishes.Sum(pr => pr.Price);
 
                 if (model.CustomerInfo is not null)
@@ -119,20 +119,29 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
         }
 
-        private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> productIds, CancellationToken ct)
+        private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> dishIds, CancellationToken ct)
         {
-            var products = await _unitOfWork.DishRepository.GetDishesByIds(productIds, ct)
-                           ?? throw new OrderArgumentException($"Products with ids: {string.Join(", ", productIds)} not exist");
+            var dishes = await _unitOfWork.DishRepository.GetDishesByIds(dishIds, ct)
+                           ?? throw new OrderArgumentException($"dishes with ids: {string.Join(", ", dishIds)} not exist");
 
-            var existingProductIds = products.Select(pr => pr.Id);
-            var nonExistentProductIds = productIds.Except(existingProductIds);
+            var ingredients  = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
 
-            if (nonExistentProductIds.Any())
+            foreach (var dish in dishes)
             {
-                throw new OrderArgumentException($"Products with ids: {string.Join(", ", nonExistentProductIds)} not exist");
+                SubtractIngredients(ingredients, dish.DishIngredients);
             }
 
-            return products;
+            await _unitOfWork.IngredientsRepository.UpdateIngredients(ingredients, ct);
+
+            var existingDishesIds = dishes.Select(pr => pr.Id);
+            var nonExistDishesIds = dishIds.Except(existingDishesIds);
+
+            if (nonExistDishesIds.Any())
+            {
+                throw new OrderArgumentException($"dishes with ids: {string.Join(", ", nonExistDishesIds)} not exist");
+            }
+
+            return dishes;
         }
 
         private async Task<CustomerInfo> GetOrderCustomerInfo(CreateOrderModel model, CancellationToken ct)
@@ -151,6 +160,22 @@ namespace Business.Services
             }
 
             throw new OrderArgumentException("Missing required customer information");
+        }
+
+        private static void SubtractIngredients(IEnumerable<Ingredient> ingredients1,
+            IEnumerable<Ingredient> ingredients2)
+        {
+            var ingredientDict1 = ingredients1.ToDictionary(i => i.Name);
+            var ingredientDict2 = ingredients2.ToDictionary(i => i.Name);
+
+            // Subtracting kilograms from ingredients1 using ingredients2
+            foreach (var kvp in ingredientDict2)
+            {
+                if (ingredientDict1.TryGetValue(kvp.Key, out var ingredient))
+                {
+                    ingredient.Kilograms -= kvp.Value.Kilograms;
+                }
+            }
         }
     }
 }

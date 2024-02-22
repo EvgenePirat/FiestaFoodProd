@@ -21,7 +21,8 @@ public partial class StContext : DbContext
     public DbSet<Ingredient> Ingredients { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<CustomerInfo> CustomerInfos { get; set; }
-    public DbSet<Size> Sizes { get; set; }
+    public DbSet<PaymentInfo> PaymentInfos { get; set; }
+    public DbSet<Quantity> Quantities { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
