@@ -1,11 +1,7 @@
-import styles from './App.module.scss';
+import Routing from './routing/Routing';
 
 function App() {
-  return (
-    <div className={styles['block']}>
-      <h1 className={styles['title']}>FiestaFood</h1>
-    </div>
-  );
+  return <Routing />;
 }
 
 export default App;

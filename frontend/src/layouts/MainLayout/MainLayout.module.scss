@@ -1,0 +1,21 @@
+.main-block {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header,
+.footer {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #000000;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.main {
+  flex: 1;
+}
