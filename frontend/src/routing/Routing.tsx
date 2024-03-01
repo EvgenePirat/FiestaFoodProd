@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { RootState } from '../redux/store';
 import { MainLayout } from '../layouts';
 
 export default function Routing() {
-  const [isAuth, setIsAuth] = useState(false);
+  const isAuth = useSelector((state: RootState) => state.authSlice.isAuth);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout setIsAuth={setIsAuth} />}>
+        <Route path="/" element={<MainLayout />}>
           {isAuth ? (
             <Route path="/" element={<h1>Auth</h1>} />
           ) : (
