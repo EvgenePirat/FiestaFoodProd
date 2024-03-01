@@ -1,13 +1,11 @@
-import styles from './App.module.scss'
+import styles from './App.module.scss';
 
 function App() {
   return (
     <div className={styles['block']}>
-      <h1 className={styles['title']}>
-        FiestaFood
-      </h1>
+      <h1 className={styles['title']}>FiestaFood</h1>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
