@@ -1,4 +1,6 @@
-import {useCallback, useState} from "react";
+import {useCallback, useState} from 'react';
+
+import {Button} from '../../components';
 
 import styles from './AuthPage.module.scss';
 
@@ -25,7 +27,7 @@ export default function AuthPage() {
                     <input type="password" className={styles['input']}
                            onChange={e => setPassword(e.target.value)} required/>
                 </div>
-                <button className={styles['btn-auth']} onClick={() => handleAuth()}>Увійти</button>
+                <Button onClick={() => handleAuth()}>Увійти</Button>
             </div>
         </div>
     );
