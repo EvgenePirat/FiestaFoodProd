@@ -7,8 +7,9 @@
   padding: 1rem 3rem;
   color: #520383;
   background-color: #FAD00A;
+  transition: background-color .3s ease;
 
   &:hover {
-    background-color: #BB9A0CFF;
+    background-color: #f5d56c;
   }
 }
