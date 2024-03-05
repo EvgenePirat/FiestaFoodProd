@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 
-import {Button} from '../../components';
+import {Button, Input} from '../../components';
 
 import styles from './AuthPage.module.scss';
 
@@ -11,6 +11,8 @@ export default function AuthPage() {
     const handleAuth = useCallback(() => {
         //TODO: Make request to post auth data
         console.log("Submit auth data");
+        setPhoneNumber('');
+        setPassword('');
     }, []);
 
     return (
@@ -19,12 +21,12 @@ export default function AuthPage() {
                 <h1 className={styles['h1']}>Авторизація</h1>
                 <div className={styles['input-block']}>
                     <label className={styles['label']}>Номер телефону:</label>
-                    <input type="text" className={styles['input']}
+                    <Input type="text" value={phoneNumber}
                            onChange={e => setPhoneNumber(e.target.value)} required/>
                 </div>
                 <div className={styles['input-block']}>
                     <label className={styles['label']}>Пароль:</label>
-                    <input type="password" className={styles['input']}
+                    <Input type="password" value={password}
                            onChange={e => setPassword(e.target.value)} required/>
                 </div>
                 <Button onClick={() => handleAuth()}>Увійти</Button>
