@@ -2,8 +2,9 @@ import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from '../../redux/authSlice.ts';
+import { phoneMask, phonePlaceholder } from '../../data/masks.ts';
 
-import { Button, Input } from '../../components';
+import { Button, Input, InputWithMask } from '../../components';
 
 import styles from './AuthPage.module.scss';
 
@@ -31,10 +32,12 @@ export default function AuthPage() {
         <h1 className={styles['h1']}>Авторизація</h1>
         <div className={styles['input-block']}>
           <label className={styles['label']}>Номер телефону:</label>
-          <Input
-            type="text"
+          <InputWithMask
+            type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
+            mask={phoneMask}
+            placeholder={phonePlaceholder}
             required
           />
         </div>
