@@ -1,3 +1,5 @@
+@import "../../scss/variables.scss";
+
 .button {
   cursor: pointer;
   border-radius: 10px;
@@ -5,11 +7,15 @@
   font-size: 1.6rem;
   font-weight: bold;
   padding: 1rem 3rem;
-  color: #520383;
-  background-color: #FAD00A;
+  color: $colorPrimary;
+  background-color: $colorSecondary;
   transition: background-color .3s ease;
 
   &:hover {
-    background-color: #f5d56c;
+    background-color: $colorSecondaryHover;
+  }
+
+  &:active {
+    background-color: $colorSecondaryActive;
   }
 }
