@@ -1,4 +1,5 @@
 import Button from './Button/Button.tsx';
 import Input from './Input/Input.tsx';
+import InputWithMask from './InputWithMask/InputWithMask.tsx';
 
-export {Button, Input};
+export { Button, Input, InputWithMask };
