@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RootState } from '../redux/store';
 import { MainLayout } from '../layouts';
-import { AuthPage } from '../pages';
+import { AuthPage, CreateOrderPage } from '../pages';
 
 export default function Routing() {
   const isAuth = useSelector((state: RootState) => state.authSlice.isAuth);
@@ -12,7 +12,7 @@ export default function Routing() {
       <Routes>
         {isAuth ? (
           <Route path="/" element={<MainLayout />}>
-            <Route path="/" element={<h1>No Auth</h1>} />
+            <Route path="/" element={<CreateOrderPage />} />
           </Route>
         ) : (
           <>
