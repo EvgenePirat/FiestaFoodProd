@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { clearOrder, createOrder } from '../../../../redux/ordersSlice';
@@ -21,8 +21,6 @@ export default function AsideBar() {
       }, 0),
     [order, products]
   );
-
-  useEffect(() => console.log(order), [order]);
 
   const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [sum]);
 
