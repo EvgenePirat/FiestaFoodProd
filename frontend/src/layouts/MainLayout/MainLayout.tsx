@@ -11,7 +11,6 @@ export default function MainLayout() {
       <main className={styles['main']}>
         <Outlet />
       </main>
-      <div className={styles['footer']}>Footer. Click to get false.</div>
     </div>
   );
 }
