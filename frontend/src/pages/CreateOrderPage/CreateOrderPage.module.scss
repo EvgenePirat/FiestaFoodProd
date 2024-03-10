@@ -1,3 +1,5 @@
+@import "../../scss/variables.scss";
+
 .page-block {
   display: flex;
   flex: 1;
@@ -5,10 +7,31 @@
 }
 
 .aside {
-  width: 500px;
+  width: 700px;
   background-color: #FFFFFF;
 }
 
-.list {
+.list-block {
   flex: 1;
+  padding: 60px 50px;
+  position: relative;
+}
+
+.p-title {
+  position: absolute;
+  top: 0;
+  right: 50px;
+  font-size: 2rem;
+  height: 50px;
+  width: 150px;
+  background-color: $colorApp1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
 }

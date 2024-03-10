@@ -1,0 +1,28 @@
+@import "../../../../scss/variables.scss";
+
+.card {
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 10px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.image-block {
+  height: calc(100% - $heightProductCardTitle);
+
+  .image {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.title {
+  font-size: 2.4rem;
+  height: $heightProductCardTitle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $colorApp1;
+}
