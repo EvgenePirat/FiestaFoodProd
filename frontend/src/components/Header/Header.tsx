@@ -1,12 +1,16 @@
 import { BiSolidExit } from 'react-icons/bi';
 import { MdDehaze } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { signOut } from '../../redux/authSlice';
 
-import { Button } from '../index.ts';
+import { Button } from '../';
 
 import styles from './Header.module.scss';
 
 export default function Header() {
+  const dispatch = useDispatch();
+
   return (
     <header className={styles['header']}>
       <nav className={styles['nav']}>
@@ -20,7 +24,7 @@ export default function Header() {
         </ul>
       </nav>
 
-      <Button className={styles['user']}>
+      <Button className={styles['user']} onClick={() => dispatch(signOut())}>
         <span className={styles['username']}>Іванов І. І.</span>
         <BiSolidExit className={styles['icon']} />
       </Button>
