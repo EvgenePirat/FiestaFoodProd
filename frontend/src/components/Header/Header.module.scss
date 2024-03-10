@@ -1,0 +1,51 @@
+@import '../../scss/variables.scss';
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $colorSecondary;
+  height: 100px;
+
+  .nav {
+    .nav-list {
+      list-style: none;
+
+      .element {
+        .link {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 3rem;
+          cursor: pointer;
+          transition: background-color .3s ease;
+          border-radius: 10px;
+          font-size: 1.6rem;
+          text-decoration: none;
+          color: $colorPrimary;
+
+          &:hover {
+            background-color: $colorSecondaryHover;
+          }
+
+          &:active {
+            background-color: $colorSecondaryActive;
+          }
+        }
+      }
+    }
+  }
+
+  .icon {
+    font-size: 32px;
+    color: $colorPrimary;
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 3rem;
+    font-weight: 400;
+  }
+}
