@@ -14,13 +14,9 @@
   display: flex;
 
   .clear-btn {
+    @include bookmark();
+
     margin-left: auto;
-    background-color: $colorApp1;
-    font-size: 2rem;
-    height: 50px;
-    padding: 0 25px;
-    display: flex;
-    align-items: center;
     border: none;
     cursor: pointer;
   }
