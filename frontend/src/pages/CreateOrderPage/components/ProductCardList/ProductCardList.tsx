@@ -1,9 +1,12 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store';
 import { ProductCard } from '../';
-import { products } from '../../../../data/fakeProducts';
 
 import styles from './ProductCardList.module.scss';
 
 export default function ProductCardList() {
+  const products = useSelector((state: RootState) => state.productsSlice.products);
+
   return (
     <div className={styles['list-block']}>
       <div className={styles['control-block']}>

@@ -1,16 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
-import { products } from '../../../../data/fakeProducts';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store';
+import { changeComment } from '../../../../redux/ordersSlice';
 import { OrderItemType } from '../../../../types/OrderItemType';
 
 import styles from './OrderItem.module.scss';
-import { useDispatch } from 'react-redux';
-import { changeComment } from '../../../../redux/ordersSlice';
 
 interface OrderItemProps {
   item: OrderItemType;
 }
 
 export default function OrderItem({ item }: OrderItemProps) {
+  const products = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function OrderItem({ item }: OrderItemProps) {
 
   const product = useMemo(() => {
     return products.find((obj) => obj.id === item.id);
-  }, [item.id]);
+  }, [item.id, products]);
 
   const onBlurHandler = useCallback(() => {
     dispatch(changeComment({ id: item.id, value }));

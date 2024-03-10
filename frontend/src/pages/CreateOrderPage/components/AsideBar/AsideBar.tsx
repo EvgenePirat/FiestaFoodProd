@@ -4,13 +4,12 @@ import { RootState } from '../../../../redux/store';
 import { clearOrder, createOrder } from '../../../../redux/ordersSlice';
 import { OrderItem } from '../';
 
-import { products } from '../../../../data/fakeProducts';
-
 import styles from './AsideBar.module.scss';
 
 const discount = 10;
 
 export default function AsideBar() {
+  const products = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
   const dispatch = useDispatch();
 
@@ -20,7 +19,7 @@ export default function AsideBar() {
         const product = products.find((obj) => obj.id === item.id);
         return acc + (product?.price ?? 0) * item.count;
       }, 0),
-    [order]
+    [order, products]
   );
 
   useEffect(() => console.log(order), [order]);
