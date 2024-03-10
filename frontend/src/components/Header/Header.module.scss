@@ -9,20 +9,13 @@
 
   .nav {
     .nav-list {
+      display: flex;
       list-style: none;
 
       .element {
-        .link {
-          display: flex;
-          align-items: center;
-          gap: 10px;
+        & > * {
           padding: 3rem;
-          cursor: pointer;
-          transition: background-color .3s ease;
           border-radius: 10px;
-          font-size: 1.6rem;
-          text-decoration: none;
-          color: $colorPrimary;
 
           &:hover {
             background-color: $colorSecondaryHover;

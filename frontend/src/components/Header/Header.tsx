@@ -1,8 +1,8 @@
 import { BiSolidExit } from 'react-icons/bi';
-import { MdDehaze } from 'react-icons/md';
-import { NavLink } from 'react-router-dom';
+import { MdDehaze, MdOutlineBookmarkBorder } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../redux/authSlice';
+import { Link } from '../index';
 
 import { Button } from '../';
 
@@ -16,10 +16,16 @@ export default function Header() {
       <nav className={styles['nav']}>
         <ul className={styles['nav-list']}>
           <li className={styles['element']}>
-            <NavLink to={'/'} className={styles['link']}>
+            <Link to="/">
               <MdDehaze className={styles['icon']} />
-              Усі замовлення
-            </NavLink>
+              <span>Усі замовлення</span>
+            </Link>
+          </li>
+          <li className={styles['element']}>
+            <Link to="/">
+              <MdOutlineBookmarkBorder className={styles['icon']} />
+              <span>Створення замовлення</span>
+            </Link>
           </li>
         </ul>
       </nav>
