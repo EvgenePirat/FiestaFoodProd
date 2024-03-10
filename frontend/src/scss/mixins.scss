@@ -1,0 +1,9 @@
+@mixin gridTableLayout {
+  display: grid;
+  grid-template-columns: 4fr 2fr 1fr 2fr;
+  gap: 10px;
+
+  span:last-child {
+    text-align: end;
+  }
+}

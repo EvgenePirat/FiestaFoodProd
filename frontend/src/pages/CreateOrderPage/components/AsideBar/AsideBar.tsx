@@ -37,10 +37,10 @@ export default function AsideBar() {
 
       <div className={styles['table-block']}>
         <div className={styles['head']}>
-          <span>Title</span>
-          <span>Count</span>
-          <span>Price</span>
-          <span>Final price</span>
+          <span>Найменування</span>
+          <span>К-ть</span>
+          <span>Ціна</span>
+          <span>Загалом</span>
         </div>
         {order.length ? (
           <ul className={styles['list']}>

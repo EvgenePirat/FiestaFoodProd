@@ -1,4 +1,5 @@
 @import "../../../../scss/variables.scss";
+@import "../../../../scss/mixins.scss";
 
 .item {
   display: flex;
@@ -12,10 +13,14 @@
 }
 
 .info-content {
-  display: flex;
+  @include gridTableLayout();
   align-items: center;
-  gap: 15px;
   height: 30px;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .comment-block {

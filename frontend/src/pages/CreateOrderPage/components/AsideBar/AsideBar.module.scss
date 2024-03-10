@@ -1,4 +1,5 @@
 @import "../../../../scss/variables.scss";
+@import "../../../../scss/mixins.scss";
 
 .aside-bar {
   width: 700px;
@@ -30,9 +31,7 @@
   padding: 0 15px;
 
   .head {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    @include gridTableLayout();
     margin-bottom: 5px;
     border-bottom: 3px solid $colorApp1;
     font-size: 2rem;
