@@ -3,3 +3,5 @@ export type ProductCardType = {
   title: string;
   image: string;
 };
+
+export type ProductType = ProductCardType & { price: number };

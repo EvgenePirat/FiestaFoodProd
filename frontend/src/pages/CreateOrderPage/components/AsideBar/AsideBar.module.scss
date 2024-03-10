@@ -43,17 +43,6 @@
     flex-direction: column;
     gap: 10px;
   }
-
-  .item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 5px 10px;
-    background-color: $colorOrderItemBack;
-    height: 50px;
-    font-size: 2rem;
-    border-radius: 10px;
-  }
 }
 
 .info-block {

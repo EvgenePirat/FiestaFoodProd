@@ -1,3 +1,5 @@
+import { OrderItem } from '../';
+
 import styles from './AsideBar.module.scss';
 
 export default function AsideBar() {
@@ -15,18 +17,9 @@ export default function AsideBar() {
           <span>Final price</span>
         </div>
         <ul className={styles['list']}>
-          <li className={styles['item']}>
-            <span>Title</span>
-            <span>Count</span>
-            <span>Price</span>
-            <span>Final price</span>
-          </li>
-          <li className={styles['item']}>
-            <span>Title</span>
-            <span>Count</span>
-            <span>Price</span>
-            <span>Final price</span>
-          </li>
+          <OrderItem id={1} count={1} />
+          <OrderItem id={2} count={2} />
+          <OrderItem id={3} count={3} />
         </ul>
       </div>
 

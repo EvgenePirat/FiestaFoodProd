@@ -5,38 +5,44 @@ import saladImg from '../assets/images/salad.png';
 import snacksImg from '../assets/images/snacks.png';
 import kebabImg from '../assets/images/kebab.png';
 
-import { ProductCardType } from '../types/ProductCardType';
+import { ProductType } from '../types/ProductCardType';
 
-const products: ProductCardType[] = [
+const products: ProductType[] = [
   {
     id: 1,
     title: 'Burgers',
-    image: burgerImg
+    image: burgerImg,
+    price: 100
   },
   {
     id: 2,
     title: 'Meat',
-    image: meatImg
+    image: meatImg,
+    price: 200
   },
   {
     id: 3,
     title: 'Drinks',
-    image: drinkImg
+    image: drinkImg,
+    price: 300
   },
   {
     id: 4,
     title: 'Salads',
-    image: saladImg
+    image: saladImg,
+    price: 400
   },
   {
     id: 5,
     title: 'Potatoes',
-    image: snacksImg
+    image: snacksImg,
+    price: 500
   },
   {
     id: 6,
     title: 'Kebab',
-    image: kebabImg
+    image: kebabImg,
+    price: 600
   }
 ];
 
