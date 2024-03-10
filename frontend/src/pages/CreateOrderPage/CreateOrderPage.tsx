@@ -1,4 +1,4 @@
-import { ProductCard } from './components';
+import { AsideBar, ProductCard } from './components';
 import { products } from '../../data/fakeProducts';
 
 import styles from './CreateOrderPage.module.scss';
@@ -6,7 +6,7 @@ import styles from './CreateOrderPage.module.scss';
 export default function CreateOrderPage() {
   return (
     <div className={styles['page-block']}>
-      <div className={styles['aside']}>Aside</div>
+      <AsideBar />
       <div className={styles['list-block']}>
         <p className={styles['p-title']}>All products</p>
         <ul className={styles['list']}>
