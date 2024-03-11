@@ -1,4 +1,4 @@
-import { ProductType } from './ProductCardType';
+import { ProductType } from './ProductType';
 
 export type OrderItemType = {
   id: ProductType['id'];

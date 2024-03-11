@@ -12,7 +12,8 @@ export default function Routing() {
       <Routes>
         {isAuth ? (
           <Route path="/" element={<MainLayout />}>
-            <Route path="/" element={<CreateOrderPage />} />
+            <Route path="/create-order" element={<CreateOrderPage />} />
+            <Route path="/create-order/:type" element={<CreateOrderPage />} />
           </Route>
         ) : (
           <>

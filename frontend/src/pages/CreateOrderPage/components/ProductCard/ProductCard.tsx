@@ -1,22 +1,18 @@
-import { useDispatch } from 'react-redux';
-import { addItem } from '../../../../redux/ordersSlice';
-import { ProductCardType } from '../../../../types/ProductCardType';
-
 import styles from './ProductCard.module.scss';
 
 interface ProductCardProps {
-  item: ProductCardType;
+  title: string;
+  image: string;
+  onClick?: () => void;
 }
 
-export default function ProductCard({ item }: ProductCardProps) {
-  const dispatch = useDispatch();
-
+export default function ProductCard({ title, image, onClick }: ProductCardProps) {
   return (
-    <li className={styles['card']} onClick={() => dispatch(addItem(item.id))}>
+    <li className={styles['card']} onClick={onClick}>
       <div className={styles['image-block']}>
-        <img className={styles['image']} src={item.image} alt={item.title} />
+        <img className={styles['image']} src={image} alt={title} />
       </div>
-      <p className={styles['title']}>{item.title}</p>
+      <p className={styles['title']}>{title}</p>
     </li>
   );
 }

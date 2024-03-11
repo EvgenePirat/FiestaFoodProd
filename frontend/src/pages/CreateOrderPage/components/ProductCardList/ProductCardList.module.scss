@@ -11,16 +11,29 @@
 
 .control-block {
   display: flex;
+
+  a {
+    text-decoration: none;
+    color: initial
+  }
 }
 
 .mark {
   @include bookmark();
 
-  margin-left: auto;
+  &.last {
+    margin-left: auto;
+  }
 }
 
 .list {
   display: flex;
   flex-wrap: wrap;
   gap: 40px;
+}
+
+.empty {
+  font-size: 4rem;
+  margin-top: 20px;
+  text-align: center;
 }
