@@ -1,0 +1,13 @@
+@import '../../scss/variables.scss';
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: $colorPrimary;
+  font-size: 1.6rem;
+  font-weight: normal;
+  transition: background-color .3s ease;
+  cursor: pointer;
+}
