@@ -2,9 +2,8 @@ import { BiSolidExit } from 'react-icons/bi';
 import { MdDehaze, MdOutlineBookmarkBorder } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../redux/authSlice';
-import { Link } from '../index';
 
-import { Button } from '../';
+import { Button, Link } from '../';
 
 import styles from './Header.module.scss';
 
