@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { addItem } from '../../../../redux/ordersSlice';
 import { ProductCard } from '../';
+import { routeCreateOrder } from '../../../../data/routes';
 
 import styles from './ProductCardList.module.scss';
 
@@ -25,7 +26,7 @@ export default function ProductCardList() {
     <div className={styles['list-block']}>
       <div className={styles['control-block']}>
         {typeValue && (
-          <NavLink to="/create-order" className={styles['mark']}>
+          <NavLink to={`/${routeCreateOrder}`} className={styles['mark']}>
             Повернутись
           </NavLink>
         )}
@@ -49,7 +50,7 @@ export default function ProductCardList() {
             <ProductCard
               key={obj.id}
               {...obj}
-              onClick={() => navigate(`/create-order/${obj.id}`)}
+              onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
             />
           ))}
         </ul>
