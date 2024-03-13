@@ -18,3 +18,21 @@
   display: flex;
   align-items: center;
 }
+
+@mixin scrollbar($pdRight: 1rem) {
+  overflow-y: auto;
+  padding-right: $pdRight;
+
+  &::-webkit-scrollbar {
+    width: $scrollbarWidth;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: $colorScrollbar;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $colorScrollbarHover;
+  }
+}
