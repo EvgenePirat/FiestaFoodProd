@@ -18,6 +18,7 @@ $colorLink: #000000;
 
 $heightProductCardTitle: 50px;
 
-$pageBorder: 10px solid $colorSecondary;
+$widthPageBorder: 10px;
+$pageBorder: $widthPageBorder solid $colorSecondary;
 
 $scrollbarWidth: 10px;

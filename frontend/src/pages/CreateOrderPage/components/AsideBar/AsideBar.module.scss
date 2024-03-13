@@ -2,8 +2,7 @@
 @import "../../../../scss/mixins.scss";
 
 .aside-bar {
-  width: 700px;
-  border-left: $pageBorder;
+  width: calc(700px - $widthPageBorder);
   border-right: $pageBorder;
   display: flex;
   flex-direction: column;
