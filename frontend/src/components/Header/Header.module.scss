@@ -13,6 +13,10 @@
       list-style: none;
 
       .element {
+        .link-text {
+          font-size: 2rem;
+        }
+
         & > * {
           padding: 3rem;
           border-radius: 10px;
@@ -31,7 +35,7 @@
 
   .icon {
     font-size: 32px;
-    color: $colorPrimary;
+    color: $colorLink;
   }
 
   .user {
@@ -40,5 +44,7 @@
     gap: 10px;
     padding: 3rem;
     font-weight: 400;
+    font-size: 2rem;
+    color: $colorLink;
   }
 }

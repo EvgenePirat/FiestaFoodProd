@@ -1,17 +1,26 @@
 $colorPrimary: #520383;
-$colorSecondary: #FAD00A;
+$colorSecondary: #FFC632;
 $colorSecondaryHover: #F5D56C;
 $colorSecondaryActive: #E0BA00;
 
-$colorBorder: #000000;
-
 $colorBack: #DEDEDE;
 
-$colorApp1: #FFC632;
-$colorApp2: #43B85C;
+$colorAuthPage: #FAD00A;
+
+$colorSuccess: #43B85C;
 
 $colorOrderItemBack: #AEAEAE;
 
+$colorScrollbar: #CECECE;
+$colorScrollbarHover: #BABABA;
+
+$colorLink: #000000;
+
+$colorBoxShadow: #00000040;
+
 $heightProductCardTitle: 50px;
 
-$border1: 10px solid $colorApp1;
+$widthPageBorder: 10px;
+$pageBorder: $widthPageBorder solid $colorSecondary;
+
+$widthScrollbar: 10px;

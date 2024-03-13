@@ -23,7 +23,7 @@ export default function ProductCardList() {
   }, [products, typeValue]);
 
   return (
-    <div className={styles['list-block']}>
+    <section className={styles['list-container']}>
       <div className={styles['control-block']}>
         {typeValue && (
           <NavLink to={`/${routeCreateOrder}`} className={styles['mark']}>
@@ -34,27 +34,29 @@ export default function ProductCardList() {
           {type?.title ?? typeValue ?? 'Усі товари'}
         </p>
       </div>
-      {typeValue ? (
-        displayProducts.length ? (
+      <div className={styles['list-block']}>
+        {typeValue ? (
+          displayProducts.length ? (
+            <ul className={styles['list']}>
+              {displayProducts.map((obj) => (
+                <ProductCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
+              ))}
+            </ul>
+          ) : (
+            <p className={styles['empty']}>List is empty</p>
+          )
+        ) : (
           <ul className={styles['list']}>
-            {displayProducts.map((obj) => (
-              <ProductCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
+            {types.map((obj) => (
+              <ProductCard
+                key={obj.id}
+                {...obj}
+                onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
+              />
             ))}
           </ul>
-        ) : (
-          <p className={styles['empty']}>List is empty</p>
-        )
-      ) : (
-        <ul className={styles['list']}>
-          {types.map((obj) => (
-            <ProductCard
-              key={obj.id}
-              {...obj}
-              onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
-            />
-          ))}
-        </ul>
-      )}
-    </div>
+        )}
+      </div>
+    </section>
   );
 }
