@@ -50,7 +50,9 @@ export default function AuthPage() {
             required
           />
         </div>
-        <Button onClick={() => handleAuth()}>Увійти</Button>
+        <Button className={styles['login']} onClick={() => handleAuth()}>
+          Увійти
+        </Button>
       </div>
     </div>
   );

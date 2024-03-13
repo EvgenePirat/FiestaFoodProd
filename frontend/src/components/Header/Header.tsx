@@ -17,13 +17,13 @@ export default function Header() {
           <li className={styles['element']}>
             <Link to="/">
               <MdDehaze className={styles['icon']} />
-              <span>Усі замовлення</span>
+              <span className={styles['link-text']}>Усі замовлення</span>
             </Link>
           </li>
           <li className={styles['element']}>
             <Link to="/">
               <MdOutlineBookmarkBorder className={styles['icon']} />
-              <span>Створення замовлення</span>
+              <span className={styles['link-text']}>Створення замовлення</span>
             </Link>
           </li>
         </ul>

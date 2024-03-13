@@ -3,8 +3,8 @@
 
 .aside-bar {
   width: 700px;
-  border-left: $border1;
-  border-right: $border1;
+  border-left: $pageBorder;
+  border-right: $pageBorder;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -32,7 +32,7 @@
     @include gridTableLayout();
     margin-bottom: 5px;
     margin-right: 20px;
-    border-bottom: 3px solid $colorApp1;
+    border-bottom: 3px solid $colorSecondary;
     font-size: 2rem;
     font-weight: bold;
   }
@@ -59,7 +59,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: $colorApp1;
+  background-color: $colorSecondary;
 
   .info {
     display: flex;
@@ -81,7 +81,7 @@
 .create-btn {
   height: 70px;
   width: 100%;
-  background-color: $colorApp2;
+  background-color: $colorSuccess;
   display: flex;
   align-items: center;
   justify-content: center;
