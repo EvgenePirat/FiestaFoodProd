@@ -1,0 +1,39 @@
+@import "./variables.scss";
+
+@mixin gridTableLayout {
+  display: grid;
+  grid-template-columns: 4fr 2fr 1fr 2fr;
+  gap: 10px;
+
+  span:last-child {
+    text-align: end;
+  }
+}
+
+@mixin bookmark {
+  background-color: $colorSecondary;
+  font-size: 2rem;
+  height: 50px;
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 4px 0 $colorBoxShadow;
+}
+
+@mixin scrollbar($pdRight: 1rem) {
+  overflow-y: auto;
+  padding-right: $pdRight;
+
+  &::-webkit-scrollbar {
+    width: $widthScrollbar;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: $colorScrollbar;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $colorScrollbarHover;
+  }
+}
