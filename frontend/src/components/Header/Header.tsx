@@ -2,6 +2,7 @@ import { BiSolidExit } from 'react-icons/bi';
 import { MdDehaze, MdOutlineBookmarkBorder } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../redux/authSlice';
+import { routeCreateOrder } from '../../data/routes.ts';
 
 import { Button, Link } from '../';
 
@@ -21,7 +22,7 @@ export default function Header() {
             </Link>
           </li>
           <li className={styles['element']}>
-            <Link to="/">
+            <Link to={`/${routeCreateOrder}`}>
               <MdOutlineBookmarkBorder className={styles['icon']} />
               <span className={styles['link-text']}>Створення замовлення</span>
             </Link>
