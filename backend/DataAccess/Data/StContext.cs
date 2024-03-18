@@ -1,5 +1,7 @@
 ﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DataAccess.Data;
 
@@ -12,6 +14,22 @@ public partial class StContext : DbContext
     public StContext(DbContextOptions<StContext> options)
         : base(options)
     {
+        try
+        {
+            var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+            if (databaseCreator is not null)
+            {
+                if (!databaseCreator.CanConnect()) 
+                    databaseCreator.Create();
+                if (!databaseCreator.HasTables()) 
+                    databaseCreator.CreateTables();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
     }
 
     public DbSet<Category> Categories { get; set; }
