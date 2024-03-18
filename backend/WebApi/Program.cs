@@ -50,7 +50,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 // Remove on release 
 //app.UseTimeoutCancellationToken(TimeSpan.FromSeconds(10));
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
