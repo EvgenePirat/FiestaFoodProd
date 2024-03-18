@@ -23,7 +23,13 @@ builder.Services.AddControllers(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StDatabase")));
+
+//docker start naming
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var connectionString = $"Server={dbHost};Initial Catalog={dbName};MultipleActiveResultSets=true;User=sa;Password={dbPassword}";
+builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt => { opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
