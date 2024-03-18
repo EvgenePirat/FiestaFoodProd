@@ -17,10 +17,12 @@ public partial class StContext : DbContext
         try
         {
             var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-            if (databaseCreator is null)
+            if (databaseCreator is not null)
             {
-                if (!databaseCreator.CanConnect()) databaseCreator.Create();
-                if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+                if (!databaseCreator.CanConnect()) 
+                    databaseCreator.Create();
+                if (!databaseCreator.HasTables()) 
+                    databaseCreator.CreateTables();
             }
         }
         catch (Exception e)

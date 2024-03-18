@@ -27,8 +27,8 @@ builder.Services.AddSwaggerGen();
 //docker start naming
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
-var connectionString = $"Server={dbHost};Initial Catalog={dbName};MultipleActiveResultSets=true;User=sa;Password={dbPassword}";
+var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
 builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers()

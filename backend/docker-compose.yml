@@ -5,23 +5,19 @@ networks:
 
 name: fiesta-food
 
-volumes:
-  sql-server-data:
-    driver: local
-  sqldata:
-  sqllog:
-  sqlbackup:
 services:
   fiestafooddb:
     container_name: fistafood-db
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=strngPss37!
+      - MSSQL_SA_PASSWORD=strngPss37!
+      - MSSQL_PID=Express
     networks:
       - backend
     ports:
       - 8001:1433 
+ 
 
   webapi:
     image: ${DOCKER_REGISTRY-}webapi
@@ -33,6 +29,10 @@ services:
     ports:
      - 8080:80
     environment:
-     - DB_HOST=fiestadb
-     - DB_NAME=fiestaFoodDb
+     - DB_HOST=host.docker.internal,8001
+     - DB_NAME=fiestadb
      - DB_SA_PASSWORD=strngPss37!
+ 
+  
+
+  
