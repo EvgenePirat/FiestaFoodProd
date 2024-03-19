@@ -1,5 +1,4 @@
-﻿using WebApi.Models.CustomerInfosDto.Response;
-using WebApi.Models.Enums;
+﻿using WebApi.Models.Enums;
 using WebApi.Models.Orders.Response;
 
 namespace WebApi.Models.User.Response
@@ -10,6 +9,5 @@ namespace WebApi.Models.User.Response
         public string Login { get; set; }
         public Role Role { get; set; }
         public IEnumerable<OrderDto> Orders { get; set; }
-        public IEnumerable<CustomerInfoDto> CustomerInfos { get; set; }
     }
 }

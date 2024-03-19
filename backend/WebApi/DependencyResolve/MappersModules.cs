@@ -19,9 +19,6 @@ namespace WebApi.DependencyResolve
                 cfg.AddProfile(new CategoryDtoProfile());
                 cfg.AddProfile(new CategoryProfile());
 
-                cfg.AddProfile(new CustomerInfoProfile());
-                cfg.AddProfile(new CustomerInfoDtoProfile());
-
                 cfg.AddProfile(new UserProfile());
                 cfg.AddProfile(new UserDtoProfile());
                 
