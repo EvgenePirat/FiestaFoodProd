@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
         public async Task<OrderDetail?> GetByIdAsync(Guid id, CancellationToken ct)
         {
             return await _context.OrderDetails
-                .FirstOrDefaultAsync(od => od.Id == id, cancellationToken: ct);
+                .FirstOrDefaultAsync(od => od.OrderId == id, cancellationToken: ct);
         }
     }
 }

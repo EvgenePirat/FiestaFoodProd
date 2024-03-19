@@ -21,7 +21,7 @@ namespace DataAccess.Repositories
 
         public async Task<User?> GetUserById(Guid id, CancellationToken ct)
         {
-            return await _context.Users.Include(user => user.CustomerInfos).AsNoTracking().FirstOrDefaultAsync(temp => temp.Id == id, cancellationToken: ct);
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(temp => temp.Id == id, cancellationToken: ct);
         }
     }
 }

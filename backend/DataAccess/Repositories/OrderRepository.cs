@@ -15,7 +15,7 @@ namespace DataAccess.Repositories
         {
             return await _context.Orders
                 .Include(u=> u.OrderDetail)
-                .Include(ord => ord.CustomerInfo)
+                .Include(ord => ord.OrderItems)
                 .FirstOrDefaultAsync(od => od.Id == id, cancellationToken: ct);
         }
     }
