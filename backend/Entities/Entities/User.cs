@@ -12,6 +12,5 @@ namespace Entities.Entities
         public string Password { get; set; }
         public Role Role { get; set; }
         public virtual IEnumerable<Order> Orders { get; set; }
-        public virtual IEnumerable<CustomerInfo> CustomerInfos { get; set; }
     }
 }

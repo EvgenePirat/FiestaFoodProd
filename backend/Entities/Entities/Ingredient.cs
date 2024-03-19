@@ -1,4 +1,5 @@
-﻿using Entities.Interfaces;
+﻿using Entities.Enums;
+using Entities.Interfaces;
 
 namespace Entities.Entities
 {
@@ -6,6 +7,9 @@ namespace Entities.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Kilograms { get; set; }
+        public Importance Importance { get; set; }
+        public int QuantityId { get; set; }
+        public Quantity Quantity { get; set; }
+        public IEnumerable<DishIngridient> DishIngridients { get; set; }
     }
 }
