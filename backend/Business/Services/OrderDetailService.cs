@@ -20,55 +20,79 @@ namespace Business.Services
         }
 
 
-        public async Task<OrderDetailModel> CreateOrderDetailAsync(CreateOrderDetailModel model, CancellationToken ct)
+        //public async Task<OrderDetailModel> CreateOrderDetailAsync(CreateOrderDetailModel model, CancellationToken ct)
+        //{
+        //    var orderDetail = _mapper.Map<OrderItem>(model);
+
+        //    _unitOfWork.OrderDetailRepository.Add(orderDetail);
+        //    await _unitOfWork.SaveAsync(ct);
+
+        //    return _mapper.Map<OrderDetailModel>(orderDetail);
+        //}
+
+        //public async Task<OrderDetailModel> UpdateOrderDetailAsync(UpdateOrderDetailModel model, CancellationToken ct)
+        //{
+        //    var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(model.Id, ct)
+        //                      ?? throw new OrderDetailArgumentException($"Entity with this {model.Id} not exist");
+
+        //    orderDetail.IsPaid = model.IsPaid;
+        //    orderDetail.OrderState = _mapper.Map<OrderState>(model.OrderState);
+        //    _unitOfWork.OrderDetailRepository.Update(orderDetail);
+        //    await _unitOfWork.SaveAsync(ct);
+
+        //    return _mapper.Map<OrderDetailModel>(orderDetail);
+        //}
+
+        //public async Task DeleteOrderDetailByIdAsync(Guid id, CancellationToken ct)
+        //{
+        //    var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(id, ct)
+        //                      ?? throw new OrderDetailArgumentException($"Entity with this {id} not exist");
+        //    _unitOfWork.OrderDetailRepository.Delete(orderDetail);
+        //    await _unitOfWork.SaveAsync(ct);
+        //}
+
+        //public async Task<OrderDetailModel> GetOrderDetailAsyncById(Guid id, CancellationToken ct)
+        //{
+        //    var orderDetail = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct)
+        //                      ?? throw new OrderDetailArgumentException($"OrderDetail with this {id} not exist");
+        //    return _mapper.Map<OrderDetailModel>(orderDetail);
+        //}
+
+        //public async Task<OrderDetailModel> UpdateOrderDetailState(UpdateOrderDetailStateModel model, CancellationToken ct)
+        //{
+        //    var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(model.Id, ct)
+        //                      ?? throw new OrderDetailArgumentException($"Entity with this {model.Id} not exist");
+
+        //    orderDetail.OrderState = _mapper.Map<OrderState>(model.OrderState);
+
+        //    _unitOfWork.OrderDetailRepository.Update(orderDetail);
+        //    await _unitOfWork.SaveAsync(ct);
+
+        //    return _mapper.Map<OrderDetailModel>(orderDetail);
+        //}
+        public Task<OrderDetailModel> CreateOrderDetailAsync(CreateOrderDetailModel model, CancellationToken ct)
         {
-            var orderDetail = _mapper.Map<OrderDetail>(model);
-
-            _unitOfWork.OrderDetailRepository.Add(orderDetail);
-            await _unitOfWork.SaveAsync(ct);
-
-            return _mapper.Map<OrderDetailModel>(orderDetail);
+            throw new NotImplementedException();
         }
 
-        public async Task<OrderDetailModel> UpdateOrderDetailAsync(UpdateOrderDetailModel model, CancellationToken ct)
+        public Task DeleteOrderDetailByIdAsync(Guid id, CancellationToken ct)
         {
-            var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(model.Id, ct)
-                              ?? throw new OrderDetailArgumentException($"Entity with this {model.Id} not exist");
-
-            orderDetail.IsPaid = model.IsPaid;
-            orderDetail.OrderState = _mapper.Map<OrderState>(model.OrderState);
-            _unitOfWork.OrderDetailRepository.Update(orderDetail);
-            await _unitOfWork.SaveAsync(ct);
-
-            return _mapper.Map<OrderDetailModel>(orderDetail);
+            throw new NotImplementedException();
         }
 
-        public async Task DeleteOrderDetailByIdAsync(Guid id, CancellationToken ct)
+        public Task<OrderDetailModel> GetOrderDetailAsyncById(Guid id, CancellationToken ct)
         {
-            var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(id, ct)
-                              ?? throw new OrderDetailArgumentException($"Entity with this {id} not exist");
-            _unitOfWork.OrderDetailRepository.Delete(orderDetail);
-            await _unitOfWork.SaveAsync(ct);
+            throw new NotImplementedException();
         }
 
-        public async Task<OrderDetailModel> GetOrderDetailAsyncById(Guid id, CancellationToken ct)
+        public Task<OrderDetailModel> UpdateOrderDetailAsync(UpdateOrderDetailModel model, CancellationToken ct)
         {
-            var orderDetail = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct)
-                              ?? throw new OrderDetailArgumentException($"OrderDetail with this {id} not exist");
-            return _mapper.Map<OrderDetailModel>(orderDetail);
+            throw new NotImplementedException();
         }
 
-        public async Task<OrderDetailModel> UpdateOrderDetailState(UpdateOrderDetailStateModel model, CancellationToken ct)
+        public Task<OrderDetailModel> UpdateOrderDetailState(UpdateOrderDetailStateModel model, CancellationToken ct)
         {
-            var orderDetail = await _unitOfWork.OrderDetailRepository.GetByIdAsync(model.Id, ct)
-                              ?? throw new OrderDetailArgumentException($"Entity with this {model.Id} not exist");
-
-            orderDetail.OrderState = _mapper.Map<OrderState>(model.OrderState);
-
-            _unitOfWork.OrderDetailRepository.Update(orderDetail);
-            await _unitOfWork.SaveAsync(ct);
-
-            return _mapper.Map<OrderDetailModel>(orderDetail);
+            throw new NotImplementedException();
         }
     }
 }

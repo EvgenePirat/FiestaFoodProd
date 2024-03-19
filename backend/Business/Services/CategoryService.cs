@@ -40,7 +40,6 @@ namespace Business.Services
             var categoryToUpdate = await _unitOfWork.CategoryRepository.GetByIdAsync(model.Id, ct)
                                 ?? throw new CategoryArgumentException("Category with this id not exist");
 
-            categoryToUpdate.Description = model.Description;
             categoryToUpdate.CategoryName = model.CategoryName;
 
             _unitOfWork.CategoryRepository.Update(categoryToUpdate);
