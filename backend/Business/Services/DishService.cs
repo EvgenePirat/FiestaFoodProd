@@ -34,7 +34,6 @@ namespace Business.Services
             // Initialize default defaultPath for Dish
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
             // Create a folders by path
-            await _directoryService.CreateFolderAsync(defaultPath, ct);
 
             mappedModel.PhotoPaths = defaultPath;
 
@@ -44,6 +43,7 @@ namespace Business.Services
 
             if (model.Files is not null && model.Files.Any())
                 await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
+
             return _mapper.Map<DishModel>(mappedModel);
         }
 
