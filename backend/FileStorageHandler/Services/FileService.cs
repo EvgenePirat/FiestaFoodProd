@@ -45,6 +45,28 @@ namespace FileStorageHandler.Services
             }
         }
 
+        public async Task UploadFileAsync(IFormFile file, string path, CancellationToken ct)
+        {
+            var fullPath = Path.Combine(_projectDirectory, path);
+
+            if (!_directoryService.IsDirectoryExist(fullPath))
+                await _directoryService.CreateFolderAsync(path, ct);
+
+            var filesInDirectory = GetFilesPathsAsync(fullPath);
+            var fileType = FileTypeChecker.GetFileType(file.ContentType, file.FileName);
+            switch (fileType)
+            {
+                    case SupportedFilesEnum.Image:
+                        await _fileWriteService.WritePhotoAsync(file, fullPath, ct);
+                        break;
+                    case SupportedFilesEnum.Video:
+                        await _fileWriteService.WriteVideoAsync(file, fullPath, ct);
+                        break;
+                    default:
+                        throw new FileArgumentException("Not supported file");
+            }
+        }
+
         public async Task DeleteFilesAsync(IEnumerable<string> filesPath, string path)
         {
             try
