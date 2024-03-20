@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto model, CancellationToken ct)
+        public async Task<ActionResult<CategoryDto>> CreateCategory([FromForm]CreateCategoryDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Create Category, Task started", nameof(CategoryController), nameof(CreateCategory));
 
