@@ -1,14 +1,8 @@
-﻿using AutoMapper;
+﻿
 using Business.Interfaces;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
-using CustomExceptions.CustomerInfoCustomException;
-using CustomExceptions.OrderCustomExceptions;
-using DataAccess.Interfaces;
-using DataAccess.Utilities;
-using Entities.Entities;
-using Entities.Enums;
 
 namespace Business.Services
 {

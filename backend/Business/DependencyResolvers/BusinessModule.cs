@@ -22,6 +22,7 @@ namespace Business.DependencyResolvers
             builder.RegisterType<DirectoryService>().As<IDirectoryService>();
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<OrderDetailService>().As<IOrderDetailService>();
+            builder.RegisterType<IngredientService>().As<IIngredientService>();
         }
     }
 }
