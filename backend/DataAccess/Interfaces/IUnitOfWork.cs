@@ -9,7 +9,7 @@ namespace DataAccess.Interfaces
         IUserRepository UserRepository { get; }
         IOrderRepository OrderRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
-        IIngredientsRepository IngredientsRepository { get; }
+        IIngredientRepository IngredientsRepository { get; }
         IOrderItemRepository OrderItemRepository { get; }
         Task SaveAsync(CancellationToken ct);
         Task<IDbContextTransaction> BeginTransactionDbContextAsync(CancellationToken ct);
