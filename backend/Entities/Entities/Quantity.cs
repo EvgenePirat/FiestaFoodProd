@@ -7,6 +7,7 @@ namespace Entities.Entities
         public int Id { get; set; }
         public Measurement Measurement { get; set; }
         public double Count { get; set; }
+        public int IngredientId { get; set; }
         public Ingredient? Ingredient { get; set; }
     }
 }
