@@ -32,9 +32,9 @@ namespace DataAccess.Data
         public IOrderDetailRepository OrderDetailRepository => 
             _orderDetailRepository ??= new OrderDetailRepository(_context);
 
-        private IIngredientsRepository _ingredientsRepository;
-        public IIngredientsRepository IngredientsRepository =>
-            _ingredientsRepository ??= new IngredientsRepository(_context);
+        private IIngredientRepository _ingredientsRepository;
+        public IIngredientRepository IngredientsRepository =>
+            _ingredientsRepository ??= new IngredientRepository(_context);
 
         private IOrderItemRepository _orderItemRepository;
 

@@ -1,5 +1,6 @@
 ﻿using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace DataAccess.Data;
 
@@ -28,6 +29,12 @@ public partial class StContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         OnModelCreatingPartial(modelBuilder);
+
+        modelBuilder.Entity<Ingredient>()
+            .HasOne(i => i.Quantity)
+            .WithOne(q => q.Ingredient)
+            .HasForeignKey<Quantity>(q => q.IngredientId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<DishIngridient>()
             .HasKey(di => new { di.DishId, di.IngredientId });
