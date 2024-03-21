@@ -7,9 +7,9 @@ using WebApi.Models.PaginationsDto;
 
 namespace WebApi.Mappers
 {
-    public class ProductDtoProfile : Profile
+    public class DishDtoProfile : Profile
     {
-        public ProductDtoProfile()
+        public DishDtoProfile()
         {
             CreateMap<AddDishDto, AddDishModel>();
             CreateMap<DishModel, DishDto>();
