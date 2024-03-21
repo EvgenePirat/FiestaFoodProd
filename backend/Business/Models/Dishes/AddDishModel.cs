@@ -1,4 +1,4 @@
-﻿using Business.Models.Ingredients;
+﻿using Business.Models.Ingredients.Response;
 using Microsoft.AspNetCore.Http;
 
 namespace Business.Models.Dishes
