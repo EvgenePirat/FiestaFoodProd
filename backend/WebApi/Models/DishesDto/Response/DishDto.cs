@@ -1,4 +1,7 @@
-﻿namespace WebApi.Models.DishesDto.Response
+﻿using Business.Models.DishIngredients.Response;
+using WebApi.Models.DishIngredientsDto.Response;
+
+namespace WebApi.Models.DishesDto.Response
 {
     public class DishDto
     {
@@ -8,5 +11,6 @@
         public double Price { get; set; }
         public int CategoryId { get; set; }
         public string? PhotoPaths { get; set; }
+        public IEnumerable<DishIngridientDto> DishIngridients { get; set; }
     }
 }
