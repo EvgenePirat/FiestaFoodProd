@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<DishDto>> CreateDish([FromForm]AddDishDto model, CancellationToken ct)
+        public async Task<ActionResult<DishDto>> CreateDish(AddDishDto model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<AddDishModel>(model);
             var dish = await _dishService.AddDishAsync(mappedModel, ct);
