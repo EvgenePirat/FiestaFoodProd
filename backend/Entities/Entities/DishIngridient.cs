@@ -1,6 +1,8 @@
-﻿namespace Entities.Entities
+﻿using Entities.Interfaces;
+
+namespace Entities.Entities
 {
-    public class DishIngridient
+    public class DishIngridient : IEntity
     {
         public int DishId { get; set; }
         public Dish Dish { get; set; }

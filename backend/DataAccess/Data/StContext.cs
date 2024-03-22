@@ -47,7 +47,8 @@ public partial class StContext : DbContext
         modelBuilder.Entity<DishIngridient>()
             .HasOne(di => di.Dish)
             .WithMany(di => di.DishIngridients)
-            .HasForeignKey(di => di.DishId);
+            .HasForeignKey(di => di.DishId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<OrderDetail>()
             .HasKey(od => od.OrderId);
