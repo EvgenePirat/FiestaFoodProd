@@ -40,7 +40,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
@@ -76,7 +76,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Dishes");
+                    b.ToTable("Dishes", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
@@ -94,7 +94,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("DishIngridients");
+                    b.ToTable("DishIngridients", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Ingredient", b =>
@@ -114,7 +114,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Order", b =>
@@ -139,7 +139,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.OrderDetail", b =>
@@ -161,7 +161,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.OrderItem", b =>
@@ -183,7 +183,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("DishId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Quantity", b =>
@@ -208,7 +208,7 @@ namespace DataAccess.Migrations
                     b.HasIndex("IngredientId")
                         .IsUnique();
 
-                    b.ToTable("Quantities");
+                    b.ToTable("Quantities", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>
@@ -231,7 +231,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
