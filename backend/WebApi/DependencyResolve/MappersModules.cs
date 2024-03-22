@@ -37,6 +37,9 @@ namespace WebApi.DependencyResolve
                 cfg.AddProfile(new QuantityDtoProfile());
                 cfg.AddProfile(new QuantityProfile());
 
+                cfg.AddProfile(new DishIngredientDtoProfile());
+                cfg.AddProfile(new DishIngredientProfile());
+
             })).SingleInstance();
 
             builder.Register(c => c.Resolve<MapperConfiguration>().CreateMapper())
