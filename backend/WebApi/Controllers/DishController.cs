@@ -44,10 +44,13 @@ namespace WebApi.Controllers
         {
             _logger.LogInformation("{controller}.{method} - get Dish method with id in controller, Task started", 
                 nameof(DishController), nameof(GetDishByIdAsync));
+
             var dish = await _dishService.GetDishByIdAsync(dishId, ct);
             var mappedDish = _mapper.Map<DishDto>(dish);
+
             _logger.LogInformation("{controller}.{method} - get Dish method with id, Result - Ok, Task ended", 
                 nameof(DishController), nameof(GetDishByIdAsync));
+
             return Ok(mappedDish);
         }
 
