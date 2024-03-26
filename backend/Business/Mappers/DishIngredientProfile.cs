@@ -11,6 +11,7 @@ namespace Business.Mappers
         {
             CreateMap<CreateDishIngridientModel, DishIngridient>();
             CreateMap<DishIngridient, DishIngridientModel>();
+            CreateMap<UpdateDishIngredientModel, DishIngridient>();
         }
     }
 }

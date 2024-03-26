@@ -1,4 +1,5 @@
 ﻿using Business.Models.Dishes;
+using Business.Models.DishIngredients.Request;
 using Business.Models.Filter;
 using Business.Models.Pagination;
 
@@ -15,6 +16,8 @@ namespace Business.Interfaces
         Task<PagedDishModel> GetFilteredDishesAsync(FilterModel filter, CancellationToken ct);
 
         Task<DishModel> UpdateDishAsync(UpdateDishModel model, CancellationToken ct);
+
+        Task UpdateDishIngredientsForDishAsync(int dishId, List<UpdateDishIngredientModel> model, CancellationToken ct);
 
         Task DeleteDishByIdAsync(int id, CancellationToken ct);
     }
