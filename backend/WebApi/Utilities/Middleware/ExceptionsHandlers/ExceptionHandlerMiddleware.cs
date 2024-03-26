@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using CustomExceptions.CategoryCustomExceptions;
+using CustomExceptions.DishCustomExceptions;
 using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using CustomExceptions.OrderDetailCustomExceptions;
@@ -40,6 +42,8 @@ namespace WebApi.Utilities.Middleware.ExceptionsHandlers
                 UnauthorizedAccessException _ => new ExceptionResponse(HttpStatusCode.Unauthorized, "Unauthorized."),
                 UserArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
                 IngredientArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
+                DishArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
+                CategoryArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
                 OperationCanceledException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderDetailArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),

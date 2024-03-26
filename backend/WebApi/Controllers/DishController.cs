@@ -8,6 +8,8 @@ using WebApi.Models.PaginationsDto;
 using WebApi.Models.DishesDto.Request;
 using WebApi.Models.DishesDto.Response;
 using WebApi.Utilities;
+using WebApi.Models.DishIngredientsDto.Request;
+using Business.Models.DishIngredients.Request;
 
 namespace WebApi.Controllers
 {
@@ -93,6 +95,21 @@ namespace WebApi.Controllers
             _logger.LogInformation("{controller}.{method} - Update Dish (FromForm), Result - Ok, Task ended", 
                 nameof(DishController), nameof(UpdateDishAsync));
             return Ok(mappedDish);
+        }
+
+        [HttpPut("update/dishingredient")]
+        public async Task<IActionResult> UpdateDishIngredientAsync([FromQuery]int dishId, List<UpdateDishIngredientDto> dto, CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - Update DishIngredient for dish, Task started,", nameof(DishController),
+                nameof(UpdateDishIngredientAsync));
+
+            var mappedModel = _mapper.Map<List<UpdateDishIngredientModel>>(dto);
+            await _dishService.UpdateDishIngredientsForDishAsync(dishId, mappedModel, ct);
+
+            _logger.LogInformation("{controller}.{method} - Update DishIngredient for dish, Result - Ok, Task ended",
+                nameof(DishController), nameof(UpdateDishAsync));
+
+            return Ok();
         }
 
         [HttpDelete("by-id")]
