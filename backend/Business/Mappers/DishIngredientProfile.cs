@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Business.Models.DishIngredients.Request;
+using Business.Models.DishIngredients.Response;
 using Entities.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Mappers
 {
@@ -14,6 +10,7 @@ namespace Business.Mappers
         public DishIngredientProfile()
         {
             CreateMap<CreateDishIngridientModel, DishIngridient>();
+            CreateMap<DishIngridient, DishIngridientModel>();
         }
     }
 }
