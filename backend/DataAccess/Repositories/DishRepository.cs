@@ -21,7 +21,7 @@ namespace DataAccess.Repositories
         /// <returns>Dish</returns>
         public async Task<Dish?> GetDishById(int id, CancellationToken ct)
         {
-            return await _context.Dishes.FirstOrDefaultAsync(temp => temp.Id == id, cancellationToken: ct);
+            return await _context.Dishes.IncludeAll().FirstOrDefaultAsync(temp => temp.Id == id, cancellationToken: ct);
         }
 
         public async Task<PaginationResult<Dish>> GetDishesByQueryAsync(FilterState filter, CancellationToken ct)
