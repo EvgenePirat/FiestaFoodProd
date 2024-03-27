@@ -10,6 +10,7 @@ namespace Business.Mappers
         public OrderItemProfile()
         {
             CreateMap<CreateOrderItemModel, OrderItem>();
+            CreateMap<UpdateOrderItemModel, OrderItem>();
             CreateMap<OrderItem, OrderItemModel>();
         }
     }

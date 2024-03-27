@@ -176,9 +176,14 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
         }
 
-        public Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
+        public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
+                        throw new OrderArgumentException($"Order with this id {id} not exist");
+
+            _unitOfWork.OrderRepository.Delete(order);
+
+            await _unitOfWork.SaveAsync(ct);
         }
 
         public Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
@@ -186,9 +191,70 @@ namespace Business.Services
             throw new NotImplementedException();
         }
 
-        public Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
+        public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+            try
+            {
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
+                            ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
+
+                order = SetUpdateDataForOrderDetails(order, model);
+
+                order = SetUpdateDataForOrder(order, model);
+
+                order = SetUpdateDataForOrderItemsAsync(order, model);
+
+                _unitOfWork.OrderDetailRepository.Update(order.OrderDetail);
+
+                _unitOfWork.OrderRepository.Update(order);
+
+                await _unitOfWork.SaveAsync(ct);
+
+                await transaction.CommitAsync(ct);
+                return _mapper.Map<OrderModel>(order);
+            }
+            catch (OrderArgumentException ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw new OrderArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw new OrderArgumentException("Unable to save order", ex);
+            }
+        }
+
+        private Order SetUpdateDataForOrderDetails(Order order, UpdateOrderModel model)
+        {
+            order.OrderDetail.IsPaid = model.OrderDetail.IsPaid;
+            order.OrderDetail.PaymentType = (Entities.Enums.PaymentType)model.OrderDetail.PaymentType;
+            order.OrderDetail.PaymentStatus = (Entities.Enums.PaymentStatus)model.OrderDetail.PaymentStatus;
+            order.OrderDetail.Sum = model.OrderDetail.Sum;
+
+            return order;
+        }
+
+        private Order SetUpdateDataForOrder(Order order, UpdateOrderModel model)
+        {
+            order.OrderState = (Entities.Enums.OrderState)model.OrderState;
+            order.OrderCreateDate = model.OrderCreateDate;
+            order.OrderFinishedDate = model.OrderFinishedDate;
+            
+            return order;
+        }
+
+        private Order SetUpdateDataForOrderItemsAsync(Order order, UpdateOrderModel model)
+        {
+            order.OrderItems = _mapper.Map<IEnumerable<OrderItem>>(model.OrderItems);
+
+            foreach(OrderItem item in order.OrderItems)
+            {
+                item.OrderId = order.Id;
+            }
+
+            return order;
         }
 
         public async Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct)
