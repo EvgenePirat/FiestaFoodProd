@@ -9,11 +9,9 @@ namespace Business.Mappers
     {
         public OrderDetailProfile()
         {
-            CreateMap<CreateOrderDetailModel, OrderItem>();
-            CreateMap<UpdateOrderDetailModel, OrderItem>();
-            CreateMap<OrderDetailModel, OrderItem>();
-            CreateMap<OrderDetailModel, OrderItem>().ReverseMap();
-            CreateMap<UpdateOrderDetailStateModel, OrderItem>();
+            CreateMap<CreateOrderDetailModel, OrderDetail>();
+            CreateMap<UpdateOrderDetailModel, OrderDetail>();
+            CreateMap<OrderDetail, OrderDetailModel>();
         }
     }
 }

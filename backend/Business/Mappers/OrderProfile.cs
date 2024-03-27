@@ -12,12 +12,7 @@ namespace Business.Mappers
         public OrderProfile()
         {
             CreateMap<CreateOrderModel, Order>();
-            CreateMap<UpdateOrderModel, Order>();
             CreateMap<Order, OrderModel>();
-            CreateMap<Order, OrderModel>().ReverseMap();
-            CreateMap<CreateOrderDetailModel, OrderItem>();
-            CreateMap<UpdateOrderDetailModel, OrderItem>();
-            CreateMap<OrderItem, OrderDetailModel>();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Models.Enums;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
+using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using DataAccess.Interfaces;
 using Entities.Entities;
@@ -174,24 +176,77 @@ namespace Business.Services
         //        }
         //    }
         //}
+
+        public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
+                        throw new OrderArgumentException($"Order with this id {id} not exist");
+
+            return _mapper.Map<OrderModel>(order);
+        }
+
         public async Task<OrderModel?> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
         {
             await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+            var createModel = new Order();
 
             try
             {
-                var createModel = _mapper.Map<Order>(model);
+                if(model.OrderState == OrderState.Todo && model.OrderDetail.PaymentStatus == PaymentStatus.Payed)
+                {
+                    createModel = _mapper.Map<Order>(model);
 
-                await _unitOfWork.SaveAsync(ct);
+                    await SubtractIngredients(createModel.OrderItems, ct);
 
-                await transaction.CommitAsync(ct);
-                return _mapper.Map<OrderModel>(null);
+                    _unitOfWork.OrderRepository.Add(createModel);          
+
+                    await _unitOfWork.SaveAsync(ct);
+
+                    await transaction.CommitAsync(ct);
+                }
+
+
+                return _mapper.Map<OrderModel>(createModel);
+
+            }
+            catch(IngredientArgumentException ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw;
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync(ct);
                 throw new OrderArgumentException("Unable to create order", ex);
             }
+        }
+
+        private async Task SubtractIngredients(IEnumerable<OrderItem> items, CancellationToken ct)
+        {
+            foreach(OrderItem item in items)
+            {
+                var dish = _unitOfWork.DishRepository.GetDishById(item.DishId, ct).Result;
+
+                var ingredients = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
+
+                if(dish != null)
+                {
+                    foreach (var dishIngridient in dish.DishIngridients)
+                    {
+                        var ingredient = ingredients.FirstOrDefault(i => i.Id == dishIngridient.IngredientId);
+
+                        if (ingredient != null)
+                        {
+                            if (ingredient.Quantity.Count > (dishIngridient.Count * item.Count))
+                                ingredient.Quantity.Count -= (dishIngridient.Count * item.Count);
+                            else
+                                throw new IngredientArgumentException($"Quantity for {ingredient.Name} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
+                        }
+                    }
+                }         
+            }
+
+            await _unitOfWork.SaveAsync(ct);
         }
 
         public Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
@@ -205,11 +260,6 @@ namespace Business.Services
         }
 
         public Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<OrderModel> IOrderService.GetOrderByIdAsync(Guid id, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
