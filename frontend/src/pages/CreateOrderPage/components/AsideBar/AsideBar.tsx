@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { clearOrder, createOrder } from '../../../../redux/ordersSlice';
+import { Popup } from '../../../../components';
 import { OrderItem } from '../';
 
 import styles from './AsideBar.module.scss';
@@ -9,10 +10,12 @@ import styles from './AsideBar.module.scss';
 const discountArray = [5, 10, 15];
 
 export default function AsideBar() {
-  const [discount, setDiscount] = useState(0);
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
   const dispatch = useDispatch();
+
+  const [isVisiblePopup, setIsVisiblePopup] = useState(true);
+  const [discount, setDiscount] = useState(0);
 
   const sum = useMemo(
     () =>
@@ -80,6 +83,8 @@ export default function AsideBar() {
           Розрахувати
         </button>
       </div>
+
+      {isVisiblePopup && <Popup onClose={() => setIsVisiblePopup(false)}></Popup>}
     </div>
   );
 }
