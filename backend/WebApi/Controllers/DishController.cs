@@ -69,18 +69,18 @@ namespace WebApi.Controllers
             return Ok(mappedResult);
         }
 
-        [HttpGet("filtered")]
-        public async Task<ActionResult<PagedDishDto>> GetFilteredDishAsync([FromQuery]DishFilterDto filter, CancellationToken ct)
-        {
-            _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Task started,", nameof(DishController), nameof(GetFilteredDishAsync));
+        //[HttpGet("filtered")]
+        //public async Task<ActionResult<PagedDishDto>> GetFilteredDishAsync([FromQuery]DishFilterDto filter, CancellationToken ct)
+        //{
+        //    _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Task started,", nameof(DishController), nameof(GetFilteredDishAsync));
 
-            var mappedFilter = _mapper.Map<FilterModel>(filter);
-            var result = await _dishService.GetFilteredDishesAsync(mappedFilter, ct);
+        //    var mappedFilter = _mapper.Map<FilterModel>(filter);
+        //    var result = await _dishService.GetFilteredDishesAsync(mappedFilter, ct);
 
-            var mappedResult = _mapper.Map<PagedDishDto>(result);
-            _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Result - Ok, Task ended", nameof(DishController), nameof(GetFilteredDishAsync));
-            return Ok(mappedResult);
-        }
+        //    var mappedResult = _mapper.Map<PagedDishDto>(result);
+        //    _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Result - Ok, Task ended", nameof(DishController), nameof(GetFilteredDishAsync));
+        //    return Ok(mappedResult);
+        //}
 
         [HttpPut("update")]
         public async Task<ActionResult<DishModel>> UpdateDishAsync([FromForm] UpdateDishDto model, CancellationToken ct)

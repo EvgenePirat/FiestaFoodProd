@@ -11,6 +11,7 @@ namespace WebApi.Mappers
         public OrderItemDtoProfile()
         {
             CreateMap<CreateOrderItemDto, CreateOrderItemModel>();
+            CreateMap<UpdateOrderItemDto, UpdateOrderItemModel>();
             CreateMap<OrderItemModel, OrderItemDto>();
         }
     }
