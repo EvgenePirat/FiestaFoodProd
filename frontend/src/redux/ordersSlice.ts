@@ -20,6 +20,9 @@ const ordersSlice = createSlice({
         state.order.push({ id: action.payload, count: 1, comment: '' });
       }
     },
+    removeItem: (state, action: PayloadAction<OrderItemType['id']>) => {
+      state.order = state.order.filter((obj) => obj.id !== action.payload);
+    },
     changeComment: (
       state,
       action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['comment'] }>
@@ -38,5 +41,5 @@ const ordersSlice = createSlice({
   }
 });
 
-export const { addItem, changeComment, clearOrder, createOrder } = ordersSlice.actions;
+export const { addItem, removeItem, changeComment, clearOrder, createOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;

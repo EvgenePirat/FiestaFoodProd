@@ -10,6 +10,8 @@
   min-height: 50px;
   font-size: 2rem;
   border-radius: 10px;
+  position: relative;
+  overflow: hidden
 }
 
 .info-content {
@@ -35,4 +37,26 @@
 
 .not-found {
   margin: auto;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 85px;
+  border: none;
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $colorDanger;
+  color: $colorContentLight;
+  transform: translate(100%, 0);
+  transition: transform .3s ease;
+
+  &.active,
+  &:focus {
+    transform: translate(0);
+  }
 }
