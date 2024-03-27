@@ -1,11 +1,15 @@
-﻿using WebApi.Models.OrderDetails.Request;
+﻿using Entities.Entities;
+using WebApi.Models.Enums;
+using WebApi.Models.OrdemItems.Request;
+using WebApi.Models.OrderDetails.Request;
 
 namespace WebApi.Models.Orders.Request
 {
     public class CreateOrderDto
     {
-        public Guid? CustomerInfoId { get; set; }
         public CreateOrderDetailDto OrderDetail { get; set; }
-        public IEnumerable<Guid> ProductIds { get; set; }
+        public OrderState OrderState { get; set; }
+        public DateTime OrderCreateDate { get; set; }
+        public IEnumerable<CreateOrderItemDto> OrderItems { get; set; }
     }
 }
