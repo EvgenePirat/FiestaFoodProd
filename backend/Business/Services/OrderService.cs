@@ -1,25 +1,28 @@
-﻿
+﻿using AutoMapper;
 using Business.Interfaces;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
+using CustomExceptions.OrderCustomExceptions;
+using DataAccess.Interfaces;
+using Entities.Entities;
 
 namespace Business.Services
 {
     public class OrderService : IOrderService
     {
-        //private readonly IUnitOfWork _unitOfWork;
-        //private readonly IMapper _mapper;
-        //private readonly IOrderDetailService _orderDetailService;
-        //private readonly ICustomerInfoService _customerInfoService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IOrderDetailService _orderDetailService;
+        private readonly IDishService _dishService;
 
-        //public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IOrderDetailService orderDetailService, ICustomerInfoService customerInfoService)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //    _mapper = mapper;
-        //    _orderDetailService = orderDetailService;
-        //    _customerInfoService = customerInfoService;
-        //}
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IOrderDetailService orderDetailService, IDishService dishService)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _orderDetailService = orderDetailService;
+            _dishService = dishService;
+        }
 
         //public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
         //{
@@ -171,9 +174,24 @@ namespace Business.Services
         //        }
         //    }
         //}
-        public Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
+        public async Task<OrderModel?> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+
+            try
+            {
+                var createModel = _mapper.Map<Order>(model);
+
+                await _unitOfWork.SaveAsync(ct);
+
+                await transaction.CommitAsync(ct);
+                return _mapper.Map<OrderModel>(null);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw new OrderArgumentException("Unable to create order", ex);
+            }
         }
 
         public Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
@@ -186,12 +204,12 @@ namespace Business.Services
             throw new NotImplementedException();
         }
 
-        public Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
+        public Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
+        Task<OrderModel> IOrderService.GetOrderByIdAsync(Guid id, CancellationToken ct)
         {
             throw new NotImplementedException();
         }
