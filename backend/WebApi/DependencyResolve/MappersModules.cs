@@ -12,15 +12,12 @@ namespace WebApi.DependencyResolve
             builder.Register(c => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new DishesProfile());
-                cfg.AddProfile(new ProductDtoProfile());
+                cfg.AddProfile(new DishDtoProfile());
 
                 cfg.AddProfile(new PaginationProfile());
 
                 cfg.AddProfile(new CategoryDtoProfile());
                 cfg.AddProfile(new CategoryProfile());
-
-                cfg.AddProfile(new CustomerInfoProfile());
-                cfg.AddProfile(new CustomerInfoDtoProfile());
 
                 cfg.AddProfile(new UserProfile());
                 cfg.AddProfile(new UserDtoProfile());
@@ -33,6 +30,18 @@ namespace WebApi.DependencyResolve
 
                 cfg.AddProfile(new OrderDtoProfile());
                 cfg.AddProfile(new OrderProfile());
+
+                cfg.AddProfile(new IngredientDtoProfile());
+                cfg.AddProfile(new IngredientProfile());
+
+                cfg.AddProfile(new QuantityDtoProfile());
+                cfg.AddProfile(new QuantityProfile());
+
+                cfg.AddProfile(new DishIngredientDtoProfile());
+                cfg.AddProfile(new DishIngredientProfile());
+
+                cfg.AddProfile(new OrderItemDtoProfile());
+                cfg.AddProfile(new OrderItemProfile());
 
             })).SingleInstance();
 

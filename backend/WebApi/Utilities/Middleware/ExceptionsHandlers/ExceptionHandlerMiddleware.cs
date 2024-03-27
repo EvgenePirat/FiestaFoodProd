@@ -1,5 +1,7 @@
 ﻿using System.Net;
-using CustomExceptions.CustomerInfoCustomException;
+using CustomExceptions.CategoryCustomExceptions;
+using CustomExceptions.DishCustomExceptions;
+using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using CustomExceptions.OrderDetailCustomExceptions;
 using CustomExceptions.UserCustomException;
@@ -38,8 +40,10 @@ namespace WebApi.Utilities.Middleware.ExceptionsHandlers
                 ApplicationException _ => new ExceptionResponse(HttpStatusCode.BadRequest, "Application exception occurred."),
                 KeyNotFoundException _ => new ExceptionResponse(HttpStatusCode.NotFound, "The request key not found."),
                 UnauthorizedAccessException _ => new ExceptionResponse(HttpStatusCode.Unauthorized, "Unauthorized."),
-                CustomerInfoArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
                 UserArgumentException _ => new ExceptionResponse(HttpStatusCode.Conflict, exception.Message),
+                IngredientArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
+                DishArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
+                CategoryArgumentException _ => new ExceptionResponse(HttpStatusCode.BadRequest, exception.Message),
                 OperationCanceledException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),
                 OrderDetailArgumentException _ => new ExceptionResponse(HttpStatusCode.RequestTimeout, exception.Message),

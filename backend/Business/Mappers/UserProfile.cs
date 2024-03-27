@@ -15,10 +15,6 @@ namespace Business.Mappers
 
             CreateMap<User, UserModel>();
             CreateMap<User, UserModel>().ReverseMap();
-
-            CreateMap<PaginationResult<CustomerInfo>, PagedUsersModel>()
-                .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(src => src.TotalPages))
-                .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Result));
         }
     }
 }

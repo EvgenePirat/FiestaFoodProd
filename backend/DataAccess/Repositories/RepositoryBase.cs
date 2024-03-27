@@ -26,7 +26,6 @@ namespace DataAccess.Repositories
         {
             return await _context.Set<TEntity>()
                 .IncludeAll()
-                .AsNoTracking()
                 .ToListAsync(cancellationToken: ct);
         }
 

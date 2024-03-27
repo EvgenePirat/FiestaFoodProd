@@ -24,10 +24,6 @@ namespace DataAccess.Data
         public IUserRepository UserRepository => 
             _userRepository ??= new UserRepository(_context);
 
-        private ICustomerInfoRepository _CustomerInfoRepository;
-        public ICustomerInfoRepository CustomerInfoRepository => 
-            _CustomerInfoRepository ??= new CustomerInfoRepository(_context);
-
         private IOrderRepository _orderRepository;
         public IOrderRepository OrderRepository => 
             _orderRepository ??= new OrderRepository(_context);
@@ -36,10 +32,16 @@ namespace DataAccess.Data
         public IOrderDetailRepository OrderDetailRepository => 
             _orderDetailRepository ??= new OrderDetailRepository(_context);
 
-        private IIngredientsRepository _ingredientsRepository;
-        public IIngredientsRepository IngredientsRepository =>
-            _ingredientsRepository ??= new IngredientsRepository(_context);
-        
+        private IIngredientRepository _ingredientsRepository;
+        public IIngredientRepository IngredientsRepository =>
+            _ingredientsRepository ??= new IngredientRepository(_context);
+
+        private IOrderItemRepository _orderItemRepository;
+
+        public IOrderItemRepository OrderItemRepository => _orderItemRepository ??= new OrderItemRepository(_context);
+
+        private IDishIngredientRepository _dishIngredientRepository;
+        public IDishIngredientRepository DishIngredientRepository => _dishIngredientRepository ??= new DishIngredientRepository(_context);
 
         public async Task SaveAsync(CancellationToken ct)
         {

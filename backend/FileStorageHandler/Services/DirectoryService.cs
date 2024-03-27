@@ -121,16 +121,25 @@ namespace FileStorageHandler.Services
                 case User user:
                 {
                     var path = Path.Combine(_projectDirectory, "Users", user.Id.ToString());
+
                     if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                         await CreateFolderAsync(path, ct);
+
                     return path;
                 }
                 case Dish product:
                 {
-                    var path = Path.Combine(_projectDirectory, "Products", product.Name);
+                    var path = Path.Combine(_projectDirectory, "Dish", product.Name);
                     if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                         await CreateFolderAsync(path, ct);
                     return path;
+                }
+                case Category category:
+                {
+                    var path = Path.Combine(_projectDirectory, "Category", category.CategoryName);
+                    if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
+                        await CreateFolderAsync(path, ct);
+                     return path;
                 }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(entity), entity, "Entity not supported");

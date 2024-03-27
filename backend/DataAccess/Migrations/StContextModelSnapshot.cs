@@ -34,37 +34,13 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("PhotoPaths")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Entities.Entities.CustomerInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CustomerInfos");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
@@ -86,9 +62,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PhotoPaths")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -103,9 +76,25 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("OrderId");
+                    b.ToTable("Dishes", (string)null);
+                });
 
-                    b.ToTable("Dishes");
+            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
+                {
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Count")
+                        .HasColumnType("float");
+
+                    b.HasKey("DishId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("DishIngridients", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Ingredient", b =>
@@ -116,11 +105,8 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DishId")
+                    b.Property<int>("Importance")
                         .HasColumnType("int");
-
-                    b.Property<double>("Kilograms")
-                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -128,9 +114,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DishId");
-
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Order", b =>
@@ -139,68 +123,32 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerInfoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte>("OrderCardNumber")
-                        .HasColumnType("tinyint");
-
                     b.Property<DateTime>("OrderCreateDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OrderDetailId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("OrderFinishedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("OrderOnTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("OrderState")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerInfoId");
-
-                    b.HasIndex("OrderDetailId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.OrderDetail", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
-
-                    b.Property<int>("OrderState")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PaymentInfoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PaymentInfoId");
-
-                    b.ToTable("OrderDetails");
-                });
-
-            modelBuilder.Entity("Entities.Entities.PaymentInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
@@ -208,12 +156,34 @@ namespace DataAccess.Migrations
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserPaymentStatus")
+                    b.Property<double>("Sum")
+                        .HasColumnType("float");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("OrderDetails", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DishId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("PaymentInfos");
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Quantity", b =>
@@ -227,12 +197,18 @@ namespace DataAccess.Migrations
                     b.Property<double>("Count")
                         .HasColumnType("float");
 
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Measurement")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Quantities");
+                    b.HasIndex("IngredientId")
+                        .IsUnique();
+
+                    b.ToTable("Quantities", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>
@@ -255,16 +231,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Entities.Entities.CustomerInfo", b =>
-                {
-                    b.HasOne("Entities.Entities.User", "User")
-                        .WithMany("CustomerInfos")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
@@ -275,68 +242,101 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Entities.Order", null)
-                        .WithMany("Dishes")
-                        .HasForeignKey("OrderId");
-
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Entities.Entities.Ingredient", b =>
+            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
                 {
-                    b.HasOne("Entities.Entities.Dish", null)
-                        .WithMany("DishIngredients")
-                        .HasForeignKey("DishId");
+                    b.HasOne("Entities.Entities.Dish", "Dish")
+                        .WithMany("DishIngridients")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Entities.Ingredient", "Ingredient")
+                        .WithMany("DishIngridients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Ingredient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Order", b =>
                 {
-                    b.HasOne("Entities.Entities.CustomerInfo", "CustomerInfo")
-                        .WithMany()
-                        .HasForeignKey("CustomerInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Entities.OrderDetail", "OrderDetail")
-                        .WithMany()
-                        .HasForeignKey("OrderDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Entities.Entities.User", null)
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
-
-                    b.Navigation("CustomerInfo");
-
-                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("Entities.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("Entities.Entities.PaymentInfo", "PaymentInfo")
-                        .WithMany()
-                        .HasForeignKey("PaymentInfoId")
+                    b.HasOne("Entities.Entities.Order", "Order")
+                        .WithOne("OrderDetail")
+                        .HasForeignKey("Entities.Entities.OrderDetail", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PaymentInfo");
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Entities.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Entities.Entities.Dish", "Dish")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Entities.Entities.Quantity", b =>
+                {
+                    b.HasOne("Entities.Entities.Ingredient", "Ingredient")
+                        .WithOne("Quantity")
+                        .HasForeignKey("Entities.Entities.Quantity", "IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
                 });
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
                 {
-                    b.Navigation("DishIngredients");
+                    b.Navigation("DishIngridients");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Entities.Entities.Ingredient", b =>
+                {
+                    b.Navigation("DishIngridients");
+
+                    b.Navigation("Quantity")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Entities.Order", b =>
                 {
-                    b.Navigation("Dishes");
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
+
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Entities.Entities.User", b =>
                 {
-                    b.Navigation("CustomerInfos");
-
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

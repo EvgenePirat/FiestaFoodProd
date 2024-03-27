@@ -1,8 +1,12 @@
-﻿namespace WebApi.Models.DishesDto.Request
+﻿using Entities.Entities;
+using System.ComponentModel.DataAnnotations;
+
+namespace WebApi.Models.DishesDto.Request
 {
     public class UpdateDishDto
     {
-        public Guid Id { get; set; }
+        [Required]
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }

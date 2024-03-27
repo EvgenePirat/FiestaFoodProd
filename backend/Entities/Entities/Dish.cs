@@ -13,7 +13,8 @@ namespace Entities.Entities
         public virtual Category Category { get; set; }
         public string PhotoPaths { get; set; }
         public Size Size { get; set; }
-        public IEnumerable<Ingredient> DishIngredients { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
+        public IEnumerable<DishIngridient> DishIngridients { get; set; }
     }
 }
  

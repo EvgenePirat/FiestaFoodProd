@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Models.Dishes;
+using Business.Models.Enums;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
-using CustomExceptions.CustomerInfoCustomException;
+using Business.Models.Pagination;
+using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
-using Entities.Enums;
 
 namespace Business.Services
 {
@@ -17,43 +19,127 @@ namespace Business.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IOrderDetailService _orderDetailService;
-        private readonly ICustomerInfoService _customerInfoService;
+        private readonly IDishService _dishService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IOrderDetailService orderDetailService, ICustomerInfoService customerInfoService)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IOrderDetailService orderDetailService, IDishService dishService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _orderDetailService = orderDetailService;
-            _customerInfoService = customerInfoService;
+            _dishService = dishService;
         }
 
-        public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
+
+        //public async Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
+        //{
+        //    var dbFilter = _mapper.Map<FilterState>(filter);
+        //    var result = await _unitOfWork.OrderRepository.GetPagedByQueryAsync(dbFilter, ct);
+        //    return _mapper.Map<PagedOrdersModel>(result);
+        //}
+
+        //public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
+        //{
+        //    await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+        //    try
+        //    {
+        //        var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
+        //                    ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
+
+        //        order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
+        //        order.Price = order.Dishes.Sum(pr => pr.Price);
+
+        //        if (model.CustomerInfo is not null)
+        //        {
+        //            await _customerInfoService.UpdateCustomerInfoAsync(model.CustomerInfo, ct);
+        //        }
+
+        //        _unitOfWork.OrderRepository.Update(order);
+        //        await _unitOfWork.SaveAsync(ct);
+
+        //        await transaction.CommitAsync(ct);
+        //        return _mapper.Map<OrderModel>(order);
+        //    }
+        //    catch (OrderArgumentException ex)
+        //    {
+        //        await transaction.RollbackAsync(ct);
+        //        throw new OrderArgumentException(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await transaction.RollbackAsync(ct);
+        //        throw new OrderArgumentException("Unable to save order", ex);
+        //    }
+        //}
+
+        //public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
+        //{
+        //    var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
+        //                throw new OrderArgumentException($"Order with this id {id} not exist");
+        //    _unitOfWork.OrderRepository.Delete(order);
+        //    await _unitOfWork.SaveAsync(ct);
+        //}
+
+        //private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> dishIds, CancellationToken ct)
+        //{
+        //    var dishes = await _unitOfWork.DishRepository.GetDishesByIds(dishIds, ct)
+        //                   ?? throw new OrderArgumentException($"dishes with ids: {string.Join(", ", dishIds)} not exist");
+
+        //    var ingredients  = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
+
+        //    foreach (var dish in dishes)
+        //    {
+        //        SubtractIngredients(ingredients, dish.DishIngredients);
+        //    }
+
+        //    await _unitOfWork.IngredientsRepository.UpdateIngredients(ingredients, ct);
+
+        //    var existingDishesIds = dishes.Select(pr => pr.Id);
+        //    var nonExistDishesIds = dishIds.Except(existingDishesIds);
+
+        //    if (nonExistDishesIds.Any())
+        //    {
+        //        throw new OrderArgumentException($"dishes with ids: {string.Join(", ", nonExistDishesIds)} not exist");
+        //    }
+
+        //    return dishes;
+        //}
+
+        public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
+                        throw new OrderArgumentException($"Order with this id {id} not exist");
+
+            return _mapper.Map<OrderModel>(order);
+        }
+
+        public async Task<OrderModel?> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
         {
             await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+            var createModel = new Order();
+
             try
             {
-                var order = new Order();
+                if(model.OrderState == OrderState.Todo && model.OrderDetail.PaymentStatus == PaymentStatus.Payed)
+                {
+                    createModel = _mapper.Map<Order>(model);
 
-                var customerInfo = await GetOrderCustomerInfo(model, ct);
-                order.CustomerInfoId = customerInfo.Id;
+                    await SubtractIngredients(createModel.OrderItems, ct);
 
-                var orderDetail = _mapper.Map<OrderDetail>(model.OrderDetail);
+                    _unitOfWork.OrderRepository.Add(createModel);          
 
-                _unitOfWork.OrderDetailRepository.Add(orderDetail);
-                await _unitOfWork.SaveAsync(ct);
+                    await _unitOfWork.SaveAsync(ct);
 
-                order.OrderDetail = orderDetail;
-                order.OrderDetail.OrderState = OrderState.Pending;
+                    await transaction.CommitAsync(ct);
+                }
 
-                order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
-                order.Price = order.Dishes.Sum(pr => pr.Price);
 
-                _unitOfWork.OrderRepository.Add(order);
-                await _unitOfWork.SaveAsync(ct);
+                return _mapper.Map<OrderModel>(createModel);
 
-                await transaction.CommitAsync(ct);
-                order.CustomerInfo = customerInfo;
-                return _mapper.Map<OrderModel>(order);
+            }
+            catch(IngredientArgumentException ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw;
             }
             catch (Exception ex)
             {
@@ -62,19 +148,47 @@ namespace Business.Services
             }
         }
 
+        private async Task SubtractIngredients(IEnumerable<OrderItem> items, CancellationToken ct)
+        {
+            foreach(OrderItem item in items)
+            {
+                var dish = _unitOfWork.DishRepository.GetDishById(item.DishId, ct).Result;
 
-        public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
+                var ingredients = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
+
+                if(dish != null)
+                {
+                    foreach (var dishIngridient in dish.DishIngridients)
+                    {
+                        var ingredient = ingredients.FirstOrDefault(i => i.Id == dishIngridient.IngredientId);
+
+                        if (ingredient != null)
+                        {
+                            if (ingredient.Quantity.Count > (dishIngridient.Count * item.Count))
+                                ingredient.Quantity.Count -= (dishIngridient.Count * item.Count);
+                            else
+                                throw new IngredientArgumentException($"Quantity for {ingredient.Name} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
+                        }
+                    }
+                }         
+            }
+
+            await _unitOfWork.SaveAsync(ct);
+        }
+
+        public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
                         throw new OrderArgumentException($"Order with this id {id} not exist");
-            return _mapper.Map<OrderModel>(order);
+
+            _unitOfWork.OrderRepository.Delete(order);
+
+            await _unitOfWork.SaveAsync(ct);
         }
 
-        public async Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
+        public Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
         {
-            var dbFilter = _mapper.Map<FilterState>(filter);
-            var result = await _unitOfWork.OrderRepository.GetPagedByQueryAsync(dbFilter, ct);
-            return _mapper.Map<PagedOrdersModel>(result);
+            throw new NotImplementedException();
         }
 
         public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
@@ -85,15 +199,16 @@ namespace Business.Services
                 var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
                             ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
 
-                order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
-                order.Price = order.Dishes.Sum(pr => pr.Price);
+                order = SetUpdateDataForOrderDetails(order, model);
 
-                if (model.CustomerInfo is not null)
-                {
-                    await _customerInfoService.UpdateCustomerInfoAsync(model.CustomerInfo, ct);
-                }
+                order = SetUpdateDataForOrder(order, model);
+
+                order = SetUpdateDataForOrderItemsAsync(order, model);
+
+                _unitOfWork.OrderDetailRepository.Update(order.OrderDetail);
 
                 _unitOfWork.OrderRepository.Update(order);
+
                 await _unitOfWork.SaveAsync(ct);
 
                 await transaction.CommitAsync(ct);
@@ -111,71 +226,49 @@ namespace Business.Services
             }
         }
 
-        public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
+        private Order SetUpdateDataForOrderDetails(Order order, UpdateOrderModel model)
         {
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
-                        throw new OrderArgumentException($"Order with this id {id} not exist");
-            _unitOfWork.OrderRepository.Delete(order);
-            await _unitOfWork.SaveAsync(ct);
+            order.OrderDetail.IsPaid = model.OrderDetail.IsPaid;
+            order.OrderDetail.PaymentType = (Entities.Enums.PaymentType)model.OrderDetail.PaymentType;
+            order.OrderDetail.PaymentStatus = (Entities.Enums.PaymentStatus)model.OrderDetail.PaymentStatus;
+            order.OrderDetail.Sum = model.OrderDetail.Sum;
+
+            return order;
         }
 
-        private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> dishIds, CancellationToken ct)
+        private Order SetUpdateDataForOrder(Order order, UpdateOrderModel model)
         {
-            var dishes = await _unitOfWork.DishRepository.GetDishesByIds(dishIds, ct)
-                           ?? throw new OrderArgumentException($"dishes with ids: {string.Join(", ", dishIds)} not exist");
-
-            var ingredients  = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
-
-            foreach (var dish in dishes)
-            {
-                SubtractIngredients(ingredients, dish.DishIngredients);
-            }
-
-            await _unitOfWork.IngredientsRepository.UpdateIngredients(ingredients, ct);
-
-            var existingDishesIds = dishes.Select(pr => pr.Id);
-            var nonExistDishesIds = dishIds.Except(existingDishesIds);
-
-            if (nonExistDishesIds.Any())
-            {
-                throw new OrderArgumentException($"dishes with ids: {string.Join(", ", nonExistDishesIds)} not exist");
-            }
-
-            return dishes;
+            order.OrderState = (Entities.Enums.OrderState)model.OrderState;
+            order.OrderCreateDate = model.OrderCreateDate;
+            order.OrderFinishedDate = model.OrderFinishedDate;
+            
+            return order;
         }
 
-        private async Task<CustomerInfo> GetOrderCustomerInfo(CreateOrderModel model, CancellationToken ct)
+        private Order SetUpdateDataForOrderItemsAsync(Order order, UpdateOrderModel model)
         {
-            if (model is { CustomerInfoId: null, CustomerInfo: not null })
+            order.OrderItems = _mapper.Map<IEnumerable<OrderItem>>(model.OrderItems);
+
+            foreach(OrderItem item in order.OrderItems)
             {
-                var mappedModel = _mapper.Map<CustomerInfo>(model.CustomerInfo);
-                _unitOfWork.CustomerInfoRepository.Add(mappedModel);
-                return mappedModel;
+                item.OrderId = order.Id;
             }
 
-            if (model.CustomerInfoId is not null)
-            {
-                return await _unitOfWork.CustomerInfoRepository.GetCustomerInfoById((Guid)model.CustomerInfoId, ct) 
-                       ?? throw new CustomerInfoArgumentException($"Customer with this id {model.CustomerInfoId} not exist");
-            }
-
-            throw new OrderArgumentException("Missing required customer information");
+            return order;
         }
 
-        private static void SubtractIngredients(IEnumerable<Ingredient> ingredients1,
-            IEnumerable<Ingredient> ingredients2)
+        public async Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct)
         {
-            var ingredientDict1 = ingredients1.ToDictionary(i => i.Name);
-            var ingredientDict2 = ingredients2.ToDictionary(i => i.Name);
+            var mappedModel = _mapper.Map<PaginationDb>(pagination);
 
-            // Subtracting kilograms from ingredients1 using ingredients2
-            foreach (var kvp in ingredientDict2)
+            var result = await _unitOfWork.OrderRepository.GetAllOrdersPagination(mappedModel, ct);
+
+            return new PagedOrdersModel()
             {
-                if (ingredientDict1.TryGetValue(kvp.Key, out var ingredient))
-                {
-                    ingredient.Kilograms -= kvp.Value.Kilograms;
-                }
-            }
+                Orders = _mapper.Map<IEnumerable<OrderModel>>(result.Result),
+                TotalPages = result.TotalPages
+            };
+
         }
     }
 }

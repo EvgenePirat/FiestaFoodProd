@@ -10,6 +10,5 @@ namespace Business.Models.Users.Response
         public string Login { get; set; }
         public Role Role { get; set; }
         public IEnumerable<OrderModel> Orders { get; set; }
-        public IEnumerable<CustomerInfo> CustomerInfos { get; set; }
     }
 }

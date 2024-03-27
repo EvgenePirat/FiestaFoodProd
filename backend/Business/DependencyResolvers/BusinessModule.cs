@@ -15,7 +15,6 @@ namespace Business.DependencyResolvers
             builder.RegisterType<DishService>().As<IDishService>();
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             builder.RegisterType<CategoryService>().As<ICategoryService>();
-            builder.RegisterType<CustomerInfoService>().As<ICustomerInfoService>();
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<CategoryService>().As<ICategoryService>();
             builder.RegisterType<FileService>().As<IFileService>();
@@ -23,6 +22,7 @@ namespace Business.DependencyResolvers
             builder.RegisterType<DirectoryService>().As<IDirectoryService>();
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<OrderDetailService>().As<IOrderDetailService>();
+            builder.RegisterType<IngredientService>().As<IIngredientService>();
         }
     }
 }

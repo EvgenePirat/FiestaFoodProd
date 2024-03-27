@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
 using Business.Models.Dishes;
+using Business.Models.DishIngredients.Request;
 using Business.Models.Filter;
 using Business.Models.Pagination;
 using CustomExceptions.CategoryCustomExceptions;
@@ -34,7 +35,6 @@ namespace Business.Services
             // Initialize default defaultPath for Dish
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
             // Create a folders by path
-            await _directoryService.CreateFolderAsync(defaultPath, ct);
 
             mappedModel.PhotoPaths = defaultPath;
 
@@ -44,6 +44,7 @@ namespace Business.Services
 
             if (model.Files is not null && model.Files.Any())
                 await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
+
             return _mapper.Map<DishModel>(mappedModel);
         }
 
@@ -157,6 +158,28 @@ namespace Business.Services
                             ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");
 
             return dish;
+        }
+
+        public async Task UpdateDishIngredientsForDishAsync(int dishId, List<UpdateDishIngredientModel> model, CancellationToken ct)
+        {
+            var dish = await _unitOfWork.DishRepository.GetDishById(dishId, ct)
+                      ?? throw new DishArgumentException("Dish with this id not found");
+
+            foreach(var elem in dish.DishIngridients)
+            {
+                foreach(var dishIngredient in model)
+                {
+                    if (elem.IngredientId == dishIngredient.IngredientId)
+                    {
+                        elem.Count = dishIngredient.Count;
+                        _unitOfWork.DishIngredientRepository.Update(elem);
+                    }
+                }
+
+
+            }
+
+            await _unitOfWork.SaveAsync(ct);
         }
     }
 }

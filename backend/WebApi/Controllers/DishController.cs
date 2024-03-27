@@ -8,6 +8,8 @@ using WebApi.Models.PaginationsDto;
 using WebApi.Models.DishesDto.Request;
 using WebApi.Models.DishesDto.Response;
 using WebApi.Utilities;
+using WebApi.Models.DishIngredientsDto.Request;
+using Business.Models.DishIngredients.Request;
 
 namespace WebApi.Controllers
 {
@@ -25,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult<DishDto>> CreateDish([FromForm]AddDishDto model, CancellationToken ct)
+        public async Task<ActionResult<DishDto>> CreateDish(AddDishDto model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<AddDishModel>(model);
             var dish = await _dishService.AddDishAsync(mappedModel, ct);
@@ -44,10 +46,13 @@ namespace WebApi.Controllers
         {
             _logger.LogInformation("{controller}.{method} - get Dish method with id in controller, Task started", 
                 nameof(DishController), nameof(GetDishByIdAsync));
+
             var dish = await _dishService.GetDishByIdAsync(dishId, ct);
             var mappedDish = _mapper.Map<DishDto>(dish);
+
             _logger.LogInformation("{controller}.{method} - get Dish method with id, Result - Ok, Task ended", 
                 nameof(DishController), nameof(GetDishByIdAsync));
+
             return Ok(mappedDish);
         }
 
@@ -64,18 +69,18 @@ namespace WebApi.Controllers
             return Ok(mappedResult);
         }
 
-        [HttpGet("filtered")]
-        public async Task<ActionResult<PagedDishDto>> GetFilteredDishAsync([FromQuery]DishFilterDto filter, CancellationToken ct)
-        {
-            _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Task started,", nameof(DishController), nameof(GetFilteredDishAsync));
+        //[HttpGet("filtered")]
+        //public async Task<ActionResult<PagedDishDto>> GetFilteredDishAsync([FromQuery]DishFilterDto filter, CancellationToken ct)
+        //{
+        //    _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Task started,", nameof(DishController), nameof(GetFilteredDishAsync));
 
-            var mappedFilter = _mapper.Map<FilterModel>(filter);
-            var result = await _dishService.GetFilteredDishesAsync(mappedFilter, ct);
+        //    var mappedFilter = _mapper.Map<FilterModel>(filter);
+        //    var result = await _dishService.GetFilteredDishesAsync(mappedFilter, ct);
 
-            var mappedResult = _mapper.Map<PagedDishDto>(result);
-            _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Result - Ok, Task ended", nameof(DishController), nameof(GetFilteredDishAsync));
-            return Ok(mappedResult);
-        }
+        //    var mappedResult = _mapper.Map<PagedDishDto>(result);
+        //    _logger.LogInformation("{controller}.{method} - Get paged Dishes by query filter, Result - Ok, Task ended", nameof(DishController), nameof(GetFilteredDishAsync));
+        //    return Ok(mappedResult);
+        //}
 
         [HttpPut("update")]
         public async Task<ActionResult<DishModel>> UpdateDishAsync([FromForm] UpdateDishDto model, CancellationToken ct)
@@ -90,6 +95,21 @@ namespace WebApi.Controllers
             _logger.LogInformation("{controller}.{method} - Update Dish (FromForm), Result - Ok, Task ended", 
                 nameof(DishController), nameof(UpdateDishAsync));
             return Ok(mappedDish);
+        }
+
+        [HttpPut("update/dishingredient")]
+        public async Task<IActionResult> UpdateDishIngredientAsync([FromQuery]int dishId, List<UpdateDishIngredientDto> dto, CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - Update DishIngredient for dish, Task started,", nameof(DishController),
+                nameof(UpdateDishIngredientAsync));
+
+            var mappedModel = _mapper.Map<List<UpdateDishIngredientModel>>(dto);
+            await _dishService.UpdateDishIngredientsForDishAsync(dishId, mappedModel, ct);
+
+            _logger.LogInformation("{controller}.{method} - Update DishIngredient for dish, Result - Ok, Task ended",
+                nameof(DishController), nameof(UpdateDishAsync));
+
+            return Ok();
         }
 
         [HttpDelete("by-id")]

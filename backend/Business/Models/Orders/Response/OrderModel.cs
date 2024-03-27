@@ -1,15 +1,18 @@
-﻿using Business.Models.CustomerInfos.Response;
-using Business.Models.Dishes;
+﻿using Business.Models.Dishes;
+using Business.Models.Enums;
 using Business.Models.OrderDetails.Response;
+using Business.Models.OrderItems.Response;
+using Entities.Entities;
 
 namespace Business.Models.Orders.Response
 {
     public class OrderModel
     {
-        public Guid CustomerInfoId { get; set; }
-        public CustomerInfoModel CustomerInfo { get; set; }
-        public double Price { get; set; }
+        public Guid Id { get; set; }
+        public IEnumerable<OrderItemModel> OrderItems { get; set; }
         public OrderDetailModel OrderDetail { get; set; }
-        public IEnumerable<DishModel> Products { get; set; }
+        public OrderState OrderState { get; set; }
+        public DateTime OrderCreateDate { get; set; }
+        public DateTime OrderFinishedDate { get; set; }
     }
 }
