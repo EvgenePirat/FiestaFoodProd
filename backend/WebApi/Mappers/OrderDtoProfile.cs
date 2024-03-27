@@ -14,8 +14,7 @@ namespace WebApi.Mappers
         {
             CreateMap<CreateOrderDto, CreateOrderModel>();
             CreateMap<UpdateOrderDto, UpdateOrderModel>();
-            CreateMap<OrderDto, OrderModel>();
-            CreateMap<OrderDto, OrderModel>().ReverseMap();
+            CreateMap<OrderModel, OrderDto>();
             CreateMap<PagedOrdersModel, PagedOrdersDto>();
         }
     }

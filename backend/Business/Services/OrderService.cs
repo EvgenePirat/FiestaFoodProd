@@ -26,48 +26,6 @@ namespace Business.Services
             _dishService = dishService;
         }
 
-        //public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
-        //{
-        //    await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
-        //    try
-        //    {
-        //        var order = new Order();
-
-        //        var customerInfo = await GetOrderCustomerInfo(model, ct);
-        //        order.CustomerInfoId = customerInfo.Id;
-
-        //        var orderDetail = _mapper.Map<OrderItem>(model.OrderDetail);
-
-        //        _unitOfWork.OrderDetailRepository.Add(orderDetail);
-        //        await _unitOfWork.SaveAsync(ct);
-
-        //        order.OrderDetail = orderDetail;
-        //        order.OrderDetail.OrderState = OrderState.Pending;
-
-        //        order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
-        //        order.Price = order.Dishes.Sum(pr => pr.Price);
-
-        //        _unitOfWork.OrderRepository.Add(order);
-        //        await _unitOfWork.SaveAsync(ct);
-
-        //        await transaction.CommitAsync(ct);
-        //        order.CustomerInfo = customerInfo;
-        //        return _mapper.Map<OrderModel>(order);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await transaction.RollbackAsync(ct);
-        //        throw new OrderArgumentException("Unable to create order", ex);
-        //    }
-        //}
-
-
-        //public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
-        //{
-        //    var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
-        //                throw new OrderArgumentException($"Order with this id {id} not exist");
-        //    return _mapper.Map<OrderModel>(order);
-        //}
 
         //public async Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
         //{
@@ -141,40 +99,6 @@ namespace Business.Services
         //    }
 
         //    return dishes;
-        //}
-
-        //private async Task<CustomerInfo> GetOrderCustomerInfo(CreateOrderModel model, CancellationToken ct)
-        //{
-        //    if (model is { CustomerInfoId: null, CustomerInfo: not null })
-        //    {
-        //        var mappedModel = _mapper.Map<CustomerInfo>(model.CustomerInfo);
-        //        _unitOfWork.CustomerInfoRepository.Add(mappedModel);
-        //        return mappedModel;
-        //    }
-
-        //    if (model.CustomerInfoId is not null)
-        //    {
-        //        return await _unitOfWork.CustomerInfoRepository.GetCustomerInfoById((Guid)model.CustomerInfoId, ct) 
-        //               ?? throw new CustomerInfoArgumentException($"Customer with this id {model.CustomerInfoId} not exist");
-        //    }
-
-        //    throw new OrderArgumentException("Missing required customer information");
-        //}
-
-        //private static void SubtractIngredients(IEnumerable<Ingredient> ingredients1,
-        //    IEnumerable<Ingredient> ingredients2)
-        //{
-        //    var ingredientDict1 = ingredients1.ToDictionary(i => i.Name);
-        //    var ingredientDict2 = ingredients2.ToDictionary(i => i.Name);
-
-        //    // Subtracting kilograms from ingredients1 using ingredients2
-        //    foreach (var kvp in ingredientDict2)
-        //    {
-        //        if (ingredientDict1.TryGetValue(kvp.Key, out var ingredient))
-        //        {
-        //            //ingredient.Kilograms -= kvp.Value.Kilograms;
-        //        }
-        //    }
         //}
 
         public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
