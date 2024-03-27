@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Models.Dishes;
 using Business.Models.Enums;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
+using Business.Models.Pagination;
 using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
 using DataAccess.Interfaces;
+using DataAccess.Utilities;
 using Entities.Entities;
 
 namespace Business.Services
@@ -186,6 +189,20 @@ namespace Business.Services
         public Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct)
+        {
+            var mappedModel = _mapper.Map<PaginationDb>(pagination);
+
+            var result = await _unitOfWork.OrderRepository.GetAllOrdersPagination(mappedModel, ct);
+
+            return new PagedOrdersModel()
+            {
+                Orders = _mapper.Map<IEnumerable<OrderModel>>(result.Result),
+                TotalPages = result.TotalPages
+            };
+
         }
     }
 }

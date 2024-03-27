@@ -2,10 +2,12 @@
 using Business.Interfaces;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
+using Business.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models.FiltersDto;
 using WebApi.Models.Orders.Request;
 using WebApi.Models.Orders.Response;
+using WebApi.Models.PaginationsDto;
 using WebApi.Utilities;
 
 namespace WebApi.Controllers
@@ -56,23 +58,42 @@ namespace WebApi.Controllers
             return Ok(mappedOrder);
         }
 
-        [HttpGet("filtered")]
-        public async Task<ActionResult<PagedOrdersDto>> GetFilteredOrderAsync([FromQuery] FilterDto model, CancellationToken ct)
+        //[HttpGet("filtered")]
+        //public async Task<ActionResult<PagedOrdersDto>> GetFilteredOrderAsync([FromQuery] FilterDto model, CancellationToken ct)
+        //{
+        //    _logger.LogInformation("{controller}.{method} - Get, Get Order by filter, Task started",
+        //        nameof(OrderController), nameof(GetFilteredOrderAsync));
+
+        //    var mappedFilter = _mapper.Map<FilterModel>(model);
+
+        //    var result = await _orderService.GetFilteredOrdersAsync(mappedFilter, ct);
+
+        //    var mappedResult = _mapper.Map<PagedOrdersDto>(result);
+
+        //    _logger.LogInformation("{controller}.{method} - Get, Get Order by filter, Result - Ok, Task ended",
+        //        nameof(OrderController), nameof(GetFilteredOrderAsync));
+
+        //    return Ok(mappedResult);
+        //}
+
+        [HttpGet("all")]
+        public async Task<ActionResult<PagedOrdersDto>> GetAllOrderAsync([FromQuery] PaginationDto model, CancellationToken ct)
         {
-            _logger.LogInformation("{controller}.{method} - Get, Get Order by filter, Task started",
-                nameof(OrderController), nameof(GetFilteredOrderAsync));
+            _logger.LogInformation("{controller}.{method} - Get, Get all orders, Task started",
+                nameof(OrderController), nameof(GetAllOrderAsync));
 
-            var mappedFilter = _mapper.Map<FilterModel>(model);
+            var mappedModel = _mapper.Map<PaginationModel>(model);
 
-            var result = await _orderService.GetFilteredOrdersAsync(mappedFilter, ct);
+            var result = await _orderService.GetAllOrdersAsync(mappedModel, ct);
 
             var mappedResult = _mapper.Map<PagedOrdersDto>(result);
 
             _logger.LogInformation("{controller}.{method} - Get, Get Order by filter, Result - Ok, Task ended",
-                nameof(OrderController), nameof(GetFilteredOrderAsync));
+                nameof(OrderController), nameof(GetAllOrderAsync));
 
             return Ok(mappedResult);
         }
+
 
         [HttpPut("update")]
         public async Task<ActionResult<OrderDto>> UpdateOrderAsync([FromBody] UpdateOrderDto model, CancellationToken ct)
@@ -101,7 +122,7 @@ namespace WebApi.Controllers
             await _orderService.DeleteOrderByIdAsync(id, ct);
 
             _logger.LogInformation("{controller}.{method} - Delete, Delete Order by id, Result - Ok, Task ended",
-                nameof(OrderController), nameof(GetFilteredOrderAsync));
+                nameof(OrderController), nameof(DeleteOrderByIdAsync));
 
             return Ok("Order has been deleted");
         }

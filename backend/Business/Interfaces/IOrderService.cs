@@ -1,6 +1,7 @@
 ﻿using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
+using Business.Models.Pagination;
 
 namespace Business.Interfaces
 {
@@ -11,6 +12,8 @@ namespace Business.Interfaces
         Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct);
         
         Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct);
+
+        Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct);
 
         Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct);
 
