@@ -14,7 +14,6 @@ export default function OrderItem({ item }: OrderItemProps) {
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
 
-  const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState(item.comment);
 
   const product = useMemo(() => {
@@ -26,7 +25,7 @@ export default function OrderItem({ item }: OrderItemProps) {
   }, [dispatch, item.id, value]);
 
   return (
-    <li className={styles['item']} onClick={() => setIsOpen(true)}>
+    <li className={styles['item']}>
       {product ? (
         <>
           <div className={styles['info-content']}>
@@ -35,18 +34,14 @@ export default function OrderItem({ item }: OrderItemProps) {
             <span>{product.price}</span>
             <span>{item.count * product.price}</span>
           </div>
-          {isOpen && (
-            <div className={styles['comment-block']}>
-              <p>Коментар: </p>
-              <input
-                className={styles['input']}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                onBlur={onBlurHandler}
-                type="text"
-              />
-            </div>
-          )}
+          <input
+            className={styles['input']}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onBlur={onBlurHandler}
+            type="text"
+            placeholder="Коментар: "
+          />
         </>
       ) : (
         <p className={styles['not-found']}>Not Found {item.id}</p>
