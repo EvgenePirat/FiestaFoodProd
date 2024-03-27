@@ -1,4 +1,5 @@
-﻿using DataAccess.Data;
+﻿using Azure;
+using DataAccess.Data;
 using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
@@ -20,7 +21,7 @@ namespace DataAccess.Repositories
 
             return new PaginationResult<Order>
             {
-                Result = await query.ToListAsync(ct),
+                Result = await query.Skip((pagination.PageNumber-1) * pagination.PageSize).Take(pagination.PageSize).ToListAsync(),
                 TotalPages = (int)Math.Ceiling(count / (int)pagination.PageSize)
             };
         }
