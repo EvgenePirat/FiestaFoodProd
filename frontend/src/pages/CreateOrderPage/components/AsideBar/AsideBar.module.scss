@@ -54,47 +54,20 @@
   }
 }
 
-.info-block {
-  padding: 5px 10px;
-  height: 80px;
+.conclusive {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 0 5px;
   background-color: $colorSecondary;
 
-  .info {
+  .sum {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    font-size: 2.4rem;
-
-    .discount-block {
-      display: flex;
-      gap: 10px;
-
-      .discount {
-        border: none;
-        border-radius: 10px;
-        padding: 2px 10px;
-        font-size: 2.4rem;
-        font-weight: bold;
-        cursor: pointer;
-        background-color: $colorBack;
-
-        &.active {
-          background-color: $colorSuccess;
-        }
-      }
-    }
-  }
-
-  .value {
-    font-weight: bold;
-  }
-
-  .final-sum {
-    font-weight: bold;
-    font-size: 4.8rem;
+    justify-content: space-between;
+    padding: 7px 10px;
+    font-size: 4rem;
+    background-color: $colorContentLight;
+    border-radius: 10px;
   }
 }
 
