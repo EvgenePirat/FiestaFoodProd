@@ -8,6 +8,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
   btnStyle?: 'default' | 'success' | 'danger';
+  disabled?: boolean;
 }
 
 export default function Button({ btnStyle, className, children, ...rest }: ButtonProps) {

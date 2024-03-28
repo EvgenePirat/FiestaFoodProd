@@ -40,9 +40,17 @@ const ordersSlice = createSlice({
     clearOrder: (state) => {
       state.order = [];
     },
-    createOrder: (state) => {
+    createOrder: (
+      state,
+      action: PayloadAction<{
+        finalSum: number;
+        payment: string;
+        entryValue: number;
+        restValue: number;
+      }>
+    ) => {
       const date = Date.now();
-      state.orders.push({ id: date, date, list: state.order });
+      state.orders.push({ id: date, date, list: state.order, ...action.payload });
       state.order = [];
     }
   }

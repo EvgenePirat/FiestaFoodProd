@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
+import { createOrder } from '../../../../redux/ordersSlice';
 import { Button, Popup } from '../../../../components';
 
 import { IoCard, IoCashSharp } from 'react-icons/io5';
@@ -33,9 +34,11 @@ interface PopupCreateOrderProps {
 export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
+  const dispatch = useDispatch();
 
   const [discount, setDiscount] = useState(0);
   const [payment, setPayment] = useState<Payment | null>(null);
+  const [entryValue, setEntryValue] = useState(0);
 
   const sum = useMemo(
     () =>
@@ -48,10 +51,17 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
 
   const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [discount, sum]);
 
+  const restValue = useMemo(() => entryValue - finalSum, [entryValue, finalSum]);
+
+  const isDisabledBtn = useMemo(
+    () => payment === null || (payment === Payment.cash && (entryValue === 0 || restValue < 0)),
+    [entryValue, payment, restValue]
+  );
+
   const createOrderHandler = useCallback(() => {
-    console.log('CREATE');
-    setDiscount(0);
-  }, []);
+    if (payment) dispatch(createOrder({ finalSum, payment, entryValue, restValue }));
+    if (onClose) onClose();
+  }, [payment, dispatch, finalSum, entryValue, restValue, onClose]);
 
   return (
     <Popup onClose={onClose}>
@@ -75,20 +85,40 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
           </div>
           <p className={styles['final-sum']}>{finalSum.toFixed(2)} грн</p>
         </div>
-        <div className={styles['pay-block']}>
-          <div className={styles['pays']}>
-            {paymentMethods.map((obj) => (
-              <label className={styles['pay-label']} key={obj.value}>
-                <input type="radio" name="payment" onChange={() => setPayment(obj.value)} />
-                <span className={styles['pay']}>
-                  <obj.icon className={styles['icon']} />
-                  {obj.title}
-                </span>
-              </label>
-            ))}
-          </div>
+        <div className={styles['pays-block']}>
+          {paymentMethods.map((obj) => (
+            <label className={styles['pay-label']} key={obj.value}>
+              <input type="radio" name="payment" onChange={() => setPayment(obj.value)} />
+              <span className={styles['pay']}>
+                <obj.icon className={styles['icon']} />
+                {obj.title}
+              </span>
+            </label>
+          ))}
         </div>
-        <Button btnStyle="success" className={styles['create-btn']} onClick={createOrderHandler}>
+        {payment === Payment.cash && (
+          <div className={styles['inputs-block']}>
+            <input
+              className={styles['input']}
+              type="number"
+              value={entryValue || ''}
+              onChange={(e) => setEntryValue(+e.target.value)}
+              placeholder="Внесено"
+            />
+            <input
+              className={styles['input']}
+              type="number"
+              value={entryValue ? restValue : ''}
+              placeholder="Решта"
+              readOnly
+            />
+          </div>
+        )}
+        <Button
+          btnStyle="success"
+          className={styles['create-btn']}
+          onClick={createOrderHandler}
+          disabled={isDisabledBtn}>
           Розраховано
         </Button>
       </div>
