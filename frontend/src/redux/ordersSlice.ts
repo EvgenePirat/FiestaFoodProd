@@ -23,6 +23,13 @@ const ordersSlice = createSlice({
     removeItem: (state, action: PayloadAction<OrderItemType['id']>) => {
       state.order = state.order.filter((obj) => obj.id !== action.payload);
     },
+    changeCount: (
+      state,
+      action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['count'] }>
+    ) => {
+      const item = state.order.find((obj) => obj.id === action.payload.id);
+      if (item) item.count = action.payload.value;
+    },
     changeComment: (
       state,
       action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['comment'] }>
@@ -41,5 +48,6 @@ const ordersSlice = createSlice({
   }
 });
 
-export const { addItem, removeItem, changeComment, clearOrder, createOrder } = ordersSlice.actions;
+export const { addItem, removeItem, changeCount, changeComment, clearOrder, createOrder } =
+  ordersSlice.actions;
 export default ordersSlice.reducer;

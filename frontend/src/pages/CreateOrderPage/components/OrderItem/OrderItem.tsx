@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { changeComment, removeItem } from '../../../../redux/ordersSlice';
+import { changeCount, changeComment, removeItem } from '../../../../redux/ordersSlice';
 import { OrderItemType } from '../../../../types/OrderItemType';
 
-import { FaTrash } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 
 import styles from './OrderItem.module.scss';
 
@@ -50,9 +50,16 @@ export default function OrderItem({ item }: OrderItemProps) {
     [posX]
   );
 
-  const onClickHandler = useCallback(() => {
+  const removeItemHandler = useCallback(() => {
     dispatch(removeItem(item.id));
   }, [dispatch, item.id]);
+
+  const changeItemCountHandler = useCallback(
+    (value: number) => {
+      if (value !== item.count) dispatch(changeCount({ id: item.id, value }));
+    },
+    [dispatch, item.count, item.id]
+  );
 
   return (
     <li
@@ -64,7 +71,19 @@ export default function OrderItem({ item }: OrderItemProps) {
         <>
           <div className={styles['info-content']}>
             <span>{product.title}</span>
-            <span>{item.count}</span>
+            <div className={styles['count-block']}>
+              <button
+                className={styles['btn']}
+                onClick={() => changeItemCountHandler(item.count + 1)}>
+                <FaPlus />
+              </button>
+              {item.count}
+              <button
+                className={styles['btn']}
+                onClick={() => changeItemCountHandler(Math.max(item.count - 1, 1))}>
+                <FaMinus />
+              </button>
+            </div>
             <span>{product.price}</span>
             <span>{item.count * product.price}</span>
           </div>
@@ -82,7 +101,7 @@ export default function OrderItem({ item }: OrderItemProps) {
       )}
       <button
         className={`${styles['delete-btn']} ${isVisible ? styles['active'] : ''}`}
-        onClick={onClickHandler}>
+        onClick={removeItemHandler}>
         <FaTrash />
       </button>
     </li>
