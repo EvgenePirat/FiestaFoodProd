@@ -8,6 +8,7 @@ using Business.Models.Orders.Response;
 using Business.Models.Pagination;
 using CustomExceptions.IngredientCustomException;
 using CustomExceptions.OrderCustomExceptions;
+using CustomExceptions.OrderDetailCustomExceptions;
 using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
@@ -29,87 +30,27 @@ namespace Business.Services
             _dishService = dishService;
         }
 
-
-        //public async Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct)
-        //{
-        //    var dbFilter = _mapper.Map<FilterState>(filter);
-        //    var result = await _unitOfWork.OrderRepository.GetPagedByQueryAsync(dbFilter, ct);
-        //    return _mapper.Map<PagedOrdersModel>(result);
-        //}
-
-        //public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
-        //{
-        //    await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
-        //    try
-        //    {
-        //        var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
-        //                    ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
-
-        //        order.Dishes = await GetOrderDishesAsync(model.DishesId, ct);
-        //        order.Price = order.Dishes.Sum(pr => pr.Price);
-
-        //        if (model.CustomerInfo is not null)
-        //        {
-        //            await _customerInfoService.UpdateCustomerInfoAsync(model.CustomerInfo, ct);
-        //        }
-
-        //        _unitOfWork.OrderRepository.Update(order);
-        //        await _unitOfWork.SaveAsync(ct);
-
-        //        await transaction.CommitAsync(ct);
-        //        return _mapper.Map<OrderModel>(order);
-        //    }
-        //    catch (OrderArgumentException ex)
-        //    {
-        //        await transaction.RollbackAsync(ct);
-        //        throw new OrderArgumentException(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await transaction.RollbackAsync(ct);
-        //        throw new OrderArgumentException("Unable to save order", ex);
-        //    }
-        //}
-
-        //public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
-        //{
-        //    var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
-        //                throw new OrderArgumentException($"Order with this id {id} not exist");
-        //    _unitOfWork.OrderRepository.Delete(order);
-        //    await _unitOfWork.SaveAsync(ct);
-        //}
-
-        //private async Task<IEnumerable<Dish>> GetOrderDishesAsync(IEnumerable<int> dishIds, CancellationToken ct)
-        //{
-        //    var dishes = await _unitOfWork.DishRepository.GetDishesByIds(dishIds, ct)
-        //                   ?? throw new OrderArgumentException($"dishes with ids: {string.Join(", ", dishIds)} not exist");
-
-        //    var ingredients  = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
-
-        //    foreach (var dish in dishes)
-        //    {
-        //        SubtractIngredients(ingredients, dish.DishIngredients);
-        //    }
-
-        //    await _unitOfWork.IngredientsRepository.UpdateIngredients(ingredients, ct);
-
-        //    var existingDishesIds = dishes.Select(pr => pr.Id);
-        //    var nonExistDishesIds = dishIds.Except(existingDishesIds);
-
-        //    if (nonExistDishesIds.Any())
-        //    {
-        //        throw new OrderArgumentException($"dishes with ids: {string.Join(", ", nonExistDishesIds)} not exist");
-        //    }
-
-        //    return dishes;
-        //}
-
         public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
         {
             var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct) ??
                         throw new OrderArgumentException($"Order with this id {id} not exist");
 
             return _mapper.Map<OrderModel>(order);
+        }
+
+        private async Task<bool> CheckSumOrder(Order order, CancellationToken ct)
+        {
+            double sum = 0;
+
+            foreach (var item in order.OrderItems)
+            {
+                var dish = await _unitOfWork.DishRepository.GetDishById(item.DishId, ct);
+
+                if(dish != null)
+                    sum = sum + (dish.Price * item.Count);
+            }
+
+            return sum == order.OrderDetail.Sum;
         }
 
         public async Task<OrderModel?> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
@@ -122,6 +63,11 @@ namespace Business.Services
                 if(model.OrderState == OrderState.Todo && model.OrderDetail.PaymentStatus == PaymentStatus.Payed)
                 {
                     createModel = _mapper.Map<Order>(model);
+
+                    if((await CheckSumOrder(createModel, ct)) == false)
+                    {
+                        throw new OrderDetailArgumentException("Dishes price are not equal order sum");
+                    }
 
                     await SubtractIngredients(createModel.OrderItems, ct);
 
@@ -136,7 +82,12 @@ namespace Business.Services
                 return _mapper.Map<OrderModel>(createModel);
 
             }
-            catch(IngredientArgumentException ex)
+            catch (OrderDetailArgumentException ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw;
+            }
+            catch (IngredientArgumentException ex)
             {
                 await transaction.RollbackAsync(ct);
                 throw;
@@ -147,6 +98,7 @@ namespace Business.Services
                 throw new OrderArgumentException("Unable to create order", ex);
             }
         }
+
 
         private async Task SubtractIngredients(IEnumerable<OrderItem> items, CancellationToken ct)
         {
