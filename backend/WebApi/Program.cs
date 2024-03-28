@@ -29,7 +29,10 @@ var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
+//var connectionString = builder.Configuration.GetConnectionString("StDatabase");
 builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddCors();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt => { opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
@@ -58,6 +61,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 //app.UseHttpsRedirection();
 
+app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthorization();
 
 app.MapControllers();
