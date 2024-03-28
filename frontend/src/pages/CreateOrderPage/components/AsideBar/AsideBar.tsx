@@ -1,9 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { clearOrder, createOrder } from '../../../../redux/ordersSlice';
-import { Popup } from '../../../../components';
-import { OrderItem } from '../';
+import { createOrder } from '../../../../redux/ordersSlice';
+import { OrderItem, PopupSubmitClear } from '../';
 
 import styles from './AsideBar.module.scss';
 
@@ -14,7 +13,7 @@ export default function AsideBar() {
   const order = useSelector((state: RootState) => state.ordersSlice.order);
   const dispatch = useDispatch();
 
-  const [isVisiblePopup, setIsVisiblePopup] = useState(true);
+  const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);
   const [discount, setDiscount] = useState(0);
 
   const sum = useMemo(
@@ -27,9 +26,9 @@ export default function AsideBar() {
   );
 
   const handleClear = useCallback(() => {
-    dispatch(clearOrder());
+    setIsVisiblePopupClear(true);
     setDiscount(0);
-  }, [dispatch]);
+  }, []);
 
   const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [discount, sum]);
 
@@ -84,7 +83,7 @@ export default function AsideBar() {
         </button>
       </div>
 
-      {isVisiblePopup && <Popup onClose={() => setIsVisiblePopup(false)}></Popup>}
+      {isVisiblePopupClear && <PopupSubmitClear onClose={() => setIsVisiblePopupClear(false)} />}
     </div>
   );
 }
