@@ -60,7 +60,11 @@ export default function AsideBar() {
         <p className={styles['sum']}>
           Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
         </p>
-        <Button btnStyle="success" className={styles['create-btn']} onClick={handleCreate}>
+        <Button
+          btnStyle="success"
+          className={styles['create-btn']}
+          onClick={handleCreate}
+          disabled={!order.length}>
           Розрахувати
         </Button>
       </div>
