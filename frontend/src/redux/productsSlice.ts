@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { ProductType, TypeProductType } from '../types/ProductType';
+
 import { types } from '../data/fakeTypes';
 import { products } from '../data/fakeProducts';
 

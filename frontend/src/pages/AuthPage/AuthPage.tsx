@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { signIn } from '../../redux/authSlice.ts';
+
 import { phoneMask, phonePlaceholder } from '../../data/masks.ts';
 
 import { Input, InputWithMask } from '../../components';

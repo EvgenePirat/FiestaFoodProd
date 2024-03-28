@@ -3,8 +3,10 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { addItem } from '../../../../redux/ordersSlice';
-import { ProductCard } from '../';
+
 import { routeCreateOrder } from '../../../../data/routes';
+
+import { ProductCard } from '../';
 
 import styles from './ProductCardList.module.scss';
 

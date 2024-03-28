@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearOrder } from '../../../../redux/ordersSlice';
+
 import { Button, Popup } from '../../../../components';
 
 import styles from './PopupSubmitClear.module.scss';

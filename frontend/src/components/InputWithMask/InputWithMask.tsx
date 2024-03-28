@@ -1,4 +1,5 @@
 import MaskedInput from 'react-text-mask';
+
 import Input, { InputProps } from '../Input/Input';
 
 interface InputWithMaskProps

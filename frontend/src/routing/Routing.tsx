@@ -1,9 +1,11 @@
-import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+
+import { routeCreateOrder } from '../data/routes';
+
 import { MainLayout } from '../layouts';
 import { AuthPage, CreateOrderPage } from '../pages';
-import { routeCreateOrder } from '../data/routes';
 
 export default function Routing() {
   const isAuth = useSelector((state: RootState) => state.authSlice.isAuth);
