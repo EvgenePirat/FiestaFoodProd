@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { OrderItemType } from '../types/OrderItemType';
 
-interface IAuthState {
+interface IOrdersState {
   order: OrderItemType[];
   orders: { id: number; date: number; list: OrderItemType[] }[];
 }
 
-const initialState: IAuthState = {
+const initialState: IOrdersState = {
   order: [],
   orders: []
 };

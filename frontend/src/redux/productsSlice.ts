@@ -3,12 +3,12 @@ import { ProductType, TypeProductType } from '../types/ProductType';
 import { types } from '../data/fakeTypes';
 import { products } from '../data/fakeProducts';
 
-interface IAuthState {
+interface IProductsState {
   products: ProductType[];
   types: TypeProductType[];
 }
 
-const initialState: IAuthState = {
+const initialState: IProductsState = {
   products: [],
   types: []
 };
