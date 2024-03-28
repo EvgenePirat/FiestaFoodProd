@@ -7,7 +7,24 @@ import { IoCard, IoCashSharp } from 'react-icons/io5';
 
 import styles from './PopupCreateOrder.module.scss';
 
+enum Payment {
+  card = 'card',
+  cash = 'cash'
+}
+
 const discountArray = [5, 10, 15];
+const paymentMethods = [
+  {
+    icon: IoCard,
+    title: 'Безготівковий',
+    value: Payment.card
+  },
+  {
+    icon: IoCashSharp,
+    title: 'Готівковий',
+    value: Payment.cash
+  }
+];
 
 interface PopupCreateOrderProps {
   onClose?: () => void;
@@ -18,6 +35,7 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
   const order = useSelector((state: RootState) => state.ordersSlice.order);
 
   const [discount, setDiscount] = useState(0);
+  const [payment, setPayment] = useState<Payment | null>(null);
 
   const sum = useMemo(
     () =>
@@ -59,14 +77,15 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
         </div>
         <div className={styles['pay-block']}>
           <div className={styles['pays']}>
-            <div className={styles['pay']}>
-              <IoCard className={styles['icon']} />
-              Безготівковий
-            </div>
-            <div className={styles['pay']}>
-              <IoCashSharp className={styles['icon']} />
-              Готівковий
-            </div>
+            {paymentMethods.map((obj) => (
+              <label className={styles['pay-label']} key={obj.value}>
+                <input type="radio" name="payment" onChange={() => setPayment(obj.value)} />
+                <span className={styles['pay']}>
+                  <obj.icon className={styles['icon']} />
+                  {obj.title}
+                </span>
+              </label>
+            ))}
           </div>
         </div>
         <Button btnStyle="success" className={styles['create-btn']} onClick={createOrderHandler}>

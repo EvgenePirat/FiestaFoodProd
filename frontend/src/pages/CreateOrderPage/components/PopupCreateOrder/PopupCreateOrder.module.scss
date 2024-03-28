@@ -58,18 +58,33 @@
   gap: 10px;
 }
 
-.pay {
+.pay-label {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 2.4rem;
+  cursor: pointer;
 
-  .icon {
-    font-size: 5rem;
+  input {
+    display: none;
+
+    &:checked + .pay {
+      background-color: $colorSuccess;
+    }
+  }
+
+  .pay {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 2.4rem;
+    transition: background-color .3s ease;
+  
+    .icon {
+      font-size: 5rem;
+    }
   }
 }
+
 
 .info-block,
 .pay {
