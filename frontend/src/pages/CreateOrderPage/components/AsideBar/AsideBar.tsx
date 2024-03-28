@@ -1,18 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { createOrder } from '../../../../redux/ordersSlice';
 import { Button } from '../../../../components';
-import { OrderItem, PopupSubmitClear } from '../';
+import { OrderItem, PopupCreateOrder, PopupSubmitClear } from '../';
 
 import styles from './AsideBar.module.scss';
 
 export default function AsideBar() {
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
-  const dispatch = useDispatch();
 
   const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);
+  const [isVisiblePopupCreate, setIsVisiblePopupCreate] = useState(false);
 
   const sum = useMemo(
     () =>
@@ -25,6 +24,10 @@ export default function AsideBar() {
 
   const handleClear = useCallback(() => {
     setIsVisiblePopupClear(true);
+  }, []);
+
+  const handleCreate = useCallback(() => {
+    setIsVisiblePopupCreate(true);
   }, []);
 
   return (
@@ -57,15 +60,13 @@ export default function AsideBar() {
         <p className={styles['sum']}>
           Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
         </p>
-        <Button
-          btnStyle="success"
-          className={styles['create-btn']}
-          onClick={() => dispatch(createOrder())}>
+        <Button btnStyle="success" className={styles['create-btn']} onClick={handleCreate}>
           Розрахувати
         </Button>
       </div>
 
       {isVisiblePopupClear && <PopupSubmitClear onClose={() => setIsVisiblePopupClear(false)} />}
+      {isVisiblePopupCreate && <PopupCreateOrder onClose={() => setIsVisiblePopupCreate(false)} />}
     </div>
   );
 }

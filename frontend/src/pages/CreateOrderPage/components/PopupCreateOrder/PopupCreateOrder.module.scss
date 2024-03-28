@@ -1,0 +1,83 @@
+@import "../../../../scss/variables.scss";
+@import "../../../../scss/mixins.scss";
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 540px;
+}
+
+.info-block {
+  padding: 0 20px;
+  height: 75px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 2.4rem;
+
+    .sum,
+    .discount-block {
+      display: flex;
+      gap: 5px;
+    }
+
+    .discount {
+      font-size: 2.4rem;
+      border: none;
+      width: 5rem;
+      height: 3.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: $colorBack;
+
+      &.active {
+        background-color: $colorSuccess;
+      }
+    }
+  }
+
+  .value,
+  .discount,
+  .final-sum {
+    font-weight: bold;
+  }
+
+  .final-sum {
+    font-size: 3.6rem;
+  }
+}
+
+.pays {
+  display: flex;
+  gap: 10px;
+}
+
+.pay {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 2.4rem;
+
+  .icon {
+    font-size: 5rem;
+  }
+}
+
+.info-block,
+.pay {
+  background-color: $colorContentLight;
+  @include borderOut();
+}
+
+.pay,
+.create-btn {
+  height: 70px;
+}
