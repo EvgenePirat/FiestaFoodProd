@@ -74,14 +74,14 @@ export default function OrderItem({ item }: OrderItemProps) {
             <div className={styles['count-block']}>
               <button
                 className={styles['btn']}
-                onClick={() => changeItemCountHandler(item.count + 1)}>
-                <FaPlus />
+                onClick={() => changeItemCountHandler(Math.max(item.count - 1, 1))}>
+                <FaMinus />
               </button>
               {item.count}
               <button
                 className={styles['btn']}
-                onClick={() => changeItemCountHandler(Math.max(item.count - 1, 1))}>
-                <FaMinus />
+                onClick={() => changeItemCountHandler(item.count + 1)}>
+                <FaPlus />
               </button>
             </div>
             <span>{product.price}</span>
