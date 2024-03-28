@@ -67,7 +67,7 @@
     padding: 7px 10px;
     font-size: 4rem;
     background-color: $colorContentLight;
-    border-radius: 10px;
+    @include borderOut();
   }
 }
 
@@ -79,6 +79,6 @@
   align-items: center;
   justify-content: center;
   font-size: 2.4rem;
-  border: none;
   cursor: pointer;
+  @include borderOut();
 }

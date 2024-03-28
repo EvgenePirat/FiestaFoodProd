@@ -37,3 +37,9 @@
     background: $colorScrollbarHover;
   }
 }
+
+@mixin borderOut() {
+  border: 1px solid $colorBorder;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px 0 $colorBoxShadow;
+}
