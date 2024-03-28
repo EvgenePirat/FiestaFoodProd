@@ -1,9 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { OrderItemType } from '../types/OrderItemType';
+import { OrderType } from '../types/OrderType';
 
 interface IOrdersState {
   order: OrderItemType[];
-  orders: { id: number; date: number; list: OrderItemType[] }[];
+  orders: OrderType[];
 }
 
 const initialState: IOrdersState = {
@@ -42,12 +43,7 @@ const ordersSlice = createSlice({
     },
     createOrder: (
       state,
-      action: PayloadAction<{
-        finalSum: number;
-        payment: string;
-        entryValue: number;
-        restValue: number;
-      }>
+      action: PayloadAction<Pick<OrderType, 'finalSum' | 'payment' | 'entryValue' | 'restValue'>>
     ) => {
       const date = Date.now();
       state.orders.push({ id: date, date, list: state.order, ...action.payload });

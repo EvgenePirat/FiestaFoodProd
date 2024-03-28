@@ -3,15 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { createOrder } from '../../../../redux/ordersSlice';
 import { Button, Popup } from '../../../../components';
+import { Payment } from '../../../../types/enums';
 
 import { IoCard, IoCashSharp } from 'react-icons/io5';
 
 import styles from './PopupCreateOrder.module.scss';
-
-enum Payment {
-  card = 'card',
-  cash = 'cash'
-}
 
 const discountArray = [5, 10, 15];
 const paymentMethods = [
