@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { createOrder } from '../../../../redux/ordersSlice';
+import { Button } from '../../../../components';
 import { OrderItem, PopupSubmitClear } from '../';
 
 import styles from './AsideBar.module.scss';
@@ -56,9 +57,12 @@ export default function AsideBar() {
         <p className={styles['sum']}>
           Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
         </p>
-        <button className={styles['create-btn']} onClick={() => dispatch(createOrder())}>
+        <Button
+          btnStyle="success"
+          className={styles['create-btn']}
+          onClick={() => dispatch(createOrder())}>
           Розрахувати
-        </button>
+        </Button>
       </div>
 
       {isVisiblePopupClear && <PopupSubmitClear onClose={() => setIsVisiblePopupClear(false)} />}

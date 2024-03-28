@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearOrder } from '../../../../redux/ordersSlice';
-import { Popup } from '../../../../components';
+import { Button, Popup } from '../../../../components';
 
 import styles from './PopupSubmitClear.module.scss';
 
@@ -26,12 +26,12 @@ export default function PopupSubmitClear({ onClose }: PopupSubmitClearProps) {
       <div className={styles['content']}>
         <p className={styles['title']}>Очистити замовлення?</p>
         <div className={styles['buttons-block']}>
-          <button className={`${styles['btn']} ${styles['submit']}`} onClick={submitClear}>
+          <Button btnStyle="success" onClick={submitClear}>
             Так
-          </button>
-          <button className={`${styles['btn']} ${styles['cancel']}`} onClick={cancelClear}>
+          </Button>
+          <Button btnStyle="danger" onClick={cancelClear}>
             Ні
-          </button>
+          </Button>
         </div>
       </div>
     </Popup>

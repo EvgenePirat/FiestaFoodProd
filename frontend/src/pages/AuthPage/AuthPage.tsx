@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { signIn } from '../../redux/authSlice.ts';
 import { phoneMask, phonePlaceholder } from '../../data/masks.ts';
 
-import { Button, Input, InputWithMask } from '../../components';
+import { Input, InputWithMask } from '../../components';
 
 import styles from './AuthPage.module.scss';
 
@@ -50,9 +50,9 @@ export default function AuthPage() {
             required
           />
         </div>
-        <Button className={styles['login']} onClick={() => handleAuth()}>
+        <button className={styles['login']} onClick={() => handleAuth()}>
           Увійти
-        </Button>
+        </button>
       </div>
     </div>
   );

@@ -17,19 +17,3 @@
   display: flex;
   justify-content: space-between;
 }
-
-.btn {
-  height: 50px;
-  width: 100px;
-  font-size: 2rem;
-  cursor: pointer;
-  @include borderOut();
-
-  &.submit {
-    background-color: $colorSuccess;
-  }
-
-  &.cancel {
-    background-color: $colorDangerDark;
-  }
-}

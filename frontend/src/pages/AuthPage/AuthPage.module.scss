@@ -32,7 +32,23 @@
     }
 
     .login {
+      cursor: pointer;
+      border-radius: 10px;
+      border: none;
+      font-size: 1.6rem;
+      font-weight: bold;
+      padding: 1rem 3rem;
+      color: $colorPrimary;
+      transition: background-color .3s ease;
       background-color: $colorAuthPage;
+    
+      &:hover {
+        background-color: $colorSecondaryHover;
+      }
+    
+      &:active {
+        background-color: $colorSecondaryActive;
+      }
     }
   }
 }
