@@ -115,32 +115,32 @@ namespace FileStorageHandler.Services
 
         public async Task<string> GetDefaultPathAsync<TEntity>(TEntity entity, CancellationToken ct) where TEntity : IEntity
         {
-            
+
             switch (entity)
             {
                 case User user:
-                {
-                    var path = Path.Combine(_projectDirectory, "Users", user.Id.ToString());
+                    {
+                        var path = Path.Combine("Users", user.Id.ToString());
 
-                    if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
-                        await CreateFolderAsync(path, ct);
+                        if (!IsDirectoryExist(Path.Combine(path)))
+                            await CreateFolderAsync(path, ct);
 
-                    return path;
-                }
+                        return path;
+                    }
                 case Dish product:
-                {
-                    var path = Path.Combine(_projectDirectory, "Dish", product.Name);
-                    if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
-                        await CreateFolderAsync(path, ct);
-                    return path;
-                }
+                    {
+                        var path = Path.Combine("Dish", product.Name);
+                        if (!IsDirectoryExist(Path.Combine(path)))
+                            await CreateFolderAsync(path, ct);
+                        return path;
+                    }
                 case Category category:
-                {
-                    var path = Path.Combine(_projectDirectory, "Category", category.CategoryName);
-                    if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
-                        await CreateFolderAsync(path, ct);
-                     return path;
-                }
+                    {
+                        var path = Path.Combine("Category", category.CategoryName);
+                        if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
+                            await CreateFolderAsync(path, ct);
+                        return path;
+                    }
                 default:
                     throw new ArgumentOutOfRangeException(nameof(entity), entity, "Entity not supported");
             }
