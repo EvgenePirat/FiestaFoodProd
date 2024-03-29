@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { signOut } from '../../redux/authSlice';
-import { routeCreateOrder } from '../../data/routes.ts';
+import { routeCreateOrder, routeOrders } from '../../data/routes.ts';
 
 import { Link } from '../';
 
@@ -17,7 +17,7 @@ export default function Header() {
       <nav className={styles['nav']}>
         <ul className={styles['nav-list']}>
           <li className={styles['element']}>
-            <Link to="/">
+            <Link to={`/${routeOrders}`}>
               <MdDehaze className={styles['icon']} />
               <span className={styles['link-text']}>Усі замовлення</span>
             </Link>
