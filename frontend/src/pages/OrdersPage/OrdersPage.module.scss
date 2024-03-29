@@ -1,7 +1,7 @@
 .page-block {
   height: 100%;
   width: 100%;
-  padding: 45px 25px;
+  padding: 45px 25px 30px 35px;
   display: flex;
   flex-direction: column;
   gap: 45px;
@@ -15,4 +15,11 @@
 
 .title {
   font-size: 4rem;
+}
+
+.orders-list {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }

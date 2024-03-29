@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { loadProducts, loadTypes } from '../../redux/productsSlice';
+import { loadOrders } from '../../redux/ordersSlice';
 
 import { Header } from '../../components';
 
@@ -16,6 +17,7 @@ export default function MainLayout() {
   useEffect(() => {
     dispatch(loadTypes());
     dispatch(loadProducts());
+    dispatch(loadOrders());
   }, [dispatch]);
 
   return (

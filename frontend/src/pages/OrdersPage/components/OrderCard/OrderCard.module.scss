@@ -1,0 +1,40 @@
+@import "../../../../scss/variables.scss";
+
+.order-card {
+  width: 350px;
+  min-width: 350px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  border: 1px solid $colorBorder;
+  background-color: $colorSecondary;
+}
+
+.head,
+.list {
+  padding: 0 10px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 4rem;
+}
+
+.id {
+  font-weight: bold;
+}
+
+.time {
+  font-weight: lighter;
+}
+
+.list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
