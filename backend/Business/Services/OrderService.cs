@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Dishes;
 using Business.Models.Enums;
 using Business.Models.Filter;
 using Business.Models.Orders.Request;
@@ -19,15 +18,11 @@ namespace Business.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IOrderDetailService _orderDetailService;
-        private readonly IDishService _dishService;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, IOrderDetailService orderDetailService, IDishService dishService)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _orderDetailService = orderDetailService;
-            _dishService = dishService;
         }
 
         public async Task<OrderModel> GetOrderByIdAsync(Guid id, CancellationToken ct)
@@ -40,44 +35,38 @@ namespace Business.Services
 
         private async Task<bool> CheckSumOrder(Order order, CancellationToken ct)
         {
-            double sum = 0;
-
-            foreach (var item in order.OrderItems)
-            {
-                var dish = await _unitOfWork.DishRepository.GetDishById(item.DishId, ct);
-
-                if(dish != null)
-                    sum = sum + (dish.Price * item.Count);
-            }
-
-            return sum == order.OrderDetail.Sum;
+            var dishes = await _unitOfWork.DishRepository.GetDishesByIds(
+                order.OrderItems.Select(d => d.DishId), ct);
+            var sum = (from orderItem in order.OrderItems
+                       let dish = dishes.FirstOrDefault(d => d.Id == orderItem.DishId)
+                       select orderItem.Count * dish.Price).Sum();
+            return sum.Equals(order.OrderDetail.Sum);
         }
 
-        public async Task<OrderModel?> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
+        public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
         {
             await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
             var createModel = new Order();
 
             try
             {
-                if(model.OrderState == OrderState.Todo && model.OrderDetail.PaymentStatus == PaymentStatus.Payed)
+                if (model is not { OrderState: OrderState.Todo, OrderDetail.PaymentStatus: PaymentStatus.Payed })
+                    return _mapper.Map<OrderModel>(createModel);
+
+                createModel = _mapper.Map<Order>(model);
+
+                if (await CheckSumOrder(createModel, ct) == false)
                 {
-                    createModel = _mapper.Map<Order>(model);
-
-                    if((await CheckSumOrder(createModel, ct)) == false)
-                    {
-                        throw new OrderDetailArgumentException("Dishes price are not equal order sum");
-                    }
-
-                    await SubtractIngredients(createModel.OrderItems, ct);
-
-                    _unitOfWork.OrderRepository.Add(createModel);          
-
-                    await _unitOfWork.SaveAsync(ct);
-
-                    await transaction.CommitAsync(ct);
+                    throw new OrderDetailArgumentException("Dishes price are not equal order sum");
                 }
 
+                await SubtractIngredients(createModel.OrderItems, ct);
+
+                _unitOfWork.OrderRepository.Add(createModel);
+
+                await _unitOfWork.SaveAsync(ct);
+
+                await transaction.CommitAsync(ct);
 
                 return _mapper.Map<OrderModel>(createModel);
 
@@ -99,33 +88,29 @@ namespace Business.Services
             }
         }
 
-
-        private async Task SubtractIngredients(IEnumerable<OrderItem> items, CancellationToken ct)
+        public async Task<OrderModel> UpdateOrderStateAsync(UpdateOrderStateModel model, CancellationToken ct)
         {
-            foreach(OrderItem item in items)
+            await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
+            try
             {
-                var dish = _unitOfWork.DishRepository.GetDishById(item.DishId, ct).Result;
-
-                var ingredients = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
-
-                if(dish != null)
-                {
-                    foreach (var dishIngridient in dish.DishIngridients)
-                    {
-                        var ingredient = ingredients.FirstOrDefault(i => i.Id == dishIngridient.IngredientId);
-
-                        if (ingredient != null)
-                        {
-                            if (ingredient.Quantity.Count > (dishIngridient.Count * item.Count))
-                                ingredient.Quantity.Count -= (dishIngridient.Count * item.Count);
-                            else
-                                throw new IngredientArgumentException($"Quantity for {ingredient.Name} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
-                        }
-                    }
-                }         
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.OrderId, ct) ??
+                            throw new OrderArgumentException($"Order with this id {model.OrderId} not exist");
+                order.OrderState = _mapper.Map<Entities.Enums.OrderState>(model.OrderState);
+                await _unitOfWork.SaveAsync(ct);
+                await _unitOfWork.SaveAsync(ct);
+                await transaction.CommitAsync(ct);
+                return _mapper.Map<OrderModel>(order);
             }
-
-            await _unitOfWork.SaveAsync(ct);
+            catch (OrderArgumentException ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw new OrderArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync(ct);
+                throw new OrderArgumentException("Unable to save order", ex);
+            }
         }
 
         public async Task DeleteOrderByIdAsync(Guid id, CancellationToken ct)
@@ -178,6 +163,43 @@ namespace Business.Services
             }
         }
 
+        public async Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct)
+        {
+            var mappedModel = _mapper.Map<PaginationDb>(pagination);
+
+            var result = await _unitOfWork.OrderRepository.GetAllOrdersPagination(mappedModel, ct);
+
+            return new PagedOrdersModel()
+            {
+                Orders = _mapper.Map<IEnumerable<OrderModel>>(result.Result),
+                TotalPages = result.TotalPages
+            };
+        }
+
+        private async Task SubtractIngredients(IEnumerable<OrderItem> items, CancellationToken ct)
+        {
+            foreach (var item in items)
+            {
+                var dish = _unitOfWork.DishRepository.GetDishById(item.DishId, ct).Result;
+
+                var ingredients = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
+
+                if (dish is null) continue;
+                foreach (var dishIngredient in dish.DishIngridients)
+                {
+                    var ingredient = ingredients.FirstOrDefault(i => i.Id == dishIngredient.IngredientId);
+
+                    if (ingredient == null) continue;
+                    if (ingredient.Quantity.Count > dishIngredient.Count * item.Count)
+                        ingredient.Quantity.Count -= dishIngredient.Count * item.Count;
+                    else
+                        throw new IngredientArgumentException($"Quantity for {ingredient.Name} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
+                }
+            }
+
+            await _unitOfWork.SaveAsync(ct);
+        }
+
         private Order SetUpdateDataForOrderDetails(Order order, UpdateOrderModel model)
         {
             order.OrderDetail.IsPaid = model.OrderDetail.IsPaid;
@@ -193,7 +215,7 @@ namespace Business.Services
             order.OrderState = (Entities.Enums.OrderState)model.OrderState;
             order.OrderCreateDate = model.OrderCreateDate;
             order.OrderFinishedDate = model.OrderFinishedDate;
-            
+
             return order;
         }
 
@@ -201,26 +223,12 @@ namespace Business.Services
         {
             order.OrderItems = _mapper.Map<IEnumerable<OrderItem>>(model.OrderItems);
 
-            foreach(OrderItem item in order.OrderItems)
+            foreach (var item in order.OrderItems)
             {
                 item.OrderId = order.Id;
             }
 
             return order;
-        }
-
-        public async Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct)
-        {
-            var mappedModel = _mapper.Map<PaginationDb>(pagination);
-
-            var result = await _unitOfWork.OrderRepository.GetAllOrdersPagination(mappedModel, ct);
-
-            return new PagedOrdersModel()
-            {
-                Orders = _mapper.Map<IEnumerable<OrderModel>>(result.Result),
-                TotalPages = result.TotalPages
-            };
-
         }
     }
 }
