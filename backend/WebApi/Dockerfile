@@ -16,6 +16,7 @@ COPY ["CustomExceptions/CustomExceptions.csproj", "CustomExceptions/"]
 COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
 COPY ["Entities/Entities.csproj", "Entities/"]
 COPY ["FileStorageHandler/FileStorageHandler.csproj", "FileStorageHandler/"]
+COPY ["RealTimeHandler/RealTimeHandler.csproj", "RealTimeHandler/"]
 RUN dotnet restore "./WebApi/./WebApi.csproj"
 COPY . .
 WORKDIR "/src/WebApi"
