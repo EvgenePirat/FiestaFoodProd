@@ -3,11 +3,16 @@ $colorSecondary: #FFC632;
 $colorSecondaryHover: #F5D56C;
 $colorSecondaryActive: #E0BA00;
 
+$colorContentLight: #FFFFFF;
+
 $colorBack: #DEDEDE;
+$colorBorder: #B4B4B4;
 
 $colorAuthPage: #FAD00A;
 
 $colorSuccess: #43B85C;
+$colorDanger: #FF0000;
+$colorDangerDark: #D26E6E;
 
 $colorOrderItemBack: #AEAEAE;
 
@@ -16,6 +21,7 @@ $colorScrollbarHover: #BABABA;
 
 $colorLink: #000000;
 
+$colorOverlay: #0000004d;
 $colorBoxShadow: #00000040;
 
 $heightProductCardTitle: 50px;
@@ -24,3 +30,5 @@ $widthPageBorder: 10px;
 $pageBorder: $widthPageBorder solid $colorSecondary;
 
 $widthScrollbar: 10px;
+
+$boxShadow: 0 4px 4px 0 $colorBoxShadow;

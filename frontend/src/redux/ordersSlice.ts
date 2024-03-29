@@ -1,12 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { OrderItemType } from '../types/OrderItemType';
 
-interface IAuthState {
+import { OrderItemType } from '../types/OrderItemType';
+import { OrderType } from '../types/OrderType';
+
+interface IOrdersState {
   order: OrderItemType[];
-  orders: { id: number; date: number; list: OrderItemType[] }[];
+  orders: OrderType[];
 }
 
-const initialState: IAuthState = {
+const initialState: IOrdersState = {
   order: [],
   orders: []
 };
@@ -20,6 +22,16 @@ const ordersSlice = createSlice({
         state.order.push({ id: action.payload, count: 1, comment: '' });
       }
     },
+    removeItem: (state, action: PayloadAction<OrderItemType['id']>) => {
+      state.order = state.order.filter((obj) => obj.id !== action.payload);
+    },
+    changeCount: (
+      state,
+      action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['count'] }>
+    ) => {
+      const item = state.order.find((obj) => obj.id === action.payload.id);
+      if (item) item.count = action.payload.value;
+    },
     changeComment: (
       state,
       action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['comment'] }>
@@ -30,13 +42,17 @@ const ordersSlice = createSlice({
     clearOrder: (state) => {
       state.order = [];
     },
-    createOrder: (state) => {
+    createOrder: (
+      state,
+      action: PayloadAction<Pick<OrderType, 'finalSum' | 'payment' | 'entryValue' | 'restValue'>>
+    ) => {
       const date = Date.now();
-      state.orders.push({ id: date, date, list: state.order });
+      state.orders.push({ id: date, date, list: state.order, ...action.payload });
       state.order = [];
     }
   }
 });
 
-export const { addItem, changeComment, clearOrder, createOrder } = ordersSlice.actions;
+export const { addItem, removeItem, changeCount, changeComment, clearOrder, createOrder } =
+  ordersSlice.actions;
 export default ordersSlice.reducer;

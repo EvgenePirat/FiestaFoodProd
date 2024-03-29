@@ -4,12 +4,14 @@
 .item {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   padding: 10px;
   background-color: $colorOrderItemBack;
-  min-height: 50px;
+  min-height: 85px;
   font-size: 2rem;
   border-radius: 10px;
+  position: relative;
+  overflow: hidden
 }
 
 .info-content {
@@ -23,10 +25,21 @@
   }
 }
 
-.comment-block {
+.count-block {
   display: flex;
   gap: 10px;
+}
+
+.btn {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  height: 2.4rem;
+  width: 2.4rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.8rem;
+  cursor: pointer;
 }
 
 .input {
@@ -41,4 +54,26 @@
 
 .not-found {
   margin: auto;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 85px;
+  border: none;
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $colorDanger;
+  color: $colorContentLight;
+  transform: translate(100%, 0);
+  transition: transform .3s ease;
+
+  &.active,
+  &:focus {
+    transform: translate(0);
+  }
 }

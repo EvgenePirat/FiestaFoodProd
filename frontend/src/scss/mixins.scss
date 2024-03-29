@@ -17,7 +17,7 @@
   padding: 0 25px;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 4px 0 $colorBoxShadow;
+  box-shadow: $boxShadow;
 }
 
 @mixin scrollbar($pdRight: 1rem) {
@@ -36,4 +36,10 @@
   &::-webkit-scrollbar-thumb:hover {
     background: $colorScrollbarHover;
   }
+}
+
+@mixin borderOut() {
+  border: 1px solid $colorBorder;
+  border-radius: 10px;
+  box-shadow: $boxShadow;
 }

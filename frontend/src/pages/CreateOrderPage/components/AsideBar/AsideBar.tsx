@@ -1,18 +1,18 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { clearOrder, createOrder } from '../../../../redux/ordersSlice';
-import { OrderItem } from '../';
+
+import { Button } from '../../../../components';
+import { OrderItem, PopupCreateOrder, PopupSubmitClear } from '../';
 
 import styles from './AsideBar.module.scss';
 
-const discountArray = [5, 10, 15];
-
 export default function AsideBar() {
-  const [discount, setDiscount] = useState(0);
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
-  const dispatch = useDispatch();
+
+  const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);
+  const [isVisiblePopupCreate, setIsVisiblePopupCreate] = useState(false);
 
   const sum = useMemo(
     () =>
@@ -24,11 +24,12 @@ export default function AsideBar() {
   );
 
   const handleClear = useCallback(() => {
-    dispatch(clearOrder());
-    setDiscount(0);
-  }, [dispatch]);
+    setIsVisiblePopupClear(true);
+  }, []);
 
-  const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [discount, sum]);
+  const handleCreate = useCallback(() => {
+    setIsVisiblePopupCreate(true);
+  }, []);
 
   return (
     <div className={styles['aside-bar']}>
@@ -57,29 +58,20 @@ export default function AsideBar() {
       </div>
 
       <div className={styles['conclusive']}>
-        <div className={styles['info-block']}>
-          <div className={styles['info']}>
-            <p className={styles['sum']}>
-              Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
-            </p>
-            <div className={styles['discount-block']}>
-              <span>Знижка:</span>
-              {discountArray.map((value) => (
-                <button
-                  key={value}
-                  className={`${styles['discount']} ${value === discount ? styles['active'] : ''}`}
-                  onClick={() => setDiscount(value)}>
-                  {value}%
-                </button>
-              ))}
-            </div>
-          </div>
-          <p className={styles['final-sum']}>{finalSum.toFixed(2)} грн</p>
-        </div>
-        <button className={styles['create-btn']} onClick={() => dispatch(createOrder())}>
+        <p className={styles['sum']}>
+          Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
+        </p>
+        <Button
+          btnStyle="success"
+          className={styles['create-btn']}
+          onClick={handleCreate}
+          disabled={!order.length}>
           Розрахувати
-        </button>
+        </Button>
       </div>
+
+      {isVisiblePopupClear && <PopupSubmitClear onClose={() => setIsVisiblePopupClear(false)} />}
+      {isVisiblePopupCreate && <PopupCreateOrder onClose={() => setIsVisiblePopupCreate(false)} />}
     </div>
   );
 }
