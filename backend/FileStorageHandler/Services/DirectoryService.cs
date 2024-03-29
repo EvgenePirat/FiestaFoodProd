@@ -3,6 +3,7 @@ using Entities.Interfaces;
 using FileStorageHandler.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FileStorageHandler.Services
 {
@@ -13,11 +14,12 @@ namespace FileStorageHandler.Services
         /// Gets the current directory for files.
         /// </summary>
         private readonly string _projectDirectory;
-        public DirectoryService(ILogger<DirectoryService> logger)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public DirectoryService(ILogger<DirectoryService> logger, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
-            var currentDirectory = Path.GetDirectoryName(Directory.GetCurrentDirectory());
-            _projectDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "Media"));
+            _webHostEnvironment = webHostEnvironment;
+            _projectDirectory = Path.Combine(_webHostEnvironment.WebRootPath, "Media");
         }
 
         public async Task CreateFolderAsync(string path, CancellationToken ct)
@@ -122,7 +124,7 @@ namespace FileStorageHandler.Services
                     {
                         var path = Path.Combine("Users", user.Id.ToString());
 
-                        if (!IsDirectoryExist(Path.Combine(path)))
+                        if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                             await CreateFolderAsync(path, ct);
 
                         return path;
@@ -130,7 +132,7 @@ namespace FileStorageHandler.Services
                 case Dish product:
                     {
                         var path = Path.Combine("Dish", product.Name);
-                        if (!IsDirectoryExist(Path.Combine(path)))
+                        if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                             await CreateFolderAsync(path, ct);
                         return path;
                     }
