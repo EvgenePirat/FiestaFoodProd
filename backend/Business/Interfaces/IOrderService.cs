@@ -17,6 +17,8 @@ namespace Business.Interfaces
 
         Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct);
 
+        Task<OrderModel> UpdateOrderStateAsync(UpdateOrderStateModel model, CancellationToken ct);
+
         Task DeleteOrderByIdAsync(Guid id, CancellationToken ct);
     }
 }

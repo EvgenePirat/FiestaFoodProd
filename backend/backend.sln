@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileStorageHandler", "FileS
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{802A9849-481D-47DE-B2CC-017F19BAD83B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeHandler", "..\RealTimeHandler\RealTimeHandler.csproj", "{A3B47662-B201-459D-8E50-DA063F91A081}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{802A9849-481D-47DE-B2CC-017F19BAD83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802A9849-481D-47DE-B2CC-017F19BAD83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{802A9849-481D-47DE-B2CC-017F19BAD83B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3B47662-B201-459D-8E50-DA063F91A081}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3B47662-B201-459D-8E50-DA063F91A081}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3B47662-B201-459D-8E50-DA063F91A081}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3B47662-B201-459D-8E50-DA063F91A081}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

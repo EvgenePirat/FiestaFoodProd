@@ -21,8 +21,8 @@ namespace DataAccess.Repositories
 
             return new PaginationResult<Order>
             {
-                Result = await query.Skip((pagination.PageNumber-1) * pagination.PageSize).Take(pagination.PageSize).ToListAsync(),
-                TotalPages = (int)Math.Ceiling(count / (int)pagination.PageSize)
+                Result = await query.Skip((pagination.PageNumber-1) * pagination.PageSize).Take(pagination.PageSize).ToListAsync(ct),
+                TotalPages = (int)Math.Ceiling(count / pagination.PageSize)
             };
         }
 
