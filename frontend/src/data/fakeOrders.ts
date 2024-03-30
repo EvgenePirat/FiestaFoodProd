@@ -1,5 +1,5 @@
 import { OrderType } from '../types/OrderType';
-import { Payment } from '../types/enums';
+import { OrderState, Payment } from '../types/enums';
 
 const orders: OrderType[] = [
   {
@@ -25,7 +25,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.todo
   },
   {
     id: 15,
@@ -50,7 +51,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.progress
   },
   {
     id: 16,
@@ -75,7 +77,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.todo
   },
   {
     id: 23,
@@ -100,7 +103,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.todo
   },
   {
     id: 25,
@@ -125,7 +129,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.todo
   },
   {
     id: 26,
@@ -150,7 +155,8 @@ const orders: OrderType[] = [
     finalSum: 1000,
     payment: Payment.card,
     entryValue: 1200,
-    restValue: 200
+    restValue: 200,
+    status: OrderState.progress
   }
 ];
 
