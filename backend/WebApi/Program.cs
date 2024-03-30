@@ -9,7 +9,10 @@ using WebApi.DependencyResolve;
 using WebApi.Utilities.Filters.CancellationFilter;
 using WebApi.Utilities.Filters.FormFileFilter;
 using WebApi.Utilities.Middleware.ExceptionsHandlers;
-using Autofac.Core;
+using Microsoft.Extensions.FileProviders;
+using WebApi.BuildUtils;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +24,9 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<FormFileOperationFilter>();
 });
 
+new SetEnvironmentPath(builder).SetDefaultStoragePathForProject();
+builder.WebHost.UseWebRoot(builder.Environment.WebRootPath);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -30,8 +34,8 @@ builder.Services.AddSwaggerGen();
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
-//var connectionString = builder.Configuration.GetConnectionString("StDatabase");
+//var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
+var connectionString = builder.Configuration.GetConnectionString("StDatabase");
 builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
@@ -54,12 +58,14 @@ builder.Services.AddSignalR();
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt => { opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+
 builder.Services.AddSignalR()
     .AddHubOptions<OrderHub>(options => options.EnableDetailedErrors = true)
     .AddJsonProtocol(options =>
     {
         options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-    }); ;
+    });
+
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Host.ConfigureContainer<ContainerBuilder>(
@@ -67,6 +73,10 @@ builder.Host.ConfigureContainer<ContainerBuilder>(
 
 builder.Host.ConfigureContainer<ContainerBuilder>(
     containerBuilder => containerBuilder.RegisterModule(new MappersModules()));
+
+builder.Host.ConfigureContainer<ContainerBuilder>(
+    containerBuilder => containerBuilder.RegisterModule(new ApiUtilities()));
+
 
 var app = builder.Build();
 
@@ -76,6 +86,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(builder.Environment.WebRootPath),
+});
 
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();

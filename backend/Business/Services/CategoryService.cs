@@ -15,13 +15,20 @@ namespace Business.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileService _fileService;
         private readonly IDirectoryService _directoryService;
+        private readonly IMediaHandlerService _mediaHandlerService;
 
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService, IDirectoryService directoryService)
+        public CategoryService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper, 
+            IFileService fileService, 
+            IDirectoryService directoryService, 
+            IMediaHandlerService mediaHandlerService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileService = fileService;
             _directoryService = directoryService;
+            _mediaHandlerService = mediaHandlerService;
         }
 
         public async Task<CategoryModel> CreateCategoryAsync(CreateCategoryModel model, CancellationToken ct)
@@ -46,12 +53,18 @@ namespace Business.Services
             if (model.FormFile is not null)
                 await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
 
+            category.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             return _mapper.Map<CategoryModel>(category);
         }
 
         public async Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync(CancellationToken ct)
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync(ct);
+
+            foreach (var category in categories)
+            {
+                category.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(category.PhotoPaths, ct);
+            }
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
         }
 
@@ -82,7 +95,7 @@ namespace Business.Services
 
                 throw new CategoryArgumentException("An error occurred while updating the Category.");
             }
-
+            categoryToUpdate.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             return _mapper.Map<CategoryModel>(categoryToUpdate);
         }
 

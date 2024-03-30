@@ -20,6 +20,7 @@ namespace Business.DependencyResolvers
             builder.RegisterType<FileService>().As<IFileService>();
             builder.RegisterType<FileWriterService>().As<IFileWriteService>();
             builder.RegisterType<DirectoryService>().As<IDirectoryService>();
+            builder.RegisterType<MediaHandlerService>().As<IMediaHandlerService>();
             builder.RegisterType<OrderService>().As<IOrderService>();
             builder.RegisterType<OrderDetailService>().As<IOrderDetailService>();
             builder.RegisterType<IngredientService>().As<IIngredientService>();

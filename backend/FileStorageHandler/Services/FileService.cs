@@ -2,6 +2,7 @@
 using FileStorageHandler.Enums;
 using FileStorageHandler.Interfaces;
 using FileStorageHandler.Validations;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -13,13 +14,15 @@ namespace FileStorageHandler.Services
         private readonly IFileWriteService _fileWriteService;
         private readonly string _projectDirectory;
         private readonly IDirectoryService _directoryService;
-        public FileService(ILogger<FileService> logger, IFileWriteService fileWriteService, IDirectoryService directoryService)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public FileService(ILogger<FileService> logger, IFileWriteService fileWriteService, IDirectoryService directoryService, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _fileWriteService = fileWriteService;
             _directoryService = directoryService;
-            var currentDirectory = Path.GetDirectoryName(Directory.GetCurrentDirectory());
-            _projectDirectory = Path.GetFullPath(Path.Combine(currentDirectory, "Media"));
+            _webHostEnvironment = webHostEnvironment;
+            _projectDirectory = Path.Combine(_webHostEnvironment.WebRootPath, "Media");
         }
         
         public async Task UploadFilesAsync(IEnumerable<IFormFile> files, string path, CancellationToken ct)
@@ -96,9 +99,10 @@ namespace FileStorageHandler.Services
         
         public IEnumerable<string?> GetFilesPathsAsync(string path)
         {
-            if (!Directory.Exists(path)) 
+            var fullPath = Path.Combine(_projectDirectory, path);
+            if (!Directory.Exists(fullPath)) 
                 return Enumerable.Empty<string>();
-            var files = Directory.EnumerateFiles(path);
+            var files = Directory.EnumerateFiles(fullPath);
             return files.Select(Path.GetFileName).ToList();
         }
     }
