@@ -1,10 +1,14 @@
+@import "../../scss/variables.scss";
+@import "../../scss/mixins.scss";
+
 .page-block {
   height: 100%;
   width: 100%;
-  padding: 45px 25px 30px 35px;
+  padding: 20px 15px;
   display: flex;
   flex-direction: column;
-  gap: 45px;
+  gap: 20px;
+  background-color: $colorBack;
 }
 
 .section {
@@ -15,11 +19,42 @@
 
 .title {
   font-size: 4rem;
+  padding: 0 25px;
 }
 
-.orders-list {
+.orders-block {
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 10px;
+  align-items: center;
+  height: 440px;
+  background-color: $colorContentLight;
+  @include borderOut();
+  border-width: 2px;
+  padding: 0 calc(20px - 2px);
+
+  .list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+}
+
+.todo {
+  .orders-block {
+    border-color: $colorDanger;
+  }
+}
+
+.progress {
+  .title {
+    text-align: end;
+  }
+  .orders-block {
+    border-color: $colorSuccess;
+  }
+}
+
+.empty-message {
+  font-size: 4rem;
+  margin: 0 auto;
 }
