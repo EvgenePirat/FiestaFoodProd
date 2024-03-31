@@ -38,8 +38,8 @@
   }
 }
 
-@mixin borderOut() {
-  border: 1px solid $colorBorder;
+@mixin borderOut($borderWidth: 1px) {
+  border: $borderWidth solid $colorBorder;
   border-radius: 10px;
   box-shadow: $boxShadow;
 }
