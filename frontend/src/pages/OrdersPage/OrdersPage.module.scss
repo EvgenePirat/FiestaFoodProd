@@ -24,14 +24,20 @@
 
 .orders-block {
   display: flex;
-  align-items: center;
-  gap: 20px;
   height: 440px;
   background-color: $colorContentLight;
   @include borderOut();
   border-width: 2px;
-  @include scrollbar(overflow-x, scroll);
-  padding: $widthScrollbar calc(20px - 2px) 0;
+  padding: 0 18px;
+  
+  .list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    @include scrollbar(overflow-x, scroll);
+    padding-top: $widthScrollbar;
+    height: 100%;
+  }
 }
 
 .todo {
@@ -51,5 +57,5 @@
 
 .empty-message {
   font-size: 4rem;
-  margin: 0 auto;
+  margin: auto;
 }
