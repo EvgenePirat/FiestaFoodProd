@@ -128,13 +128,13 @@ namespace Business.Services
             throw new NotImplementedException();
         }
 
-        public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
+        public async Task<OrderModel> UpdateOrderAsync(Guid id, UpdateOrderModel model, CancellationToken ct)
         {
             await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
             try
             {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
-                            ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct)
+                            ?? throw new OrderArgumentException($"Order with this id {id} does not exist");
 
                 order = SetUpdateDataForOrderDetails(order, model);
 

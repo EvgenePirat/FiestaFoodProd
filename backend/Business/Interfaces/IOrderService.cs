@@ -15,7 +15,7 @@ namespace Business.Interfaces
 
         Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct);
 
-        Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct);
+        Task<OrderModel> UpdateOrderAsync(Guid id, UpdateOrderModel model, CancellationToken ct);
 
         Task<OrderModel> UpdateOrderStateAsync(UpdateOrderStateModel model, CancellationToken ct);
 

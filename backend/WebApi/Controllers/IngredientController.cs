@@ -24,8 +24,8 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<IngredientDto>> CreateIngredient([FromForm]CreateIngredientDto model, CancellationToken ct)
+        [HttpPost]
+        public async Task<ActionResult<IngredientDto>> CreateIngredient([FromBody]CreateIngredientDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Create Ingredient, Task started", nameof(IngredientController), nameof(CreateIngredient));
 
@@ -56,15 +56,15 @@ namespace WebApi.Controllers
             return Ok(mappedResult);
         }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<IngredientDto>> UpdateIIngredient([FromQuery] UpdateIngredientDto model, CancellationToken ct)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<IngredientDto>> UpdateIIngredient(int id, [FromBody] UpdateIngredientDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Update Ingredient, Task started",
                 nameof(IngredientController), nameof(UpdateIIngredient));
 
             var mappedModel = _mapper.Map<UpdateIngredientModel>(model);
 
-            var result = await _ingredientService.UpdateIngredientAsync(mappedModel, ct);
+            var result = await _ingredientService.UpdateIngredientAsync(id, mappedModel, ct);
 
             var mappedResult = _mapper.Map<IngredientDto>(result);
 
@@ -74,7 +74,7 @@ namespace WebApi.Controllers
             return Ok(mappedResult);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteIngredient(int id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Delete, delete ingredient, Task started", 

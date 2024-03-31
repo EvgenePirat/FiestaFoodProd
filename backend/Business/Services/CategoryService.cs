@@ -68,9 +68,9 @@ namespace Business.Services
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
         }
 
-        public async Task<CategoryModel> UpdateCategoryAsync(UpdateCategoryModel model, CancellationToken ct)
+        public async Task<CategoryModel> UpdateCategoryAsync(int id, UpdateCategoryModel model, CancellationToken ct)
         {
-            var categoryToUpdate = await _unitOfWork.CategoryRepository.GetByIdAsync(model.Id, ct)
+            var categoryToUpdate = await _unitOfWork.CategoryRepository.GetByIdAsync(id, ct)
                                 ?? throw new CategoryArgumentException("Category with this id not exist");
 
             var defaultPath = string.IsNullOrEmpty(categoryToUpdate.PhotoPaths)

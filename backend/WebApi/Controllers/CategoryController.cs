@@ -21,8 +21,8 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<CategoryDto>> CreateCategory([FromForm]CreateCategoryDto model, CancellationToken ct)
+        [HttpPost]
+        public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody]CreateCategoryDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Create Category, Task started", nameof(CategoryController), nameof(CreateCategory));
 
@@ -51,24 +51,25 @@ namespace WebApi.Controllers
             return Ok(mappedResult);
         }
 
-        [HttpPut("update")]
-        public async Task<ActionResult<CategoryDto>> UpdateCategory([FromQuery] UpdateCategoryDto model, CancellationToken ct)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, [FromBody] UpdateCategoryDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Update Category, Task started",
                 nameof(CategoryController), nameof(UpdateCategory));
 
             var mappedModel = _mapper.Map<UpdateCategoryModel>(model);
 
-            var result = await _categoryService.UpdateCategoryAsync(mappedModel, ct);
+            var result = await _categoryService.UpdateCategoryAsync(id, mappedModel, ct);
 
             var mappedResult = _mapper.Map<CategoryDto>(result);
 
             _logger.LogInformation("{controller}.{method} - Post, Update Category, Result - Ok, Task ended", 
                 nameof(CategoryController), nameof(UpdateCategory));
+
             return Ok(mappedResult);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCategory(int id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Delete, delete category, Task started", 

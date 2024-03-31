@@ -87,9 +87,9 @@ namespace Business.Services
             };
         }
 
-        public async Task<DishModel> UpdateDishAsync(UpdateDishModel model, CancellationToken ct)
+        public async Task<DishModel> UpdateDishAsync(int id, UpdateDishModel model, CancellationToken ct)
         {
-            var dishToUpdate = await CheckDishEntityExist(model, ct);
+            var dishToUpdate = await CheckDishEntityExist(id, model, ct);
             var dishName = dishToUpdate.Name;
             var defaultPath = string.IsNullOrEmpty(dishToUpdate.PhotoPaths)
                 ? await _directoryService.GetDefaultPathAsync(dishToUpdate, ct)
@@ -149,9 +149,9 @@ namespace Business.Services
             return mappedModel;
         }
 
-        private async Task<Dish> CheckDishEntityExist(UpdateDishModel model, CancellationToken ct)
+        private async Task<Dish> CheckDishEntityExist(int id, UpdateDishModel model, CancellationToken ct)
         {
-            var dish = await _unitOfWork.DishRepository.GetDishById(model.Id, ct)
+            var dish = await _unitOfWork.DishRepository.GetDishById(id, ct)
                                   ?? throw new DishArgumentException("Dish with this id not found");
 
             dish.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)

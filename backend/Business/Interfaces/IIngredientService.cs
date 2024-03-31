@@ -12,7 +12,7 @@ namespace Business.Interfaces
     public interface IIngredientService
     {
         Task<IngredientModel> CreateIngredientAsync(CreateIngredientModel model, CancellationToken ct);
-        Task<IngredientModel> UpdateIngredientAsync(UpdateIngredientModel model, CancellationToken ct);
+        Task<IngredientModel> UpdateIngredientAsync(int id, UpdateIngredientModel model, CancellationToken ct);
         Task<IEnumerable<IngredientModel>> GetAllIngredientsAsync(CancellationToken ct);
         Task DeleteIngredientAsync(int id, CancellationToken ct);
     }
