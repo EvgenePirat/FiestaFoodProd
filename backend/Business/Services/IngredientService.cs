@@ -51,9 +51,9 @@ namespace Business.Services
             return _mapper.Map<IEnumerable<IngredientModel>>(ingredients);
         }
 
-        public async Task<IngredientModel> UpdateIngredientAsync(UpdateIngredientModel model, CancellationToken ct)
+        public async Task<IngredientModel> UpdateIngredientAsync(int id, UpdateIngredientModel model, CancellationToken ct)
         {
-            var ingredientToUpdate = await _unitOfWork.IngredientsRepository.GetByIdAsync(model.Id, ct)
+            var ingredientToUpdate = await _unitOfWork.IngredientsRepository.GetByIdAsync(id, ct)
                                                ?? throw new IngredientArgumentException("Ingredient with id not exist");
 
             ingredientToUpdate.Name = model.Name;

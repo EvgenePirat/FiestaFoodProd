@@ -50,7 +50,7 @@ namespace Business.Services
 
             try
             {
-                if (model is not { OrderState: OrderState.Todo, OrderDetail.PaymentStatus: PaymentStatus.Payed })
+                if (model is not { OrderState: OrderState.Todo})
                     return _mapper.Map<OrderModel>(createModel);
 
                 createModel = _mapper.Map<Order>(model);
@@ -128,15 +128,13 @@ namespace Business.Services
             throw new NotImplementedException();
         }
 
-        public async Task<OrderModel> UpdateOrderAsync(UpdateOrderModel model, CancellationToken ct)
+        public async Task<OrderModel> UpdateOrderAsync(Guid id, UpdateOrderModel model, CancellationToken ct)
         {
             await using var transaction = await _unitOfWork.BeginTransactionDbContextAsync(ct);
             try
             {
-                var order = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id, ct)
-                            ?? throw new OrderArgumentException($"Order with this id {model.Id} does not exist");
-
-                order = SetUpdateDataForOrderDetails(order, model);
+                var order = await _unitOfWork.OrderRepository.GetByIdAsync(id, ct)
+                            ?? throw new OrderArgumentException($"Order with this id {id} does not exist");
 
                 order = SetUpdateDataForOrder(order, model);
 
@@ -200,20 +198,9 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
         }
 
-        private Order SetUpdateDataForOrderDetails(Order order, UpdateOrderModel model)
-        {
-            order.OrderDetail.IsPaid = model.OrderDetail.IsPaid;
-            order.OrderDetail.PaymentType = (Entities.Enums.PaymentType)model.OrderDetail.PaymentType;
-            order.OrderDetail.PaymentStatus = (Entities.Enums.PaymentStatus)model.OrderDetail.PaymentStatus;
-            order.OrderDetail.Sum = model.OrderDetail.Sum;
-
-            return order;
-        }
-
         private Order SetUpdateDataForOrder(Order order, UpdateOrderModel model)
         {
             order.OrderState = (Entities.Enums.OrderState)model.OrderState;
-            order.OrderCreateDate = model.OrderCreateDate;
             order.OrderFinishedDate = model.OrderFinishedDate;
 
             return order;

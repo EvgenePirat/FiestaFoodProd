@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models.FiltersDto;
 using WebApi.Models.Orders.Request;
 using WebApi.Models.Orders.Response;
 using WebApi.Models.PaginationsDto;
@@ -24,7 +22,7 @@ namespace WebApi.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<OrderDto>> CreateOrderAsync([FromBody]CreateOrderDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Create Order, Task started", 
@@ -42,8 +40,8 @@ namespace WebApi.Controllers
             return Ok(mappedOrder);
         }
 
-        [HttpGet("by-id")]
-        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync([FromQuery] Guid id, CancellationToken ct)
+        [HttpGet("{id:Guid}")]
+        public async Task<ActionResult<OrderDto>> GetOrderByIdAsync(Guid id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Get, Get Order by id {id}, Task started",
                 nameof(OrderController), nameof(GetOrderByIdAsync), id);
@@ -95,25 +93,25 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPut("update")]
-        public async Task<ActionResult<OrderDto>> UpdateOrderAsync([FromBody] UpdateOrderDto model, CancellationToken ct)
+        [HttpPut("{id:Guid}")]
+        public async Task<ActionResult<OrderDto>> UpdateOrderAsync(Guid id, [FromBody] UpdateOrderDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Put, Update Order {Id}, Task started",
-                nameof(OrderController), nameof(UpdateOrderAsync), model.Id);
+                nameof(OrderController), nameof(UpdateOrderAsync), id);
 
             var updateModel = _mapper.Map<UpdateOrderModel>(model);
 
-            var order = await _orderService.UpdateOrderAsync(updateModel, ct);
+            var order = await _orderService.UpdateOrderAsync(id, updateModel, ct);
 
             var mappedOrder = _mapper.Map<OrderDto>(order);
 
             _logger.LogInformation("{controller}.{method} - Put, Update Order {model.Id}, Result - Ok, Task ended",
-                nameof(OrderController), nameof(UpdateOrderAsync), model.Id);
+                nameof(OrderController), nameof(UpdateOrderAsync), id);
 
             return Ok(mappedOrder);
         }
 
-        [HttpDelete("by-id")]
+        [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> DeleteOrderByIdAsync(Guid id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Delete, Delete Order by id, Task started",

@@ -11,7 +11,6 @@ namespace WebApi.Mappers
         public OrderDetailDtoProfile()
         {
             CreateMap<CreateOrderDetailDto, CreateOrderDetailModel>();
-            CreateMap<UpdateOrderDetailDto, UpdateOrderDetailModel>();
             CreateMap<OrderDetailModel, OrderDetailDto>();
         }
     }

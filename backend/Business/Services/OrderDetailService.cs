@@ -84,10 +84,5 @@ namespace Business.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<OrderDetailModel> UpdateOrderDetailAsync(UpdateOrderDetailModel model, CancellationToken ct)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

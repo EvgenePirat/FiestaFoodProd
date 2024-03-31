@@ -26,8 +26,8 @@ namespace WebApi.Controllers
             _logger = logger;
         }
 
-        [HttpPost("add")]
-        public async Task<ActionResult<DishDto>> CreateDish(AddDishDto model, CancellationToken ct)
+        [HttpPost]
+        public async Task<ActionResult<DishDto>> CreateDish([FromBody]AddDishDto model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<AddDishModel>(model);
             var dish = await _dishService.AddDishAsync(mappedModel, ct);
@@ -41,13 +41,13 @@ namespace WebApi.Controllers
         /// <param name="dishId">int if dor search in bd</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>returned model with data from db or problem</returns>
-        [HttpGet("by-id")]
-        public async Task<ActionResult<DishDto>> GetDishByIdAsync(int dishId, CancellationToken ct)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<DishDto>> GetDishByIdAsync(int id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - get Dish method with id in controller, Task started", 
                 nameof(DishController), nameof(GetDishByIdAsync));
 
-            var dish = await _dishService.GetDishByIdAsync(dishId, ct);
+            var dish = await _dishService.GetDishByIdAsync(id, ct);
             var mappedDish = _mapper.Map<DishDto>(dish);
 
             _logger.LogInformation("{controller}.{method} - get Dish method with id, Result - Ok, Task ended", 
@@ -56,7 +56,22 @@ namespace WebApi.Controllers
             return Ok(mappedDish);
         }
 
-        [HttpGet("by-category-id")]
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<DishDto>>> GetAllDishesAsync(CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - get all dishes in controller, Task started",
+                nameof(DishController), nameof(GetAllDishesAsync));
+
+            var models = await _dishService.GetAllDishesAsync(ct);
+            var mappedResult = _mapper.Map<IEnumerable<DishDto>>(models);
+
+            _logger.LogInformation("{controller}.{method} - get all dishes in controller, Result - Ok, Task ended",
+                nameof(DishController), nameof(GetAllDishesAsync));
+
+            return Ok(mappedResult);
+        }
+
+        [HttpGet("category/{categoryId:int}")]
         public async Task<ActionResult<PagedDishDto>> GetDishByCategoryAsync(int categoryId, [FromQuery]PaginationDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Get paged Dishes by category, Task started,", nameof(DishController), nameof(GetDishByCategoryAsync));
@@ -82,14 +97,14 @@ namespace WebApi.Controllers
         //    return Ok(mappedResult);
         //}
 
-        [HttpPut("update")]
-        public async Task<ActionResult<DishModel>> UpdateDishAsync([FromForm] UpdateDishDto model, CancellationToken ct)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<DishModel>> UpdateDishAsync(int id, [FromBody] UpdateDishDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Update Dish (FromForm), Task started,", nameof(DishController), 
                 nameof(UpdateDishAsync));
 
             var mappedFilter = _mapper.Map<UpdateDishModel>(model);
-            var dish = await _dishService.UpdateDishAsync(mappedFilter, ct);
+            var dish = await _dishService.UpdateDishAsync(id, mappedFilter, ct);
 
             var mappedDish = _mapper.Map<DishDto>(dish);
             _logger.LogInformation("{controller}.{method} - Update Dish (FromForm), Result - Ok, Task ended", 
@@ -97,8 +112,8 @@ namespace WebApi.Controllers
             return Ok(mappedDish);
         }
 
-        [HttpPut("update/dishingredient")]
-        public async Task<IActionResult> UpdateDishIngredientAsync([FromQuery]int dishId, List<UpdateDishIngredientDto> dto, CancellationToken ct)
+        [HttpPut("dishingredient/{dishId:int}")]
+        public async Task<IActionResult> UpdateDishIngredientAsync(int dishId, [FromBody] List<UpdateDishIngredientDto> dto, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Update DishIngredient for dish, Task started,", nameof(DishController),
                 nameof(UpdateDishIngredientAsync));
@@ -112,17 +127,17 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete("by-id")]
-        public async Task<IActionResult> DeleteDishAsync(int dishId, CancellationToken ct)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteDishAsync(int id, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Delete Dish by id, Task started,", nameof(DishController),
                 nameof(DeleteDishAsync));
             
-            await _dishService.DeleteDishByIdAsync(dishId, ct);
+            await _dishService.DeleteDishByIdAsync(id, ct);
 
             _logger.LogInformation("{controller}.{method} - Delete Dish by id, Result - Ok, Task ended",
                 nameof(DishController), nameof(DeleteDishAsync));
-            return Ok($"Dish {dishId} was deleted");
+            return Ok($"Dish {id} was deleted");
         }
     }
 }
