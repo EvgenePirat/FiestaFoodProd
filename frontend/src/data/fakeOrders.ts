@@ -17,6 +17,21 @@ const orders: OrderType[] = [
         comment: ''
       },
       {
+        id: 5,
+        count: 3,
+        comment: ''
+      },
+      {
+        id: 6,
+        count: 3,
+        comment: ''
+      },
+      {
+        id: 7,
+        count: 3,
+        comment: ''
+      },
+      {
         id: 2,
         count: 1,
         comment: ''

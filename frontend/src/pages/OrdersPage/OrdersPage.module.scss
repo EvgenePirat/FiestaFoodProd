@@ -25,18 +25,13 @@
 .orders-block {
   display: flex;
   align-items: center;
+  gap: 20px;
   height: 440px;
   background-color: $colorContentLight;
   @include borderOut();
   border-width: 2px;
-  padding: 0 calc(20px - 2px);
-
-  .list {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-  }
+  @include scrollbar(overflow-x, scroll);
+  padding: $widthScrollbar calc(20px - 2px) 0;
 }
 
 .todo {

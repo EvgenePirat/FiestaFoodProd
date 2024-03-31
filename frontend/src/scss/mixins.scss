@@ -20,12 +20,12 @@
   box-shadow: $boxShadow;
 }
 
-@mixin scrollbar($pdRight: 1rem) {
-  overflow-y: auto;
-  padding-right: $pdRight;
+@mixin scrollbar($overflow: overflow, $overflowValue: auto) {
+  #{$overflow}: $overflowValue;
 
   &::-webkit-scrollbar {
     width: $widthScrollbar;
+    height: $widthScrollbar; 
   }
 
   &::-webkit-scrollbar-thumb {

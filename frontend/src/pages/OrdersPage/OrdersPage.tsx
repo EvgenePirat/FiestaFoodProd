@@ -26,11 +26,7 @@ export default function OrdersPage() {
         <p className={styles['title']}>Нові замовлення</p>
         <div className={styles['orders-block']}>
           {ordersTodo.length ? (
-            <div className={styles['list']}>
-              {ordersTodo.map((order) => (
-                <OrderCard key={order.id} {...order} />
-              ))}
-            </div>
+            ordersTodo.map((order) => <OrderCard key={order.id} {...order} />)
           ) : (
             <p className={styles['empty-message']}>Нових замовлень немає</p>
           )}
@@ -40,11 +36,7 @@ export default function OrdersPage() {
         <p className={styles['title']}>Готуються</p>
         <div className={styles['orders-block']}>
           {ordersProgress.length ? (
-            <div className={styles['list']}>
-              {ordersProgress.map((order) => (
-                <OrderCard key={order.id} {...order} />
-              ))}
-            </div>
+            ordersProgress.map((order) => <OrderCard key={order.id} {...order} />)
           ) : (
             <p className={styles['empty-message']}>Зараз нічого не готується</p>
           )}
