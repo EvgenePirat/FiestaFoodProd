@@ -6,9 +6,7 @@ namespace WebApi.Models.Orders.Request
 {
     public class UpdateOrderDto
     {
-        public UpdateOrderDetailDto OrderDetail { get; set; }
         public OrderState OrderState { get; set; }
-        public DateTime OrderCreateDate { get; set; }
         public DateTime OrderFinishedDate { get; set; }
         public IEnumerable<UpdateOrderItemDto> OrderItems { get; set; }
     }

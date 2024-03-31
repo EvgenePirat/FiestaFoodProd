@@ -165,18 +165,23 @@ namespace Business.Services
             var dish = await _unitOfWork.DishRepository.GetDishById(dishId, ct)
                       ?? throw new DishArgumentException("Dish with this id not found");
 
-            foreach(var elem in dish.DishIngridients)
+
+            foreach (var dishIngredientModel in model)
             {
-                foreach(var dishIngredient in model)
+                foreach (var elem in dish.DishIngridients)
                 {
-                    if (elem.IngredientId == dishIngredient.IngredientId)
+                    if (elem.IngredientId == dishIngredientModel.IngredientId)
                     {
-                        elem.Count = dishIngredient.Count;
+                        elem.Count = dishIngredientModel.Count;
                         _unitOfWork.DishIngredientRepository.Update(elem);
                     }
+                    else
+                    {
+                        var dishIngredient = _mapper.Map<DishIngridient>(dishIngredientModel);
+                        dishIngredient.DishId = dishId;
+                        _unitOfWork.DishIngredientRepository.Add(dishIngredient);
+                    }
                 }
-
-
             }
 
             await _unitOfWork.SaveAsync(ct);
