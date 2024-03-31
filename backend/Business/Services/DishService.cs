@@ -181,5 +181,12 @@ namespace Business.Services
 
             await _unitOfWork.SaveAsync(ct);
         }
+
+        public async Task<IEnumerable<DishModel>> GetAllDishesAsync(CancellationToken ct)
+        {
+            var dishes = await _unitOfWork.DishRepository.GetAllAsync(ct);
+
+            return _mapper.Map<IEnumerable<DishModel>>(dishes);
+        }
     }
 }

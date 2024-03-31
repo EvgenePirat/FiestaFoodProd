@@ -15,6 +15,8 @@ namespace Business.Interfaces
 
         Task<PagedDishModel> GetFilteredDishesAsync(FilterModel filter, CancellationToken ct);
 
+        Task<IEnumerable<DishModel>> GetAllDishesAsync(CancellationToken ct);
+
         Task<DishModel> UpdateDishAsync(int id, UpdateDishModel model, CancellationToken ct);
 
         Task UpdateDishIngredientsForDishAsync(int dishId, List<UpdateDishIngredientModel> model, CancellationToken ct);

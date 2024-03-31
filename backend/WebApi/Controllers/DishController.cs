@@ -56,6 +56,21 @@ namespace WebApi.Controllers
             return Ok(mappedDish);
         }
 
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<DishDto>>> GetAllDishesAsync(CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - get all dishes in controller, Task started",
+                nameof(DishController), nameof(GetAllDishesAsync));
+
+            var models = await _dishService.GetAllDishesAsync(ct);
+            var mappedResult = _mapper.Map<IEnumerable<DishDto>>(models);
+
+            _logger.LogInformation("{controller}.{method} - get all dishes in controller, Result - Ok, Task ended",
+                nameof(DishController), nameof(GetAllDishesAsync));
+
+            return Ok(mappedResult);
+        }
+
         [HttpGet("category/{categoryId:int}")]
         public async Task<ActionResult<PagedDishDto>> GetDishByCategoryAsync(int categoryId, [FromQuery]PaginationDto model, CancellationToken ct)
         {
