@@ -17,11 +17,14 @@ export default function DishCatalog() {
   const navigate = useNavigate();
   const { type: typeValue } = useParams();
 
-  const type = useMemo(() => types.find((obj) => obj.id === typeValue), [typeValue, types]);
+  const type = useMemo(
+    () => types.find((obj) => !!typeValue && obj.id === +typeValue),
+    [typeValue, types]
+  );
 
   const displayDishes = useMemo(() => {
     if (!typeValue) return [];
-    return dishes.filter((obj) => obj.type === typeValue);
+    return dishes.filter((obj) => obj.category === +typeValue);
   }, [dishes, typeValue]);
 
   return (
@@ -32,7 +35,7 @@ export default function DishCatalog() {
             Повернутись
           </NavLink>
         )}
-        <p className={styles['book-mark']}>{type?.title ?? typeValue ?? 'Усі товари'}</p>
+        <p className={styles['book-mark']}>{type?.categoryName ?? typeValue ?? 'Усі товари'}</p>
       </div>
       <div className={styles['list-block']}>
         {typeValue ? (
@@ -50,7 +53,8 @@ export default function DishCatalog() {
             {types.map((obj) => (
               <DishCard
                 key={obj.id}
-                {...obj}
+                title={obj.categoryName}
+                image={obj.photoPaths}
                 onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
               />
             ))}

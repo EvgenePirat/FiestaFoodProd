@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ProductType, TypeProductType } from '../types/ProductType';
+import { DishType } from '../types/DishType.ts';
+import { CategoryType } from '../types/CategoryType.ts';
 
 import { types } from '../data/fakeTypes';
 import { products } from '../data/fakeProducts';
 
 interface IProductsState {
-  products: ProductType[];
-  types: TypeProductType[];
+  products: DishType[];
+  types: CategoryType[];
 }
 
 const initialState: IProductsState = {

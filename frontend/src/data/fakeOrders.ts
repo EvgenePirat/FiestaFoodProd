@@ -39,8 +39,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.todo
   },
   {
@@ -65,8 +63,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.progress
   },
   {
@@ -91,8 +87,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.todo
   },
   {
@@ -117,8 +111,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.todo
   },
   {
@@ -143,8 +135,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.todo
   },
   {
@@ -169,8 +159,6 @@ const orders: OrderType[] = [
     ],
     finalSum: 1000,
     payment: Payment.card,
-    entryValue: 1200,
-    restValue: 200,
     status: OrderState.progress
   }
 ];

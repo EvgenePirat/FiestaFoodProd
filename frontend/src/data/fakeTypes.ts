@@ -5,38 +5,38 @@ import saladImg from '../assets/images/types/salad.png';
 import snacksImg from '../assets/images/types/snacks.png';
 import kebabImg from '../assets/images/types/kebab.png';
 
-import { TypeProductType } from '../types/ProductType';
+import { CategoryType } from '../types/CategoryType.ts';
 
-const types: TypeProductType[] = [
+const types: CategoryType[] = [
   {
-    id: 'burgers',
-    title: 'Бургери',
-    image: burgerImg
+    id: 1,
+    categoryName: 'Бургери',
+    photoPaths: burgerImg
   },
   {
-    id: 'meat',
-    title: 'М`ясо',
-    image: meatImg
+    id: 2,
+    categoryName: 'М`ясо',
+    photoPaths: meatImg
   },
   {
-    id: 'drinks',
-    title: 'Напої',
-    image: drinkImg
+    id: 3,
+    categoryName: 'Напої',
+    photoPaths: drinkImg
   },
   {
-    id: 'salads',
-    title: 'Салати',
-    image: saladImg
+    id: 4,
+    categoryName: 'Салати',
+    photoPaths: saladImg
   },
   {
-    id: 'potatoes',
-    title: 'Картопля',
-    image: snacksImg
+    id: 5,
+    categoryName: 'Картопля',
+    photoPaths: snacksImg
   },
   {
-    id: 'kebab',
-    title: 'Шаурма',
-    image: kebabImg
+    id: 6,
+    categoryName: 'Шаурма',
+    photoPaths: kebabImg
   }
 ];
 
