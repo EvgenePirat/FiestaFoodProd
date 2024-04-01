@@ -7,7 +7,5 @@ export type OrderType = {
   list: OrderItemType[];
   finalSum: number;
   payment: Payment;
-  entryValue: number;
-  restValue: number;
   status: OrderState;
 };
