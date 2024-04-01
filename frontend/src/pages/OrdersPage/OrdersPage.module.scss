@@ -1,0 +1,61 @@
+@import "../../scss/variables.scss";
+@import "../../scss/mixins.scss";
+
+.page-block {
+  height: 100%;
+  width: 100%;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: $colorBack;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  font-size: 4rem;
+  padding: 0 25px;
+}
+
+.orders-block {
+  display: flex;
+  height: 440px;
+  background-color: $colorContentLight;
+  @include borderOut(2px);
+  padding: 0 18px;
+  
+  .list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    @include scrollbar(overflow-x, scroll);
+    padding-top: $widthScrollbar;
+    height: 100%;
+  }
+}
+
+.todo {
+  .orders-block {
+    border-color: $colorDanger;
+  }
+}
+
+.progress {
+  .title {
+    text-align: end;
+  }
+  .orders-block {
+    border-color: $colorSuccess;
+  }
+}
+
+.empty-message {
+  font-size: 4rem;
+  margin: auto;
+}

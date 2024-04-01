@@ -1,7 +1,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { OrderState } from '../types/enums';
 import { OrderItemType } from '../types/OrderItemType';
 import { OrderType } from '../types/OrderType';
+
+import { orders } from '../data/fakeOrders';
 
 interface IOrdersState {
   order: OrderItemType[];
@@ -17,6 +20,9 @@ const ordersSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
+    loadOrders: (state) => {
+      state.orders = orders;
+    },
     addItem: (state, action: PayloadAction<OrderItemType['id']>) => {
       if (state.order.every((obj) => obj.id !== action.payload)) {
         state.order.push({ id: action.payload, count: 1, comment: '' });
@@ -47,12 +53,33 @@ const ordersSlice = createSlice({
       action: PayloadAction<Pick<OrderType, 'finalSum' | 'payment' | 'entryValue' | 'restValue'>>
     ) => {
       const date = Date.now();
-      state.orders.push({ id: date, date, list: state.order, ...action.payload });
+      state.orders.push({
+        id: date,
+        date,
+        list: state.order,
+        ...action.payload,
+        status: OrderState.todo
+      });
       state.order = [];
+    },
+    changeOrderStatus: (
+      state,
+      action: PayloadAction<{ id: OrderType['id']; value: OrderState }>
+    ) => {
+      const order = state.orders.find((obj) => obj.id === action.payload.id);
+      if (order) order.status = action.payload.value;
     }
   }
 });
 
-export const { addItem, removeItem, changeCount, changeComment, clearOrder, createOrder } =
-  ordersSlice.actions;
+export const {
+  loadOrders,
+  addItem,
+  removeItem,
+  changeCount,
+  changeComment,
+  clearOrder,
+  createOrder,
+  changeOrderStatus
+} = ordersSlice.actions;
 export default ordersSlice.reducer;

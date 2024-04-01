@@ -40,6 +40,7 @@
 
   .list {
     @include scrollbar();
+    padding-right: 0.5rem;
     display: flex;
     flex: 1 1 0;
     flex-direction: column;

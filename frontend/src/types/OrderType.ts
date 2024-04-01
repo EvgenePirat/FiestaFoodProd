@@ -1,4 +1,4 @@
-import { Payment } from './enums';
+import { OrderState, Payment } from './enums';
 import { OrderItemType } from './OrderItemType';
 
 export type OrderType = {
@@ -9,4 +9,5 @@ export type OrderType = {
   payment: Payment;
   entryValue: number;
   restValue: number;
+  status: OrderState;
 };
