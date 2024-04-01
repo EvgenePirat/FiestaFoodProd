@@ -36,7 +36,6 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
 
   const [discount, setDiscount] = useState(0);
   const [payment, setPayment] = useState<Payment | null>(null);
-  const [entryValue, setEntryValue] = useState(0);
 
   const sum = useMemo(
     () =>
@@ -49,17 +48,10 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
 
   const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [discount, sum]);
 
-  const restValue = useMemo(() => entryValue - finalSum, [entryValue, finalSum]);
-
-  const isDisabledBtn = useMemo(
-    () => payment === null || (payment === Payment.cash && (entryValue === 0 || restValue < 0)),
-    [entryValue, payment, restValue]
-  );
-
   const createOrderHandler = useCallback(() => {
-    if (payment) dispatch(createOrder({ finalSum, payment, entryValue, restValue }));
+    if (payment) dispatch(createOrder({ finalSum, payment }));
     if (onClose) onClose();
-  }, [payment, dispatch, finalSum, entryValue, restValue, onClose]);
+  }, [payment, dispatch, finalSum, onClose]);
 
   return (
     <Popup onClose={onClose}>
@@ -94,29 +86,11 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
             </label>
           ))}
         </div>
-        {payment === Payment.cash && (
-          <div className={styles['inputs-block']}>
-            <input
-              className={styles['input']}
-              type="number"
-              value={entryValue || ''}
-              onChange={(e) => setEntryValue(+e.target.value)}
-              placeholder="Внесено"
-            />
-            <input
-              className={styles['input']}
-              type="number"
-              value={entryValue ? restValue : ''}
-              placeholder="Решта"
-              readOnly
-            />
-          </div>
-        )}
         <Button
           btnStyle="success"
           className={styles['create-btn']}
           onClick={createOrderHandler}
-          disabled={isDisabledBtn}>
+          disabled={payment === null}>
           Розраховано
         </Button>
       </div>
