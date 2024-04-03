@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Business.Models.Dishes;
+using Business.Models.Dishes.Request;
+using Business.Models.Dishes.Response;
 using Entities.Entities;
 
 namespace Business.Mappers

@@ -6,8 +6,7 @@ namespace Entities.Entities
     public class Ingredient : IEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public Importance Importance { get; set; }
+        public string Title { get; set; }
         public Quantity Quantity { get; set; }
         public IEnumerable<DishIngridient> DishIngridients { get; set; }
     }

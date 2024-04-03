@@ -5,8 +5,7 @@ namespace WebApi.Models.IngredientsDto.Request
 {
     public class CreateIngredientDto
     {
-        public string Name { get; set; }
-        public Importance Importance { get; set; }
+        public string Title { get; set; }
         public CreateQuantityDto Quantity { get; set; }
     }
 }

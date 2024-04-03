@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
 
         public async Task<Ingredient?> GetByNameAsync(string name, CancellationToken ct)
         {
-            return await _context.Ingredients.Include(i => i.Quantity).FirstOrDefaultAsync(u => u.Name == name, cancellationToken: ct);
+            return await _context.Ingredients.Include(i => i.Quantity).FirstOrDefaultAsync(u => u.Title == name, cancellationToken: ct);
         }
     }
 }

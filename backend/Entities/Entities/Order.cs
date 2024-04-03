@@ -8,6 +8,7 @@ namespace Entities.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        public int Number { get; set; }
         public IEnumerable<OrderItem> OrderItems { get; set; }
         public OrderDetail OrderDetail { get; set; }
         public OrderState OrderState { get; set; }

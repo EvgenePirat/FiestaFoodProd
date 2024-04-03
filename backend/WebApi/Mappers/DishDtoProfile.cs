@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Business.Models.Dishes;
+using Business.Models.Dishes.Request;
+using Business.Models.Dishes.Response;
 using Business.Models.Pagination;
 using WebApi.Models.DishesDto.Request;
 using WebApi.Models.DishesDto.Response;

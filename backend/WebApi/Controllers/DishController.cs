@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Dishes;
 using Business.Models.Filter;
 using Business.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,8 @@ using WebApi.Models.DishesDto.Response;
 using WebApi.Utilities;
 using WebApi.Models.DishIngredientsDto.Request;
 using Business.Models.DishIngredients.Request;
+using Business.Models.Dishes.Request;
+using Business.Models.Dishes.Response;
 
 namespace WebApi.Controllers
 {

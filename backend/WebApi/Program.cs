@@ -34,8 +34,8 @@ builder.Services.AddSwaggerGen();
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
-//var connectionString = builder.Configuration.GetConnectionString("StDatabase");
+//var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;Password={dbPassword};TrustServerCertificate=true";
+var connectionString = builder.Configuration.GetConnectionString("StDatabase");
 builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",

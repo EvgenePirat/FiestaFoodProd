@@ -33,14 +33,11 @@ namespace Business.Services
             return _mapper.Map<OrderModel>(order);
         }
 
-        private async Task<bool> CheckSumOrder(Order order, CancellationToken ct)
+        private async Task<int> SetNumberInNewOrder(CancellationToken ct)
         {
-            var dishes = await _unitOfWork.DishRepository.GetDishesByIds(
-                order.OrderItems.Select(d => d.DishId), ct);
-            var sum = (from orderItem in order.OrderItems
-                       let dish = dishes.FirstOrDefault(d => d.Id == orderItem.DishId)
-                       select orderItem.Count * dish.Price).Sum();
-            return sum.Equals(order.OrderDetail.Sum);
+            var orders = await _unitOfWork.OrderRepository.GetAllAsync(ct);
+            var lastOrder = orders.Last();
+            return lastOrder.Number == 100 ? 1 : lastOrder.Number+1;
         }
 
         public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
@@ -55,10 +52,7 @@ namespace Business.Services
 
                 createModel = _mapper.Map<Order>(model);
 
-                if (await CheckSumOrder(createModel, ct) == false)
-                {
-                    throw new OrderDetailArgumentException("Dishes price are not equal order sum");
-                }
+                createModel.Number = await SetNumberInNewOrder(ct);
 
                 await SubtractIngredients(createModel.OrderItems, ct);
 
@@ -191,7 +185,7 @@ namespace Business.Services
                     if (ingredient.Quantity.Count > dishIngredient.Count * item.Count)
                         ingredient.Quantity.Count -= dishIngredient.Count * item.Count;
                     else
-                        throw new IngredientArgumentException($"Quantity for {ingredient.Name} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
+                        throw new IngredientArgumentException($"Quantity for {ingredient.Title} not enough. Now - {ingredient.Quantity.Count} {ingredient.Quantity.Measurement}");
                 }
             }
 

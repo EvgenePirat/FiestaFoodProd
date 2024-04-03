@@ -1,4 +1,4 @@
-﻿namespace Business.Models.Dishes
+﻿namespace Business.Models.Dishes.Response
 {
     public class PagedDishModel
     {
