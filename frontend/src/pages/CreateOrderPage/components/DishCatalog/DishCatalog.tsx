@@ -6,11 +6,11 @@ import { addItem } from '../../../../redux/ordersSlice';
 
 import { routeCreateOrder } from '../../../../data/routes';
 
-import { DishCard } from '../';
+import { DishCard } from '..';
 
-import styles from './ProductCardList.module.scss';
+import styles from './DishCatalog.module.scss';
 
-export default function ProductCardList() {
+export default function DishCatalog() {
   const types = useSelector((state: RootState) => state.productsSlice.types);
   const products = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
