@@ -9,7 +9,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @include borderOut();
+  @include borderOut($borderRadius: 10px);
 }
 
 .title-block {

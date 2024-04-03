@@ -98,7 +98,7 @@
 .input,
 .pay {
   background-color: $colorContentLight;
-  @include borderOut();
+  @include borderOut($borderRadius: 10px);
 }
 
 .input,

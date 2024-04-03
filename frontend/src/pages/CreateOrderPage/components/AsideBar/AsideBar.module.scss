@@ -11,14 +11,15 @@
 
 .control-block {
   display: flex;
+  justify-content: space-between;
+  margin: 0 20px 0 30px;
 
-  .clear-btn {
+  .book-mark {
     @include bookmark();
+  }
 
-    margin-left: auto;
-    border: none;
+  button.book-mark {
     cursor: pointer;
-    clip-path: inset(-5px 0 -5px -5px);
   }
 }
 
@@ -69,7 +70,7 @@
     padding: 10px;
     font-size: 4rem;
     background-color: $colorContentLight;
-    @include borderOut();
+    @include borderOut($borderRadius: 10px);
   }
 }
 

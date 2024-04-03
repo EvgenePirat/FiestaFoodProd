@@ -34,7 +34,7 @@ export default function AsideBar() {
   return (
     <div className={styles['aside-bar']}>
       <div className={styles['control-block']}>
-        <button className={styles['clear-btn']} onClick={handleClear}>
+        <button className={styles['book-mark']} onClick={handleClear}>
           Очистити
         </button>
       </div>
