@@ -5,25 +5,26 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 calc(50px - 1rem - $widthScrollbar) 60px 50px;
+  padding: 0 calc(50px - $widthScrollbar) 50px 50px;
   position: relative;
-  gap: 10px;
+  gap: 30px;
 }
 
 .control-block {
   display: flex;
+  margin-right: $widthScrollbar;
 
   a {
     text-decoration: none;
     color: $colorLink
   }
-}
 
-.mark {
-  @include bookmark();
-
-  &.last {
-    margin-left: auto;
+  .book-mark {
+    @include bookmark();
+  
+    &:last-child {
+      margin-left: auto;
+    }
   }
 }
 

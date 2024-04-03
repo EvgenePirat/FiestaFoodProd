@@ -28,13 +28,11 @@ export default function ProductCardList() {
     <section className={styles['list-container']}>
       <div className={styles['control-block']}>
         {typeValue && (
-          <NavLink to={`/${routeCreateOrder}`} className={styles['mark']}>
+          <NavLink to={`/${routeCreateOrder}`} className={styles['book-mark']}>
             Повернутись
           </NavLink>
         )}
-        <p className={`${styles['mark']} ${styles['last']}`}>
-          {type?.title ?? typeValue ?? 'Усі товари'}
-        </p>
+        <p className={styles['book-mark']}>{type?.title ?? typeValue ?? 'Усі товари'}</p>
       </div>
       <div className={styles['list-block']}>
         {typeValue ? (
@@ -45,7 +43,7 @@ export default function ProductCardList() {
               ))}
             </ul>
           ) : (
-            <p className={styles['empty']}>List is empty</p>
+            <p className={styles['empty']}>Замовлення порожнє</p>
           )
         ) : (
           <ul className={styles['list']}>

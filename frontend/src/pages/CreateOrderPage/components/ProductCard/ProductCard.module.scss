@@ -1,13 +1,13 @@
 @import "../../../../scss/variables.scss";
+@import "../../../../scss/mixins.scss";
 
 .card {
   width: 250px;
   height: 250px;
   overflow: hidden;
-  border-radius: 10px;
   user-select: none;
   cursor: pointer;
-  box-shadow: $boxShadow;
+  @include borderOut(3px, 10px)
 }
 
 .image-block {
