@@ -54,7 +54,7 @@ export default function AsideBar() {
             ))}
           </ul>
         ) : (
-          <div className={styles['empty']}>List is empty</div>
+          <div className={styles['empty']}>Замовлення порожнє</div>
         )}
       </div>
 
