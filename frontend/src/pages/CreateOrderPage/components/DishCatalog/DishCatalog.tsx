@@ -43,7 +43,7 @@ export default function DishCatalog() {
               ))}
             </ul>
           ) : (
-            <p className={styles['empty']}>Замовлення порожнє</p>
+            <p className={styles['empty']}>Каталог порожній</p>
           )
         ) : (
           <ul className={styles['list']}>

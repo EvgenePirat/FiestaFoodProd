@@ -27,10 +27,10 @@ export default function PopupSubmitClear({ onClose }: PopupSubmitClearProps) {
       <div className={styles['content']}>
         <p className={styles['title']}>Очистити замовлення?</p>
         <div className={styles['buttons-block']}>
-          <Button btnStyle="success" onClick={submitClear}>
+          <Button className={styles['accept']} btnStyle="success" onClick={submitClear}>
             Так
           </Button>
-          <Button btnStyle="danger" onClick={cancelClear}>
+          <Button className={styles['reject']} btnStyle="danger" onClick={cancelClear}>
             Ні
           </Button>
         </div>
