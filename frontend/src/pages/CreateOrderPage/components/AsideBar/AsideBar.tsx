@@ -8,7 +8,7 @@ import { OrderItem, PopupCreateOrder, PopupSubmitClear } from '../';
 import styles from './AsideBar.module.scss';
 
 export default function AsideBar() {
-  const products = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.products);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
 
   const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);
@@ -17,10 +17,10 @@ export default function AsideBar() {
   const sum = useMemo(
     () =>
       order.reduce((acc, item) => {
-        const product = products.find((obj) => obj.id === item.id);
-        return acc + (product?.price ?? 0) * item.count;
+        const dish = dishes.find((obj) => obj.id === item.id);
+        return acc + (dish?.price ?? 0) * item.count;
       }, 0),
-    [order, products]
+    [order, dishes]
   );
 
   const handleClear = useCallback(() => {

@@ -14,16 +14,16 @@ interface OrderItemProps {
 }
 
 export default function OrderItem({ item }: OrderItemProps) {
-  const products = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
 
   const [posX, setPosX] = useState<number | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [value, setValue] = useState(item.comment);
 
-  const product = useMemo(() => {
-    return products.find((obj) => obj.id === item.id);
-  }, [item.id, products]);
+  const dish = useMemo(() => {
+    return dishes.find((obj) => obj.id === item.id);
+  }, [item.id, dishes]);
 
   const onBlurHandler = useCallback(() => {
     dispatch(changeComment({ id: item.id, value }));
@@ -68,10 +68,10 @@ export default function OrderItem({ item }: OrderItemProps) {
       onTouchStart={onTouchStartHandler}
       onTouchEnd={onTouchEndHandler}
       onTouchMove={onTouchMoveHandler}>
-      {product ? (
+      {dish ? (
         <>
           <div className={styles['info-content']}>
-            <span>{product.title}</span>
+            <span>{dish.title}</span>
             <div className={styles['count-block']}>
               <button
                 className={styles['btn']}
@@ -85,8 +85,8 @@ export default function OrderItem({ item }: OrderItemProps) {
                 <FaPlus />
               </button>
             </div>
-            <span>{product.price}</span>
-            <span>{item.count * product.price}</span>
+            <span>{dish.price}</span>
+            <span>{item.count * dish.price}</span>
           </div>
           <input
             className={styles['input']}

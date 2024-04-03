@@ -11,7 +11,7 @@ import styles from './MainLayout.module.scss';
 
 export default function MainLayout() {
   const types = useSelector((state: RootState) => state.productsSlice.types);
-  const products = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function MainLayout() {
 
   return (
     <>
-      {types.length && products.length ? (
+      {types.length && dishes.length ? (
         <div className={styles['main-block']}>
           <Header />
           <main className={styles['main']}>

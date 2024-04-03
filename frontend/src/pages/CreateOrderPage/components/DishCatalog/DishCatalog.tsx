@@ -12,17 +12,17 @@ import styles from './DishCatalog.module.scss';
 
 export default function DishCatalog() {
   const types = useSelector((state: RootState) => state.productsSlice.types);
-  const products = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { type: typeValue } = useParams();
 
   const type = useMemo(() => types.find((obj) => obj.id === typeValue), [typeValue, types]);
 
-  const displayProducts = useMemo(() => {
+  const displayDishes = useMemo(() => {
     if (!typeValue) return [];
-    return products.filter((obj) => obj.type === typeValue);
-  }, [products, typeValue]);
+    return dishes.filter((obj) => obj.type === typeValue);
+  }, [dishes, typeValue]);
 
   return (
     <section className={styles['list-container']}>
@@ -36,9 +36,9 @@ export default function DishCatalog() {
       </div>
       <div className={styles['list-block']}>
         {typeValue ? (
-          displayProducts.length ? (
+          displayDishes.length ? (
             <ul className={styles['list']}>
-              {displayProducts.map((obj) => (
+              {displayDishes.map((obj) => (
                 <DishCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
               ))}
             </ul>
