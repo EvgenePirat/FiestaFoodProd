@@ -1,13 +1,14 @@
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { signOut } from '../../redux/authSlice';
-import { routeCreateOrder, routeOrders } from '../../data/routes.ts';
+import { routeCreateOrder, routeOrders, routeInventory, routeMenu } from '../../data/routes.ts';
 
 import { Link } from '../';
 
 import { IoCashOutline } from 'react-icons/io5';
 import { BiSolidExit } from 'react-icons/bi';
-import { MdDehaze } from 'react-icons/md';
+import { MdDehaze, MdOutlineRestaurantMenu } from 'react-icons/md';
+import { LiaClipboardCheckSolid } from 'react-icons/lia';
 
 import styles from './Header.module.scss';
 
@@ -21,6 +22,16 @@ const links = [
     route: `/${routeCreateOrder}`,
     icon: IoCashOutline,
     text: 'Каса'
+  },
+  {
+    route: `/${routeInventory}`,
+    icon: LiaClipboardCheckSolid,
+    text: 'Інвертар'
+  },
+  {
+    route: `/${routeMenu}`,
+    icon: MdOutlineRestaurantMenu,
+    text: 'Меню'
   }
 ];
 
