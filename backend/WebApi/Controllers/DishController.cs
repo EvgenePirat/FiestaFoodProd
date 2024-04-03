@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DishDto>> CreateDish([FromBody]AddDishDto model, CancellationToken ct)
+        public async Task<ActionResult<DishDto>> CreateDish([FromForm] AddDishDto model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<AddDishModel>(model);
             var dish = await _dishService.AddDishAsync(mappedModel, ct);
@@ -99,7 +99,7 @@ namespace WebApi.Controllers
         //}
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<DishModel>> UpdateDishAsync(int id, [FromBody] UpdateDishDto model, CancellationToken ct)
+        public async Task<ActionResult<DishModel>> UpdateDishAsync(int id, [FromForm] UpdateDishDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Update Dish (FromForm), Task started,", nameof(DishController), 
                 nameof(UpdateDishAsync));

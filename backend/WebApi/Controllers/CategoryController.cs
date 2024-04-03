@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody]CreateCategoryDto model, CancellationToken ct)
+        public async Task<ActionResult<CategoryDto>> CreateCategory([FromForm]CreateCategoryDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Create Category, Task started", nameof(CategoryController), nameof(CreateCategory));
 
@@ -52,7 +52,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, [FromBody] UpdateCategoryDto model, CancellationToken ct)
+        public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, [FromForm] UpdateCategoryDto model, CancellationToken ct)
         {
             _logger.LogInformation("{controller}.{method} - Post, Update Category, Task started",
                 nameof(CategoryController), nameof(UpdateCategory));
