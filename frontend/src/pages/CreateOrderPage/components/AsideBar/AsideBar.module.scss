@@ -12,7 +12,7 @@
 .control-block {
   display: flex;
   justify-content: space-between;
-  margin: 0 20px 0 30px;
+  margin: 0 calc(30px - 1rem) 0 30px;
 
   .book-mark {
     @include bookmark();
@@ -27,16 +27,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-left: 15px;
-  padding-right: calc(15px - 1rem);
+  gap: 5px;
+  margin: 0 calc(30px - 1rem) 10px 30px;
 
   .head {
     @include gridTableLayout();
-    margin-bottom: 5px;
-    margin-right: 20px;
+    padding-left: 10px;
     border-bottom: 3px solid $colorSecondary;
-    font-size: 2rem;
+    font-size: 2.6rem;
     font-weight: bold;
+
+    & > *:not(:first-child) {
+      text-align: center
+    }
   }
 
   .list {
@@ -60,14 +63,15 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 15px 0 5px;
+  padding: 15px 0 15px 10px;
   background-color: $colorSecondary;
 
   .sum {
-    line-height: 100%;
+    height: 60px;
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    align-items: center;
+    padding: 0 10px;
     font-size: 4rem;
     background-color: $colorContentLight;
     @include borderOut($borderRadius: 10px);

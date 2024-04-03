@@ -34,6 +34,7 @@ export default function AsideBar() {
   return (
     <div className={styles['aside-bar']}>
       <div className={styles['control-block']}>
+        <p className={styles['book-mark']}>Створення замовлення</p>
         <button className={styles['book-mark']} onClick={handleClear}>
           Очистити
         </button>
