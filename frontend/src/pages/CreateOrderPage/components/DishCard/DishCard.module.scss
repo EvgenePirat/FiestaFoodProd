@@ -7,7 +7,13 @@
   overflow: hidden;
   user-select: none;
   cursor: pointer;
-  @include borderOut(3px, 10px)
+  @include borderOut(3px, 10px);
+
+  &:hover {
+    .title {
+      background-color: $colorLinkHover;
+    }
+  }
 }
 
 .image-block {
@@ -26,4 +32,5 @@
   align-items: center;
   justify-content: center;
   background-color: $colorSecondary;
+  transition: background-color .3s ease-out;
 }
