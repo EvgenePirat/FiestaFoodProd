@@ -14,16 +14,22 @@
   display: flex;
   margin-right: $widthScrollbar;
 
-  a {
-    text-decoration: none;
-    color: $colorLink
-  }
-
   .book-mark {
     @include bookmark();
   
     &:last-child {
       margin-left: auto;
+    }
+  }
+
+  a.book-mark {
+    transition: background-color .3s ease-out;
+    text-decoration: none;
+    color: $colorLink;
+
+    &:hover,
+    &.active {
+      background-color: $colorLinkHover;
     }
   }
 }
