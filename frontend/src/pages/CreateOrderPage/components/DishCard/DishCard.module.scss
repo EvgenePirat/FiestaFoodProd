@@ -11,7 +11,7 @@
 }
 
 .image-block {
-  height: calc(100% - $heightProductCardTitle);
+  height: calc(100% - $heightDishCardTitle);
 
   .image {
     height: 100%;
@@ -21,7 +21,7 @@
 
 .title {
   font-size: 2.4rem;
-  height: $heightProductCardTitle;
+  height: $heightDishCardTitle;
   display: flex;
   align-items: center;
   justify-content: center;

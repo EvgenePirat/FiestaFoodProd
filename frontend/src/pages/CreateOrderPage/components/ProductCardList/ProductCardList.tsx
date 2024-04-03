@@ -6,7 +6,7 @@ import { addItem } from '../../../../redux/ordersSlice';
 
 import { routeCreateOrder } from '../../../../data/routes';
 
-import { ProductCard } from '../';
+import { DishCard } from '../';
 
 import styles from './ProductCardList.module.scss';
 
@@ -39,7 +39,7 @@ export default function ProductCardList() {
           displayProducts.length ? (
             <ul className={styles['list']}>
               {displayProducts.map((obj) => (
-                <ProductCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
+                <DishCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
               ))}
             </ul>
           ) : (
@@ -48,7 +48,7 @@ export default function ProductCardList() {
         ) : (
           <ul className={styles['list']}>
             {types.map((obj) => (
-              <ProductCard
+              <DishCard
                 key={obj.id}
                 {...obj}
                 onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}

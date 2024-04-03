@@ -1,12 +1,12 @@
-import styles from './ProductCard.module.scss';
+import styles from './DishCard.module.scss';
 
-interface ProductCardProps {
+interface DishCardProps {
   title: string;
   image: string;
   onClick?: () => void;
 }
 
-export default function ProductCard({ title, image, onClick }: ProductCardProps) {
+export default function DishCard({ title, image, onClick }: DishCardProps) {
   return (
     <li className={styles['card']} onClick={onClick}>
       <div className={styles['image-block']}>
