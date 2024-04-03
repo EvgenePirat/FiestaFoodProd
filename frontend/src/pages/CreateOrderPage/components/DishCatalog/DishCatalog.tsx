@@ -6,51 +6,49 @@ import { addItem } from '../../../../redux/ordersSlice';
 
 import { routeCreateOrder } from '../../../../data/routes';
 
-import { ProductCard } from '../';
+import { DishCard } from '..';
 
-import styles from './ProductCardList.module.scss';
+import styles from './DishCatalog.module.scss';
 
-export default function ProductCardList() {
+export default function DishCatalog() {
   const types = useSelector((state: RootState) => state.productsSlice.types);
-  const products = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { type: typeValue } = useParams();
 
   const type = useMemo(() => types.find((obj) => obj.id === typeValue), [typeValue, types]);
 
-  const displayProducts = useMemo(() => {
+  const displayDishes = useMemo(() => {
     if (!typeValue) return [];
-    return products.filter((obj) => obj.type === typeValue);
-  }, [products, typeValue]);
+    return dishes.filter((obj) => obj.type === typeValue);
+  }, [dishes, typeValue]);
 
   return (
     <section className={styles['list-container']}>
       <div className={styles['control-block']}>
         {typeValue && (
-          <NavLink to={`/${routeCreateOrder}`} className={styles['mark']}>
+          <NavLink to={`/${routeCreateOrder}`} className={styles['book-mark']}>
             Повернутись
           </NavLink>
         )}
-        <p className={`${styles['mark']} ${styles['last']}`}>
-          {type?.title ?? typeValue ?? 'Усі товари'}
-        </p>
+        <p className={styles['book-mark']}>{type?.title ?? typeValue ?? 'Усі товари'}</p>
       </div>
       <div className={styles['list-block']}>
         {typeValue ? (
-          displayProducts.length ? (
+          displayDishes.length ? (
             <ul className={styles['list']}>
-              {displayProducts.map((obj) => (
-                <ProductCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
+              {displayDishes.map((obj) => (
+                <DishCard key={obj.id} {...obj} onClick={() => dispatch(addItem(obj.id))} />
               ))}
             </ul>
           ) : (
-            <p className={styles['empty']}>List is empty</p>
+            <p className={styles['empty']}>Замовлення порожнє</p>
           )
         ) : (
           <ul className={styles['list']}>
             {types.map((obj) => (
-              <ProductCard
+              <DishCard
                 key={obj.id}
                 {...obj}
                 onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}

@@ -2,12 +2,8 @@
 
 @mixin gridTableLayout {
   display: grid;
-  grid-template-columns: 4fr 2fr 1fr 2fr;
+  grid-template-columns: 4fr 2fr 2fr 2fr;
   gap: 10px;
-
-  span:last-child {
-    text-align: end;
-  }
 }
 
 @mixin bookmark {
@@ -17,7 +13,8 @@
   padding: 0 25px;
   display: flex;
   align-items: center;
-  box-shadow: $boxShadow;
+  @include borderOut();
+  border-top: none;
 }
 
 @mixin scrollbar($overflow: overflow, $overflowValue: auto) {
@@ -38,8 +35,10 @@
   }
 }
 
-@mixin borderOut($borderWidth: 1px) {
+@mixin borderOut($borderWidth: 1px, $borderRadius: 0) {
   border: $borderWidth solid $colorBorder;
-  border-radius: 10px;
   box-shadow: $boxShadow;
+  @if $borderRadius != 0 {
+    border-radius: $borderRadius;
+  }
 }
