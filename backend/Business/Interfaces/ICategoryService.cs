@@ -1,4 +1,5 @@
-﻿using Business.Models.Categories;
+﻿using Business.Models.Categories.Request;
+using Business.Models.Categories.Response;
 
 namespace Business.Interfaces
 {

@@ -4,7 +4,7 @@ namespace WebApi.Models.CategoriesDto.Request
 {
     public class CreateCategoryDto
     {
-        public string CategoryName { get; set; }
+        public string Title { get; set; }
         public IFormFile? FormFile { get; set; }
     }
 }

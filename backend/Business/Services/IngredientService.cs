@@ -23,7 +23,7 @@ namespace Business.Services
         {
             var mappedEntity = _mapper.Map<Ingredient>(model);
 
-            var ingredientExist = await _unitOfWork.IngredientsRepository.GetByNameAsync(model.Name, ct);
+            var ingredientExist = await _unitOfWork.IngredientsRepository.GetByNameAsync(model.Title, ct);
 
             if (ingredientExist != null)
                 throw new IngredientArgumentException("Ingredint with name already exist");
@@ -56,8 +56,7 @@ namespace Business.Services
             var ingredientToUpdate = await _unitOfWork.IngredientsRepository.GetByIdAsync(id, ct)
                                                ?? throw new IngredientArgumentException("Ingredient with id not exist");
 
-            ingredientToUpdate.Name = model.Name;
-            ingredientToUpdate.Importance = (Entities.Enums.Importance)model.Importance;
+            ingredientToUpdate.Title = model.Title;
             ingredientToUpdate.Quantity.Count = model.Quantity.Count;
             ingredientToUpdate.Quantity.Measurement = (Entities.Enums.Measurement)model.Quantity.Measurement;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Business.Models.Dishes
+namespace Business.Models.Dishes.Request
 {
     public class UpdateDishModel
     {

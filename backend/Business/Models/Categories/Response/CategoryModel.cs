@@ -1,6 +1,6 @@
-﻿namespace WebApi.Models.CategoriesDto.Response
+﻿namespace Business.Models.Categories.Response
 {
-    public class CategoryDto
+    public class CategoryModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

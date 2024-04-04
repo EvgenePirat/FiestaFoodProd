@@ -131,14 +131,14 @@ namespace FileStorageHandler.Services
                     }
                 case Dish product:
                     {
-                        var path = Path.Combine("Dish", product.Name);
+                        var path = Path.Combine("Dish", product.Title);
                         if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                             await CreateFolderAsync(path, ct);
                         return path;
                     }
                 case Category category:
                     {
-                        var path = Path.Combine("Category", category.CategoryName);
+                        var path = Path.Combine("Category", category.Title);
                         if (!IsDirectoryExist(Path.Combine(_projectDirectory, path)))
                             await CreateFolderAsync(path, ct);
                         return path;

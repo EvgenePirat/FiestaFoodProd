@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Dishes;
+using Business.Models.Dishes.Request;
+using Business.Models.Dishes.Response;
 using Business.Models.DishIngredients.Request;
 using Business.Models.Filter;
 using Business.Models.Pagination;
@@ -36,7 +37,7 @@ namespace Business.Services
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
             // Create a folders by path
 
-            mappedModel.PhotoPaths = defaultPath;
+            mappedModel.Image = defaultPath;
 
             _unitOfWork.DishRepository.Add(mappedModel);
 
@@ -90,24 +91,23 @@ namespace Business.Services
         public async Task<DishModel> UpdateDishAsync(int id, UpdateDishModel model, CancellationToken ct)
         {
             var dishToUpdate = await CheckDishEntityExist(id, model, ct);
-            var dishName = dishToUpdate.Name;
-            var defaultPath = string.IsNullOrEmpty(dishToUpdate.PhotoPaths)
+            var dishName = dishToUpdate.Title;
+            var defaultPath = string.IsNullOrEmpty(dishToUpdate.Image)
                 ? await _directoryService.GetDefaultPathAsync(dishToUpdate, ct)
-                : dishToUpdate.PhotoPaths;
+                : dishToUpdate.Image;
 
-            if (dishToUpdate.Name != model.Name)
+            if (dishToUpdate.Title != model.Name)
             {
                 await _directoryService.RenameFolderAsync(defaultPath, model.Name, ct);
-                dishToUpdate.Name = model.Name;
+                dishToUpdate.Title = model.Name;
 
                 // Get new default path for Dish
                 defaultPath = await _directoryService.GetDefaultPathAsync(dishToUpdate, ct);
                 if (string.IsNullOrEmpty(defaultPath))
                     throw new DirectoryNotFoundException("Exception with directory (not found)");
-                dishToUpdate.PhotoPaths = defaultPath;
+                dishToUpdate.Image = defaultPath;
             }
 
-            dishToUpdate.Description = model.Description;
             dishToUpdate.Price = model.Price;
             dishToUpdate.CategoryId = model.CategoryId;
 
@@ -120,7 +120,7 @@ namespace Business.Services
             }
             catch
             {
-                if (dishToUpdate.Name != model.Name)
+                if (dishToUpdate.Title != model.Name)
                     await _directoryService.RenameFolderAsync(defaultPath, dishName, ct);
                 throw new DishArgumentException("An error occurred while updating the Dish.");
             }
@@ -134,7 +134,7 @@ namespace Business.Services
                         ?? throw new DishArgumentException("Dish with this id not found");
             _unitOfWork.DishRepository.Delete(Dish);
 
-            await _directoryService.DeleteFolderByPathAsync(Dish.PhotoPaths, ct);
+            await _directoryService.DeleteFolderByPathAsync(Dish.Image, ct);
 
             await _unitOfWork.SaveAsync(ct);
         }

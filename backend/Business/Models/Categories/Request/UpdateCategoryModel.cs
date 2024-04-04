@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Business.Models.Categories
+namespace Business.Models.Categories.Request
 {
     public class UpdateCategoryModel
     {
-        public string CategoryName { get; set; }
+        public string Title { get; set; }
         public IFormFile? FormFile { get; set; }
     }
 }

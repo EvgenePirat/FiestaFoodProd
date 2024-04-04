@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Categories;
+using Business.Models.Categories.Request;
+using Business.Models.Categories.Response;
 using CustomExceptions.CategoryCustomExceptions;
 using CustomExceptions.DishCustomExceptions;
 using DataAccess.Interfaces;
@@ -35,25 +36,26 @@ namespace Business.Services
         {
             var mappedModel = _mapper.Map<Category>(model);
 
-            var categoryExist = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.CategoryName, ct);
+            var categoryExist = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.Title, ct);
 
             if (categoryExist != null)
                 throw new CategoryArgumentException("Category with name already exist");
 
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
 
-            mappedModel.PhotoPaths = defaultPath;
+            mappedModel.Image = defaultPath;
+            mappedModel.Title = model.Title;
 
             _unitOfWork.CategoryRepository.Add(mappedModel);
 
             await _unitOfWork.SaveAsync(ct);
 
-            var category = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.CategoryName, ct);
+            var category = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.Title, ct);
 
             if (model.FormFile is not null)
                 await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
 
-            category.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+            category.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             return _mapper.Map<CategoryModel>(category);
         }
 
@@ -63,7 +65,7 @@ namespace Business.Services
 
             foreach (var category in categories)
             {
-                category.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(category.PhotoPaths, ct);
+                category.Image = await _mediaHandlerService.GetPhotoByPathAsync(category.Image, ct);
             }
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
         }
@@ -73,11 +75,11 @@ namespace Business.Services
             var categoryToUpdate = await _unitOfWork.CategoryRepository.GetByIdAsync(id, ct)
                                 ?? throw new CategoryArgumentException("Category with this id not exist");
 
-            var defaultPath = string.IsNullOrEmpty(categoryToUpdate.PhotoPaths)
+            var defaultPath = string.IsNullOrEmpty(categoryToUpdate.Image)
                 ? await _directoryService.GetDefaultPathAsync(categoryToUpdate, ct)
-                : categoryToUpdate.PhotoPaths;
+                : categoryToUpdate.Image;
 
-            if (categoryToUpdate.CategoryName != model.CategoryName)
+            if (categoryToUpdate.Image != model.Title)
                 await UpdateFolderAndPath(model,defaultPath,categoryToUpdate,ct);
 
             try
@@ -90,27 +92,27 @@ namespace Business.Services
             }
             catch
             {
-                if (categoryToUpdate.CategoryName != model.CategoryName)
-                    await _directoryService.RenameFolderAsync(defaultPath, categoryToUpdate.CategoryName, ct);
+                if (categoryToUpdate.Title != model.Title)
+                    await _directoryService.RenameFolderAsync(defaultPath, categoryToUpdate.Title, ct);
 
                 throw new CategoryArgumentException("An error occurred while updating the Category.");
             }
-            categoryToUpdate.PhotoPaths = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+            categoryToUpdate.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             return _mapper.Map<CategoryModel>(categoryToUpdate);
         }
 
         private async Task UpdateFolderAndPath(UpdateCategoryModel model, string defaultPath, Category categoryToUpdate, CancellationToken ct)
         {
-            await _directoryService.RenameFolderAsync(defaultPath, model.CategoryName, ct);
+            await _directoryService.RenameFolderAsync(defaultPath, model.Title, ct);
 
-            categoryToUpdate.CategoryName = model.CategoryName;
+            categoryToUpdate.Title = model.Title;
 
             defaultPath = await _directoryService.GetDefaultPathAsync(categoryToUpdate, ct);
 
             if (string.IsNullOrEmpty(defaultPath))
                 throw new DirectoryNotFoundException("Exception with directory (not found)");
 
-            categoryToUpdate.PhotoPaths = defaultPath;
+            categoryToUpdate.Image = defaultPath;
         }
 
         public async Task DeleteCategoryAsync(int id, CancellationToken ct)
@@ -120,7 +122,7 @@ namespace Business.Services
 
             _unitOfWork.CategoryRepository.Delete(categoryToDelete);
 
-            await _directoryService.DeleteFolderByPathAsync(categoryToDelete.PhotoPaths, ct);
+            await _directoryService.DeleteFolderByPathAsync(categoryToDelete.Image, ct);
 
             await _unitOfWork.SaveAsync(ct);
         }

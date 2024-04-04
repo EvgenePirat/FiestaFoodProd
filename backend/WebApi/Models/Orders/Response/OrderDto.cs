@@ -8,6 +8,7 @@ namespace WebApi.Models.Orders.Response
     public class OrderDto
     {
         public Guid Id { get; set; }
+        public int Number { get; set; }
         public IEnumerable<OrderItemDto> OrderItems { get; set; }
         public OrderDetailDto OrderDetail { get; set; }
         public OrderState OrderState { get; set; }

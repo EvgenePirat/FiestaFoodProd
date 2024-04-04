@@ -6,8 +6,7 @@ namespace WebApi.Models.IngredientsDto.Request
 {
     public class UpdateIngredientDto
     {
-        public string Name { get; set; }
-        public Importance Importance { get; set; }
+        public string Title { get; set; }
         public UpdateQuantityDto Quantity { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Business.Models.Categories;
+using Business.Models.Categories.Request;
+using Business.Models.Categories.Response;
 using Entities.Entities;
 
 namespace Business.Mappers

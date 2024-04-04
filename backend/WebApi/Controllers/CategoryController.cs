@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
-using Business.Models.Categories;
+using Business.Models.Categories.Request;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models.CategoriesDto.Request;
 using WebApi.Models.CategoriesDto.Response;

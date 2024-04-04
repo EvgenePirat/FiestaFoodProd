@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
 
         public async Task<Category?> FindByCategoryNameAsync(string name, CancellationToken ct)
         {
-            return await _context.Categories.FirstOrDefaultAsync(u => u.CategoryName == name, cancellationToken: ct);
+            return await _context.Categories.FirstOrDefaultAsync(u => u.Title == name, cancellationToken: ct);
         }
     }
 }

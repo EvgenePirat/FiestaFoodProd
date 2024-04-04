@@ -1,4 +1,5 @@
-﻿using Business.Models.Dishes;
+﻿using Business.Models.Dishes.Request;
+using Business.Models.Dishes.Response;
 using Business.Models.DishIngredients.Request;
 using Business.Models.Filter;
 using Business.Models.Pagination;

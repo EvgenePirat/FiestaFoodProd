@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Business.Models.Categories;
+using Business.Models.Categories.Request;
+using Business.Models.Categories.Response;
 using WebApi.Models.CategoriesDto.Request;
 using WebApi.Models.CategoriesDto.Response;
 

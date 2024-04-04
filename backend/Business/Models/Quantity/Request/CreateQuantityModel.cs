@@ -6,5 +6,6 @@ namespace Business.Models.Quantity.Request
     {
         public Measurement Measurement { get; set; }
         public double Count { get; set; }
+        public double MinCount { get; set; }
     }
 }
