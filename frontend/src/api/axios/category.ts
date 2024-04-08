@@ -4,19 +4,27 @@ import { CategoryType } from '../../types/CategoryType.ts';
 export default function (instance: AxiosInstance) {
   return {
     getAllCategory() {
-      return console.log('Get all category');
+      return instance.get<CategoryType>('/api/Category/all');
     },
 
     deleteCategoryById(id: number) {
-      return console.log('Delete category by id');
+      return instance.delete(`/api/Category/${id}`);
     },
 
-    postCategory(payload: Pick<CategoryType, 'categoryName' | 'photoPaths'>) {
-      return console.log('Post category');
+    postCategory(payload: { Title: CategoryType['title']; FormFile: File }) {
+      return instance.post<CategoryType>('/api/Category', payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
     },
 
-    putCategory(payload: CategoryType) {
-      return console.log('Put category');
+    putCategory(id: CategoryType['id'], payload: { Title: CategoryType['title']; FormFile: File }) {
+      return instance.put<CategoryType>(`/api/Category/${id}`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
     }
   };
 }
