@@ -35,7 +35,7 @@ export default function DishCatalog() {
             Повернутись
           </NavLink>
         )}
-        <p className={styles['book-mark']}>{type?.categoryName ?? typeValue ?? 'Усі товари'}</p>
+        <p className={styles['book-mark']}>{type?.title ?? typeValue ?? 'Усі товари'}</p>
       </div>
       <div className={styles['list-block']}>
         {typeValue ? (
@@ -53,8 +53,8 @@ export default function DishCatalog() {
             {types.map((obj) => (
               <DishCard
                 key={obj.id}
-                title={obj.categoryName}
-                image={obj.photoPaths}
+                title={obj.title}
+                image={obj.image}
                 onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
               />
             ))}

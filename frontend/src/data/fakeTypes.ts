@@ -10,33 +10,33 @@ import { CategoryType } from '../types/CategoryType.ts';
 const types: CategoryType[] = [
   {
     id: 1,
-    categoryName: 'Бургери',
-    photoPaths: burgerImg
+    title: 'Бургери',
+    image: burgerImg
   },
   {
     id: 2,
-    categoryName: 'М`ясо',
-    photoPaths: meatImg
+    title: 'М`ясо',
+    image: meatImg
   },
   {
     id: 3,
-    categoryName: 'Напої',
-    photoPaths: drinkImg
+    title: 'Напої',
+    image: drinkImg
   },
   {
     id: 4,
-    categoryName: 'Салати',
-    photoPaths: saladImg
+    title: 'Салати',
+    image: saladImg
   },
   {
     id: 5,
-    categoryName: 'Картопля',
-    photoPaths: snacksImg
+    title: 'Картопля',
+    image: snacksImg
   },
   {
     id: 6,
-    categoryName: 'Шаурма',
-    photoPaths: kebabImg
+    title: 'Шаурма',
+    image: kebabImg
   }
 ];
 
