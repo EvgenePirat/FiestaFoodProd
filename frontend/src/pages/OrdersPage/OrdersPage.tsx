@@ -36,6 +36,7 @@ export default function OrdersPage() {
           )}
         </div>
       </section>
+      <hr className={styles['hr']} />
       <section className={`${styles['section']} ${styles['progress']}`}>
         <p className={styles['title']}>Готуються</p>
         <div className={styles['orders-block']}>
