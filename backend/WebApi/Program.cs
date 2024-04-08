@@ -38,21 +38,21 @@ var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User=SA;P
 //var connectionString = builder.Configuration.GetConnectionString("StDatabase");
 builder.Services.AddDbContext<StContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
-    cors =>
-    {
-        cors.AllowAnyHeader()
-            .AllowAnyMethod()
-            .SetIsOriginAllowed((_) => true)
-            .AllowCredentials();
-    }));
 
-builder.Services.AddCors(o =>
+builder.Services.AddCors(options =>
 {
-    o.AddPolicy("AllowAnyOrigin", p => p
-        .WithOrigins("null") // Origin of an html file opened in a browser
-        .AllowAnyHeader()
-        .AllowCredentials());
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+    options.AddPolicy("SignalR",
+        builder => builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .SetIsOriginAllowed(hostName => true));
 });
 builder.Services.AddSignalR();
 
@@ -100,7 +100,7 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 //app.UseHttpsRedirection();
 
 //app.UseCors("CorsPolicy");
-app.UseCors("AllowAnyOrigin");
+app.UseCors("CorsPolicy");
 app.MapHub<OrderHub>("/orderHub");
 
 
