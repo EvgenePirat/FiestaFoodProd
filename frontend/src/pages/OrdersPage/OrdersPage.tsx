@@ -22,33 +22,34 @@ export default function OrdersPage() {
 
   return (
     <div className={styles['page-block']}>
-      <section className={`${styles['section']} ${styles['todo']}`}>
-        <p className={styles['title']}>Нові замовлення</p>
-        <div className={styles['orders-block']}>
-          {ordersTodo.length ? (
+      <section className={`${styles['section-orders']} ${styles['todo']}`}>
+        {ordersTodo.length ? (
+          <>
+            <p className={styles['title']}>Нові замовлення</p>
             <div className={styles['list']}>
               {ordersTodo.map((order) => (
                 <OrderCard key={order.id} {...order} />
               ))}
             </div>
-          ) : (
-            <p className={styles['empty-message']}>Нових замовлень немає</p>
-          )}
-        </div>
+          </>
+        ) : (
+          <p className={styles['empty-message']}>Нових замовлень немає</p>
+        )}
       </section>
-      <section className={`${styles['section']} ${styles['progress']}`}>
-        <p className={styles['title']}>Готуються</p>
-        <div className={styles['orders-block']}>
-          {ordersProgress.length ? (
+      <hr className={styles['hr']} />
+      <section className={`${styles['section-orders']} ${styles['progress']}`}>
+        {ordersProgress.length ? (
+          <>
+            <p className={styles['title']}>Готуються</p>
             <div className={styles['list']}>
               {ordersProgress.map((order) => (
                 <OrderCard key={order.id} {...order} />
               ))}
             </div>
-          ) : (
-            <p className={styles['empty-message']}>Зараз нічого не готується</p>
-          )}
-        </div>
+          </>
+        ) : (
+          <p className={styles['empty-message']}>Зараз нічого не готується</p>
+        )}
       </section>
     </div>
   );
