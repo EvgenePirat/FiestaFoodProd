@@ -168,7 +168,7 @@ namespace Business.Services
 
             foreach (var dishIngredientModel in model)
             {
-                foreach (var elem in dish.DishIngridients)
+                foreach (var elem in dish.DishIngredients)
                 {
                     if (elem.IngredientId == dishIngredientModel.IngredientId)
                     {
@@ -177,7 +177,7 @@ namespace Business.Services
                     }
                     else
                     {
-                        var dishIngredient = _mapper.Map<DishIngridient>(dishIngredientModel);
+                        var dishIngredient = _mapper.Map<DishIngredient>(dishIngredientModel);
                         dishIngredient.DishId = dishId;
                         _unitOfWork.DishIngredientRepository.Add(dishIngredient);
                     }

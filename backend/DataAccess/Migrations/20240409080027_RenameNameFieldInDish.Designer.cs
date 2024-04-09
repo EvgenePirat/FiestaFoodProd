@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(StContext))]
-    [Migration("20240331094522_AddNewFieldInOrderDetails")]
-    partial class AddNewFieldInOrderDetails
+    [Migration("20240409080027_RenameNameFieldInDish")]
+    partial class RenameNameFieldInDish
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,11 +33,11 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CategoryName")
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhotoPaths")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -57,23 +57,16 @@ namespace DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhotoPaths")
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -82,7 +75,7 @@ namespace DataAccess.Migrations
                     b.ToTable("Dishes");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
+            modelBuilder.Entity("Entities.Entities.DishIngredient", b =>
                 {
                     b.Property<int>("DishId")
                         .HasColumnType("int");
@@ -108,10 +101,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Importance")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -125,6 +115,9 @@ namespace DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("OrderCreateDate")
                         .HasColumnType("datetime2");
@@ -149,9 +142,6 @@ namespace DataAccess.Migrations
                 {
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("EntryValue")
-                        .HasColumnType("float");
 
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
@@ -203,6 +193,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("Measurement")
                         .HasColumnType("int");
 
+                    b.Property<double>("MinCount")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientId")
@@ -245,7 +238,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
+            modelBuilder.Entity("Entities.Entities.DishIngredient", b =>
                 {
                     b.HasOne("Entities.Entities.Dish", "Dish")
                         .WithMany("DishIngredients")

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
-    public class DishIngredientRepository : RepositoryBase<DishIngridient>, IDishIngredientRepository
+    public class DishIngredientRepository : RepositoryBase<DishIngredient>, IDishIngredientRepository
     {
         public DishIngredientRepository(StContext context) : base(context)
         {

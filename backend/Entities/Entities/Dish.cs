@@ -18,7 +18,7 @@ namespace Entities.Entities
         public virtual Category Category { get; set; }
         public string Image { get; set; }
         public IEnumerable<OrderItem> OrderItems { get; set; }
-        public IEnumerable<DishIngridient> DishIngridients { get; set; }
+        public IEnumerable<DishIngredient> DishIngredients { get; set; }
     }
 }
  

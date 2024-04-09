@@ -11,7 +11,7 @@ namespace WebApi.Mappers
         public DishIngredientDtoProfile()
         {
             CreateMap<CreateDishIngridientDto, CreateDishIngridientModel>();
-            CreateMap<DishIngridientModel, DishIngridientDto>();
+            CreateMap<DishIngredientModel, DishIngredientDto>();
             CreateMap<UpdateDishIngredientDto, UpdateDishIngredientModel>();
         }
     }

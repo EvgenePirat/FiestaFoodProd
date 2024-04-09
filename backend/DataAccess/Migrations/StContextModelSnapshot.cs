@@ -72,7 +72,7 @@ namespace DataAccess.Migrations
                     b.ToTable("Dishes");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
+            modelBuilder.Entity("Entities.Entities.DishIngredient", b =>
                 {
                     b.Property<int>("DishId")
                         .HasColumnType("int");
@@ -87,7 +87,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("DishIngridients");
+                    b.ToTable("DishIngredients");
                 });
 
             modelBuilder.Entity("Entities.Entities.Ingredient", b =>
@@ -235,16 +235,16 @@ namespace DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Entities.Entities.DishIngridient", b =>
+            modelBuilder.Entity("Entities.Entities.DishIngredient", b =>
                 {
                     b.HasOne("Entities.Entities.Dish", "Dish")
-                        .WithMany("DishIngridients")
+                        .WithMany("DishIngredients")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Entities.Ingredient", "Ingredient")
-                        .WithMany("DishIngridients")
+                        .WithMany("DishIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -304,14 +304,14 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Entities.Dish", b =>
                 {
-                    b.Navigation("DishIngridients");
+                    b.Navigation("DishIngredients");
 
                     b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Entities.Entities.Ingredient", b =>
                 {
-                    b.Navigation("DishIngridients");
+                    b.Navigation("DishIngredients");
 
                     b.Navigation("Quantity")
                         .IsRequired();

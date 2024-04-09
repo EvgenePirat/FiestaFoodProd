@@ -10,6 +10,6 @@ namespace WebApi.Models.DishesDto.Response
         public double Price { get; set; }
         public int CategoryId { get; set; }
         public string? Image { get; set; }
-        public IEnumerable<DishIngridientDto> DishIngridients { get; set; }
+        public IEnumerable<DishIngredientDto> DishIngredients { get; set; }
     }
 }

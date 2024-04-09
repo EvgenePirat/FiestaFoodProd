@@ -1,6 +1,6 @@
-﻿namespace Business.Models.DishIngredients.Request
+﻿namespace WebApi.Models.DishIngredientsDto.Response
 {
-    public class UpdateDishIngredientModel
+    public class DishIngredientDto
     {
         public int IngredientId { get; set; }
         public double Count { get; set; }

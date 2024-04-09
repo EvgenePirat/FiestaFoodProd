@@ -8,6 +8,6 @@ namespace Entities.Entities
         public int Id { get; set; }
         public string Title { get; set; }
         public Quantity Quantity { get; set; }
-        public IEnumerable<DishIngridient> DishIngridients { get; set; }
+        public IEnumerable<DishIngredient> DishIngredients { get; set; }
     }
 }

@@ -177,7 +177,7 @@ namespace Business.Services
                 var ingredients = await _unitOfWork.IngredientsRepository.GetAllAsync(ct);
 
                 if (dish is null) continue;
-                foreach (var dishIngredient in dish.DishIngridients)
+                foreach (var dishIngredient in dish.DishIngredients)
                 {
                     var ingredient = ingredients.FirstOrDefault(i => i.Id == dishIngredient.IngredientId);
 

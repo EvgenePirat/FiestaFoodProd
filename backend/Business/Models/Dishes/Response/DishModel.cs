@@ -10,6 +10,6 @@ namespace Business.Models.Dishes.Response
         public double Price { get; set; }
         public int CategoryId { get; set; }
         public string? Image { get; set; }
-        public IEnumerable<DishIngridientModel> DishIngridients { get; set; }
+        public IEnumerable<DishIngredientModel> DishIngredients { get; set; }
     }
 }

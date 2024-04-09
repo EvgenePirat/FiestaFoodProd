@@ -38,7 +38,7 @@ public partial class StContext : DbContext
     public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<Dish> Dishes { get; set; }
     public DbSet<Ingredient> Ingredients { get; set; }
-    public DbSet<DishIngridient> DishIngridients { get; set; }
+    public DbSet<DishIngredient> DishIngredients { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Quantity> Quantities { get; set; }
 
@@ -53,17 +53,17 @@ public partial class StContext : DbContext
             .HasForeignKey<Quantity>(q => q.IngredientId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<DishIngridient>()
+        modelBuilder.Entity<DishIngredient>()
             .HasKey(di => new { di.DishId, di.IngredientId });
 
-        modelBuilder.Entity<DishIngridient>()
+        modelBuilder.Entity<DishIngredient>()
             .HasOne(di => di.Ingredient)
-            .WithMany(ing => ing.DishIngridients)
+            .WithMany(ing => ing.DishIngredients)
             .HasForeignKey(di => di.IngredientId);
 
-        modelBuilder.Entity<DishIngridient>()
+        modelBuilder.Entity<DishIngredient>()
             .HasOne(di => di.Dish)
-            .WithMany(di => di.DishIngridients)
+            .WithMany(di => di.DishIngredients)
             .HasForeignKey(di => di.DishId)
             .OnDelete(DeleteBehavior.Cascade);
 

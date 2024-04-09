@@ -159,7 +159,7 @@ namespace DataAccess.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateTable(
-                name: "DishIngridients",
+                name: "DishIngredients",
                 columns: table => new
                 {
                     DishId = table.Column<int>(type: "int", nullable: false),
@@ -217,7 +217,7 @@ namespace DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_DishIngridients_IngredientId",
-                table: "DishIngridients",
+                table: "DishIngredients",
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
@@ -254,7 +254,7 @@ namespace DataAccess.Migrations
                 table: "OrderDetails");
 
             migrationBuilder.DropTable(
-                name: "DishIngridients");
+                name: "DishIngredients");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");

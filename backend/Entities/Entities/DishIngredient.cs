@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Entities
 {
-    public class DishIngridient : IEntity
+    public class DishIngredient : IEntity
     {
         public int DishId { get; set; }
 

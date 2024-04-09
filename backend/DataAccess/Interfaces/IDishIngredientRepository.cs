@@ -2,7 +2,7 @@
 
 namespace DataAccess.Interfaces
 {
-    public interface IDishIngredientRepository : IRepositoryBase<DishIngridient>
+    public interface IDishIngredientRepository : IRepositoryBase<DishIngredient>
     {
     }
 }

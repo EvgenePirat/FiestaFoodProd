@@ -1,8 +1,6 @@
-﻿using Business.Models.Ingredients.Response;
-
-namespace Business.Models.DishIngredients.Response
+﻿namespace Business.Models.DishIngredients.Response
 {
-    public class DishIngridientModel
+    public class DishIngredientModel
     {
         public int DishId { get; set; }
         public int IngredientId { get; set; }

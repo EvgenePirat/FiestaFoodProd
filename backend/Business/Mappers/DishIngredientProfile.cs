@@ -9,9 +9,9 @@ namespace Business.Mappers
     {
         public DishIngredientProfile()
         {
-            CreateMap<CreateDishIngridientModel, DishIngridient>();
-            CreateMap<DishIngridient, DishIngridientModel>();
-            CreateMap<UpdateDishIngredientModel, DishIngridient>();
+            CreateMap<CreateDishIngridientModel, DishIngredient>();
+            CreateMap<DishIngredient, DishIngredientModel>();
+            CreateMap<UpdateDishIngredientModel, DishIngredient>();
         }
     }
 }
