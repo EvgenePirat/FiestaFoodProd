@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import authSlice from './authSlice';
 import ordersSlice from './ordersSlice';
-import productsSlice from './productsSlice';
+import productsSlice from './dishesSlice.ts';
 
 const reducer = combineReducers({
   authSlice,

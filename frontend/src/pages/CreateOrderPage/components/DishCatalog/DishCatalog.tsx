@@ -11,8 +11,8 @@ import { DishCard } from '..';
 import styles from './DishCatalog.module.scss';
 
 export default function DishCatalog() {
-  const types = useSelector((state: RootState) => state.productsSlice.types);
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const types = useSelector((state: RootState) => state.productsSlice.categories);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { type: typeValue } = useParams();

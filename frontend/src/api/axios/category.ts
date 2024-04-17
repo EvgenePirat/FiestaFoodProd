@@ -4,7 +4,7 @@ import { CategoryType } from '../../types/CategoryType.ts';
 export default function (instance: AxiosInstance) {
   return {
     getAllCategory() {
-      return instance.get<CategoryType>('/api/Category/all');
+      return instance.get<CategoryType[]>('/api/Category/all');
     },
 
     deleteCategoryById(id: number) {

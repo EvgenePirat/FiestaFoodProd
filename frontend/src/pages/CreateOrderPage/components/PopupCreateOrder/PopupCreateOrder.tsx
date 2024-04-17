@@ -30,7 +30,7 @@ interface PopupCreateOrderProps {
 }
 
 export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
   const dispatch = useDispatch();
 

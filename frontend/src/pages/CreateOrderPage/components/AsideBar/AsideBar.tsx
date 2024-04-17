@@ -8,7 +8,7 @@ import { OrderItem, PopupCreateOrder, PopupSubmitClear } from '../';
 import styles from './AsideBar.module.scss';
 
 export default function AsideBar() {
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
 
   const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);

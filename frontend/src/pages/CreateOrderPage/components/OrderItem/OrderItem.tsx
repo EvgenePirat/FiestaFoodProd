@@ -14,7 +14,7 @@ interface OrderItemProps {
 }
 
 export default function OrderItem({ item }: OrderItemProps) {
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const dispatch = useDispatch();
 
   const [posX, setPosX] = useState<number | null>(null);

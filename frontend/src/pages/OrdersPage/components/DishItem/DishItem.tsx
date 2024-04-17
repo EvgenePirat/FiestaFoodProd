@@ -12,7 +12,7 @@ interface DishItemProps {
 }
 
 export default function DishItem({ id, count, comment }: DishItemProps) {
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
 
   const dish = useMemo(() => dishes.find((obj) => obj.id === id), [dishes, id]);
 
