@@ -17,8 +17,8 @@ export default function MainLayout() {
   useEffect(() => {
     (async () => {
       await dispatch(loadCategories());
+      await dispatch(loadDishes());
     })();
-    dispatch(loadDishes());
     dispatch(loadOrders());
   }, [dispatch]);
 
