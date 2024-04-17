@@ -1,7 +1,7 @@
 import { DishType } from './DishType.ts';
 
 export type OrderItemType = {
-  id: DishType['id'];
+  dishId: DishType['id'];
   count: number;
   comment: string;
 };

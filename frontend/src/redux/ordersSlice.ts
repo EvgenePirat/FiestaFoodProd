@@ -23,39 +23,41 @@ const ordersSlice = createSlice({
     loadOrders: (state) => {
       state.orders = orders;
     },
-    addItem: (state, action: PayloadAction<OrderItemType['id']>) => {
-      if (state.order.every((obj) => obj.id !== action.payload)) {
-        state.order.push({ id: action.payload, count: 1, comment: '' });
+    addItem: (state, action: PayloadAction<OrderItemType['dishId']>) => {
+      if (state.order.every((obj) => obj.dishId !== action.payload)) {
+        state.order.push({ dishId: action.payload, count: 1, comment: '' });
       }
     },
-    removeItem: (state, action: PayloadAction<OrderItemType['id']>) => {
-      state.order = state.order.filter((obj) => obj.id !== action.payload);
+    removeItem: (state, action: PayloadAction<OrderItemType['dishId']>) => {
+      state.order = state.order.filter((obj) => obj.dishId !== action.payload);
     },
     changeCount: (
       state,
-      action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['count'] }>
+      action: PayloadAction<{ id: OrderItemType['dishId']; value: OrderItemType['count'] }>
     ) => {
-      const item = state.order.find((obj) => obj.id === action.payload.id);
+      const item = state.order.find((obj) => obj.dishId === action.payload.id);
       if (item) item.count = action.payload.value;
     },
     changeComment: (
       state,
-      action: PayloadAction<{ id: OrderItemType['id']; value: OrderItemType['comment'] }>
+      action: PayloadAction<{ id: OrderItemType['dishId']; value: OrderItemType['comment'] }>
     ) => {
-      const item = state.order.find((obj) => obj.id === action.payload.id);
+      const item = state.order.find((obj) => obj.dishId === action.payload.id);
       if (item) item.comment = action.payload.value;
     },
     clearOrder: (state) => {
       state.order = [];
     },
-    createOrder: (state, action: PayloadAction<Pick<OrderType, 'finalSum' | 'payment'>>) => {
-      const date = Date.now();
+    createOrder: (state, action: PayloadAction<OrderType['orderDetail']>) => {
+      const orderCreateDate = Date.now().toString();
       state.orders.push({
-        id: date,
-        date,
-        list: state.order,
-        ...action.payload,
-        status: OrderState.todo
+        id: orderCreateDate,
+        number: 1,
+        orderCreateDate: orderCreateDate,
+        orderFinishedDate: 'data',
+        orderItems: state.order,
+        orderDetail: action.payload,
+        orderState: OrderState.todo
       });
       state.order = [];
     },
@@ -64,7 +66,7 @@ const ordersSlice = createSlice({
       action: PayloadAction<{ id: OrderType['id']; value: OrderState }>
     ) => {
       const order = state.orders.find((obj) => obj.id === action.payload.id);
-      if (order) order.status = action.payload.value;
+      if (order) order.orderState = action.payload.value;
     }
   }
 });

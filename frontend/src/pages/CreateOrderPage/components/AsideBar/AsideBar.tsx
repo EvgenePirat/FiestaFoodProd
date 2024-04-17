@@ -17,7 +17,7 @@ export default function AsideBar() {
   const sum = useMemo(
     () =>
       order.reduce((acc, item) => {
-        const dish = dishes.find((obj) => obj.id === item.id);
+        const dish = dishes.find((obj) => obj.id === item.dishId);
         return acc + (dish?.price ?? 0) * item.count;
       }, 0),
     [order, dishes]
@@ -50,7 +50,7 @@ export default function AsideBar() {
         {order.length ? (
           <ul className={styles['list']}>
             {order.map((obj) => (
-              <OrderItem key={obj.id} item={obj} />
+              <OrderItem key={obj.dishId} item={obj} />
             ))}
           </ul>
         ) : (

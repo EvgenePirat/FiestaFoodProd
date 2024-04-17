@@ -1,9 +1,16 @@
 import { CategoryType } from './CategoryType.ts';
+import { IngredientType } from './IngredientType.ts';
+
+export type DishIngredients = {
+  ingredientId: IngredientType['id'];
+  count: number;
+};
 
 export type DishType = {
   id: number;
   title: string;
-  image: string;
   price: number;
-  category: CategoryType['id'];
+  categoryId: CategoryType['id'];
+  image: string;
+  dishIngredients: DishIngredients[];
 };

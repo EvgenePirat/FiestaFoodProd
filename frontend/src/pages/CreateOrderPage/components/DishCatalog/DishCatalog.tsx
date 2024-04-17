@@ -24,7 +24,7 @@ export default function DishCatalog() {
 
   const displayDishes = useMemo(() => {
     if (!typeValue) return [];
-    return dishes.filter((obj) => obj.category === +typeValue);
+    return dishes.filter((obj) => obj.categoryId === +typeValue);
   }, [dishes, typeValue]);
 
   return (

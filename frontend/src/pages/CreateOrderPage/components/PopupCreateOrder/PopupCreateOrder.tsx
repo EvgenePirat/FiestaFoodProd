@@ -35,23 +35,23 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
   const dispatch = useDispatch();
 
   const [discount, setDiscount] = useState(0);
-  const [payment, setPayment] = useState<Payment | null>(null);
+  const [paymentType, setPaymentType] = useState<Payment | null>(null);
 
-  const sum = useMemo(
+  const sumDishes = useMemo(
     () =>
       order.reduce((acc, item) => {
-        const dish = dishes.find((obj) => obj.id === item.id);
+        const dish = dishes.find((obj) => obj.id === item.dishId);
         return acc + (dish?.price ?? 0) * item.count;
       }, 0),
     [order, dishes]
   );
 
-  const finalSum = useMemo(() => (sum * (100 - discount)) / 100, [discount, sum]);
+  const sum = useMemo(() => (sumDishes * (100 - discount)) / 100, [discount, sumDishes]);
 
   const createOrderHandler = useCallback(() => {
-    if (payment) dispatch(createOrder({ finalSum, payment }));
+    if (paymentType) dispatch(createOrder({ sum, paymentType }));
     if (onClose) onClose();
-  }, [payment, dispatch, finalSum, onClose]);
+  }, [paymentType, dispatch, sum, onClose]);
 
   return (
     <Popup onClose={onClose}>
@@ -59,7 +59,7 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
         <div className={styles['info-block']}>
           <div className={styles['info']}>
             <p className={styles['sum']}>
-              Загалом: <span className={styles['value']}>{sum.toFixed(2)} грн</span>
+              Загалом: <span className={styles['value']}>{sumDishes.toFixed(2)} грн</span>
             </p>
             <div className={styles['discount-block']}>
               <span>Знижка:</span>
@@ -73,12 +73,12 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
               ))}
             </div>
           </div>
-          <p className={styles['final-sum']}>{finalSum.toFixed(2)} грн</p>
+          <p className={styles['final-sum']}>{sum.toFixed(2)} грн</p>
         </div>
         <div className={styles['pays-block']}>
           {paymentMethods.map((obj) => (
             <label className={styles['pay-label']} key={obj.value}>
-              <input type="radio" name="payment" onChange={() => setPayment(obj.value)} />
+              <input type="radio" name="payment" onChange={() => setPaymentType(obj.value)} />
               <span className={styles['pay']}>
                 <obj.icon className={styles['icon']} />
                 {obj.title}
@@ -90,7 +90,7 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
           btnStyle="success"
           className={styles['create-btn']}
           onClick={createOrderHandler}
-          disabled={payment === null}>
+          disabled={paymentType === null}>
           Розраховано
         </Button>
       </div>

@@ -22,12 +22,12 @@ export default function OrderItem({ item }: OrderItemProps) {
   const [value, setValue] = useState(item.comment);
 
   const dish = useMemo(() => {
-    return dishes.find((obj) => obj.id === item.id);
-  }, [item.id, dishes]);
+    return dishes.find((obj) => obj.id === item.dishId);
+  }, [item.dishId, dishes]);
 
   const onBlurHandler = useCallback(() => {
-    dispatch(changeComment({ id: item.id, value }));
-  }, [dispatch, item.id, value]);
+    dispatch(changeComment({ id: item.dishId, value }));
+  }, [dispatch, item.dishId, value]);
 
   const onTouchStartHandler = useCallback((e: React.TouchEvent<HTMLLIElement>) => {
     setPosX(e.touches[0].clientX);
@@ -52,14 +52,14 @@ export default function OrderItem({ item }: OrderItemProps) {
   );
 
   const removeItemHandler = useCallback(() => {
-    dispatch(removeItem(item.id));
-  }, [dispatch, item.id]);
+    dispatch(removeItem(item.dishId));
+  }, [dispatch, item.dishId]);
 
   const changeItemCountHandler = useCallback(
     (value: number) => {
-      if (value !== item.count) dispatch(changeCount({ id: item.id, value }));
+      if (value !== item.count) dispatch(changeCount({ id: item.dishId, value }));
     },
-    [dispatch, item.count, item.id]
+    [dispatch, item.count, item.dishId]
   );
 
   return (
@@ -98,7 +98,7 @@ export default function OrderItem({ item }: OrderItemProps) {
           />
         </>
       ) : (
-        <p className={styles['not-found']}>Not Found {item.id}</p>
+        <p className={styles['not-found']}>Not Found {item.dishId}</p>
       )}
       <button
         className={`${styles['delete-btn']} ${isVisible ? styles['active'] : ''}`}

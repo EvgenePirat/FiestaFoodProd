@@ -12,18 +12,18 @@ import styles from './OrderCard.module.scss';
 
 interface OrderCardProps {
   id: OrderType['id'];
-  date: OrderType['date'];
-  list: OrderType['list'];
-  status: OrderType['status'];
+  orderCreateDate: OrderType['orderCreateDate'];
+  orderItems: OrderType['orderItems'];
+  orderState: OrderType['orderState'];
 }
 
-export default function OrderCard({ id, date, list, status }: OrderCardProps) {
+export default function OrderCard({ id, orderCreateDate, orderItems, orderState }: OrderCardProps) {
   const dispatch = useDispatch();
 
   const time = useMemo(() => {
-    const dateObj = new Date(date);
+    const dateObj = new Date(orderCreateDate);
     return `${dateObj.getHours()}:${dateObj.getMinutes()}`;
-  }, [date]);
+  }, [orderCreateDate]);
 
   const startOrder = useCallback(() => {
     dispatch(changeOrderStatus({ id, value: OrderState.progress }));
@@ -40,11 +40,11 @@ export default function OrderCard({ id, date, list, status }: OrderCardProps) {
         <p className={styles['time']}>{time}</p>
       </div>
       <div className={styles['list']}>
-        {list.map((item) => (
-          <DishItem key={item.id} {...item} />
+        {orderItems.map((item) => (
+          <DishItem key={item.dishId} {...item} />
         ))}
       </div>
-      {status === OrderState.todo ? (
+      {orderState === OrderState.todo ? (
         <Button btnStyle="danger" onClick={startOrder}>
           Готувати
         </Button>

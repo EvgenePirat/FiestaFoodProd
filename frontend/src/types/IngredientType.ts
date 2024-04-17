@@ -1,4 +1,4 @@
-type Quantity = {
+export type Quantity = {
   measurement: string;
   count: number;
   minCount: number;

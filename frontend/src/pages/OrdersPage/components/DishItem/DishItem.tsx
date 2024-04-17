@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 
 interface DishItemProps {
-  id: OrderItemType['id'];
+  id: OrderItemType['dishId'];
   count: OrderItemType['count'];
   comment: OrderItemType['comment'];
 }

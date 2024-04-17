@@ -2,17 +2,17 @@ import { OrderItemType } from '../types/OrderItemType';
 
 const order: OrderItemType[] = [
   {
-    id: 1,
+    dishId: 1,
     count: 3,
     comment: 'Example'
   },
   {
-    id: 4,
+    dishId: 4,
     count: 3,
     comment: ''
   },
   {
-    id: 2,
+    dishId: 2,
     count: 1,
     comment: ''
   }

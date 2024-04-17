@@ -3,163 +3,169 @@ import { OrderState, Payment } from '../types/enums';
 
 const orders: OrderType[] = [
   {
-    id: 13,
-    date: 1711720138804,
-    list: [
+    id: '13',
+    number: 1,
+    orderCreateDate: '1711720138804',
+    orderFinishedDate: '1711720138804',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 5,
+        dishId: 5,
         count: 3,
         comment: ''
       },
       {
-        id: 6,
+        dishId: 6,
         count: 3,
         comment: ''
       },
       {
-        id: 7,
+        dishId: 7,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.todo
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.todo
   },
   {
-    id: 15,
-    date: 1711720143252,
-    list: [
+    id: '15',
+    number: 2,
+    orderCreateDate: '1711720143252',
+    orderFinishedDate: '1711720143252',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.progress
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.progress
   },
   {
-    id: 16,
-    date: 1711720150188,
-    list: [
+    id: '16',
+    number: 3,
+    orderCreateDate: '1711720150188',
+    orderFinishedDate: '1711720150188',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.todo
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.todo
   },
   {
-    id: 23,
-    date: 1711720138804,
-    list: [
+    id: '23',
+    number: 4,
+    orderCreateDate: '1711720138804',
+    orderFinishedDate: '1711720138804',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.todo
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.todo
   },
   {
-    id: 25,
-    date: 1711720143252,
-    list: [
+    id: '25',
+    number: 5,
+    orderCreateDate: '1711720143252',
+    orderFinishedDate: '1711720143252',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.todo
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.todo
   },
   {
-    id: 26,
-    date: 1711720150188,
-    list: [
+    id: '26',
+    number: 6,
+    orderCreateDate: '1711720150188',
+    orderFinishedDate: '1711720150188',
+    orderItems: [
       {
-        id: 1,
+        dishId: 1,
         count: 3,
         comment: 'Example'
       },
       {
-        id: 4,
+        dishId: 4,
         count: 3,
         comment: ''
       },
       {
-        id: 2,
+        dishId: 2,
         count: 1,
         comment: ''
       }
     ],
-    finalSum: 1000,
-    payment: Payment.card,
-    status: OrderState.progress
+    orderDetail: { sum: 1000, paymentType: Payment.card },
+    orderState: OrderState.progress
   }
 ];
 

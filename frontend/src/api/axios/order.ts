@@ -4,23 +4,31 @@ import { OrderType } from '../../types/OrderType.ts';
 export default function (instance: AxiosInstance) {
   return {
     getAllOrder(pageSize?: number, pageNumber?: number) {
-      return console.log('Get all order');
+      return instance.get<OrderType[]>('/api/Order/all', {
+        params: {
+          PageSize: pageSize,
+          PageNumber: pageNumber
+        }
+      });
     },
 
-    getOrderById(id: number) {
-      return console.log('Get order by id');
+    getOrderById(id: OrderType['id']) {
+      return instance.get<OrderType>(`/api/Order/${id}`);
     },
 
-    postOrder(payload: Omit<OrderType, 'id' | 'date'>) {
-      return console.log('Post order');
+    postOrder(payload: Pick<OrderType, 'orderDetail' | 'orderItems'>) {
+      return instance.post<OrderType>('/api/Order', payload);
     },
 
-    putOrder(payload: OrderType) {
-      return console.log('Put order');
+    putOrder(
+      id: OrderType['id'],
+      payload: Pick<OrderType, 'orderState' | 'orderFinishedDate' | 'orderItems'>
+    ) {
+      return instance.put<OrderType>(`/api/Order/${id}`, payload);
     },
 
-    deleteOrder(id: number) {
-      return console.log('Delete order id');
+    deleteOrder(id: OrderType['id']) {
+      return instance.delete(`/api/Order/${id}`);
     }
   };
 }
