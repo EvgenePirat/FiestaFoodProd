@@ -6,15 +6,15 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 
 interface DishItemProps {
-  id: OrderItemType['dishId'];
+  dishId: OrderItemType['dishId'];
   count: OrderItemType['count'];
   comment: OrderItemType['comment'];
 }
 
-export default function DishItem({ id, count, comment }: DishItemProps) {
+export default function DishItem({ dishId, count, comment }: DishItemProps) {
   const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
 
-  const dish = useMemo(() => dishes.find((obj) => obj.id === id), [dishes, id]);
+  const dish = useMemo(() => dishes.find((obj) => obj.id === dishId), [dishes, dishId]);
 
   return (
     <div className={styles['dish']}>
