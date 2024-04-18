@@ -18,8 +18,8 @@ export default function MainLayout() {
     (async () => {
       await dispatch(loadCategories());
       await dispatch(loadDishes());
+      await dispatch(loadOrders());
     })();
-    dispatch(loadOrders());
   }, [dispatch]);
 
   return (

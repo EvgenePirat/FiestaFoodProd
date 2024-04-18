@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store';
+import { AppDispatch, RootState } from '../../../../redux/store';
 import { createOrder } from '../../../../redux/ordersSlice';
 
 import { Payment } from '../../../../types/enums';
@@ -32,7 +32,7 @@ interface PopupCreateOrderProps {
 export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
   const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const order = useSelector((state: RootState) => state.ordersSlice.order);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [discount, setDiscount] = useState(0);
   const [paymentType, setPaymentType] = useState<Payment | null>(null);
@@ -48,10 +48,11 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
 
   const sum = useMemo(() => (sumDishes * (100 - discount)) / 100, [discount, sumDishes]);
 
-  const createOrderHandler = useCallback(() => {
-    if (paymentType) dispatch(createOrder({ sum, paymentType }));
+  const createOrderHandler = useCallback(async () => {
+    if (paymentType)
+      await dispatch(createOrder({ orderItems: order, orderDetail: { sum, paymentType } }));
     if (onClose) onClose();
-  }, [paymentType, dispatch, sum, onClose]);
+  }, [paymentType, dispatch, sum, onClose, order]);
 
   return (
     <Popup onClose={onClose}>

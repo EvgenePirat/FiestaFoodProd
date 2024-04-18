@@ -1,10 +1,9 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-import { OrderState } from '../types/enums';
 import { OrderItemType } from '../types/OrderItemType';
 import { OrderType } from '../types/OrderType';
 
-import { orders } from '../data/fakeOrders';
+import axios from '../api/axios';
 
 interface IOrdersState {
   order: OrderItemType[];
@@ -16,13 +15,37 @@ const initialState: IOrdersState = {
   orders: []
 };
 
+export const loadOrders = createAsyncThunk('order/loadOrders', async () => {
+  const response = await axios.order.getAllOrder();
+  return response.data;
+});
+
+export const createOrder = createAsyncThunk(
+  'order/createOrder',
+  async (payload: Pick<OrderType, 'orderDetail' | 'orderItems'>) => {
+    const response = await axios.order.postOrder(payload);
+    return response.data;
+  }
+);
+
+export const changeOrderStatus = createAsyncThunk(
+  'order/changeOrderStatus',
+  async ({
+    id,
+    payload
+  }: {
+    id: OrderType['id'];
+    payload: Parameters<typeof axios.order.putOrder>[1];
+  }) => {
+    const response = await axios.order.putOrder(id, payload);
+    return response.data;
+  }
+);
+
 const ordersSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    loadOrders: (state) => {
-      state.orders = orders;
-    },
     addItem: (state, action: PayloadAction<OrderItemType['dishId']>) => {
       if (state.order.every((obj) => obj.dishId !== action.payload)) {
         state.order.push({ dishId: action.payload, count: 1, comment: '' });
@@ -47,38 +70,27 @@ const ordersSlice = createSlice({
     },
     clearOrder: (state) => {
       state.order = [];
-    },
-    createOrder: (state, action: PayloadAction<OrderType['orderDetail']>) => {
-      const orderCreateDate = Date.now().toString();
-      state.orders.push({
-        id: orderCreateDate,
-        number: 1,
-        orderCreateDate: orderCreateDate,
-        orderFinishedDate: 'data',
-        orderItems: state.order,
-        orderDetail: action.payload,
-        orderState: OrderState.todo
-      });
-      state.order = [];
-    },
-    changeOrderStatus: (
-      state,
-      action: PayloadAction<{ id: OrderType['id']; value: OrderState }>
-    ) => {
-      const order = state.orders.find((obj) => obj.id === action.payload.id);
-      if (order) order.orderState = action.payload.value;
     }
+  },
+  extraReducers: (builder) => {
+    //loadOrders
+    builder.addCase(loadOrders.fulfilled, (state, action) => {
+      state.orders = action.payload.orders;
+    });
+
+    //createOrder
+    builder.addCase(createOrder.fulfilled, (state, action) => {
+      state.order = [];
+      state.orders.push(action.payload);
+    });
+
+    //changeOrderStatus
+    builder.addCase(changeOrderStatus.fulfilled, (state, action) => {
+      const idx = state.orders.findIndex((order) => order.id === action.payload.id);
+      if (idx >= 0) state.orders[idx] = action.payload;
+    });
   }
 });
 
-export const {
-  loadOrders,
-  addItem,
-  removeItem,
-  changeCount,
-  changeComment,
-  clearOrder,
-  createOrder,
-  changeOrderStatus
-} = ordersSlice.actions;
+export const { addItem, removeItem, changeCount, changeComment, clearOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;

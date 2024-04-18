@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeOrderStatus } from '../../../../redux/ordersSlice';
+import { AppDispatch } from '../../../../redux/store.ts';
 
 import { OrderState } from '../../../../types/enums';
 import { OrderType } from '../../../../types/OrderType';
@@ -18,19 +19,19 @@ interface OrderCardProps {
 }
 
 export default function OrderCard({ id, orderCreateDate, orderItems, orderState }: OrderCardProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const time = useMemo(() => {
     const dateObj = new Date(orderCreateDate);
     return `${dateObj.getHours()}:${dateObj.getMinutes()}`;
   }, [orderCreateDate]);
 
-  const startOrder = useCallback(() => {
-    dispatch(changeOrderStatus({ id, value: OrderState.progress }));
+  const startOrder = useCallback(async () => {
+    await dispatch(changeOrderStatus({ id, payload: { orderState: OrderState.progress } }));
   }, [dispatch, id]);
 
-  const completeOrder = useCallback(() => {
-    dispatch(changeOrderStatus({ id, value: OrderState.complete }));
+  const completeOrder = useCallback(async () => {
+    await dispatch(changeOrderStatus({ id, payload: { orderState: OrderState.complete } }));
   }, [dispatch, id]);
 
   return (
