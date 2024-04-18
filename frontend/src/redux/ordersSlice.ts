@@ -6,12 +6,12 @@ import { OrderType } from '../types/OrderType';
 import axios from '../api/axios';
 
 interface IOrdersState {
-  order: OrderItemType[];
+  orderItems: OrderItemType[];
   orders: OrderType[];
 }
 
 const initialState: IOrdersState = {
-  order: [],
+  orderItems: [],
   orders: []
 };
 
@@ -47,29 +47,29 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<OrderItemType['dishId']>) => {
-      if (state.order.every((obj) => obj.dishId !== action.payload)) {
-        state.order.push({ dishId: action.payload, count: 1, comment: '' });
+      if (state.orderItems.every((obj) => obj.dishId !== action.payload)) {
+        state.orderItems.push({ dishId: action.payload, count: 1, comment: '' });
       }
     },
     removeItem: (state, action: PayloadAction<OrderItemType['dishId']>) => {
-      state.order = state.order.filter((obj) => obj.dishId !== action.payload);
+      state.orderItems = state.orderItems.filter((obj) => obj.dishId !== action.payload);
     },
     changeCount: (
       state,
       action: PayloadAction<{ id: OrderItemType['dishId']; value: OrderItemType['count'] }>
     ) => {
-      const item = state.order.find((obj) => obj.dishId === action.payload.id);
+      const item = state.orderItems.find((obj) => obj.dishId === action.payload.id);
       if (item) item.count = action.payload.value;
     },
     changeComment: (
       state,
       action: PayloadAction<{ id: OrderItemType['dishId']; value: OrderItemType['comment'] }>
     ) => {
-      const item = state.order.find((obj) => obj.dishId === action.payload.id);
+      const item = state.orderItems.find((obj) => obj.dishId === action.payload.id);
       if (item) item.comment = action.payload.value;
     },
     clearOrder: (state) => {
-      state.order = [];
+      state.orderItems = [];
     }
   },
   extraReducers: (builder) => {
@@ -80,7 +80,7 @@ const ordersSlice = createSlice({
 
     //createOrder
     builder.addCase(createOrder.fulfilled, (state, action) => {
-      state.order = [];
+      state.orderItems = [];
       state.orders.push(action.payload);
     });
 

@@ -31,7 +31,7 @@ interface PopupCreateOrderProps {
 
 export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
   const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
-  const order = useSelector((state: RootState) => state.ordersSlice.order);
+  const orderItems = useSelector((state: RootState) => state.ordersSlice.orderItems);
   const dispatch = useDispatch<AppDispatch>();
 
   const [discount, setDiscount] = useState(0);
@@ -39,20 +39,20 @@ export default function PopupCreateOrder({ onClose }: PopupCreateOrderProps) {
 
   const sumDishes = useMemo(
     () =>
-      order.reduce((acc, item) => {
+      orderItems.reduce((acc, item) => {
         const dish = dishes.find((obj) => obj.id === item.dishId);
         return acc + (dish?.price ?? 0) * item.count;
       }, 0),
-    [order, dishes]
+    [orderItems, dishes]
   );
 
   const sum = useMemo(() => (sumDishes * (100 - discount)) / 100, [discount, sumDishes]);
 
   const createOrderHandler = useCallback(async () => {
     if (paymentType)
-      await dispatch(createOrder({ orderItems: order, orderDetail: { sum, paymentType } }));
+      await dispatch(createOrder({ orderItems: orderItems, orderDetail: { sum, paymentType } }));
     if (onClose) onClose();
-  }, [paymentType, dispatch, sum, onClose, order]);
+  }, [paymentType, dispatch, sum, onClose, orderItems]);
 
   return (
     <Popup onClose={onClose}>

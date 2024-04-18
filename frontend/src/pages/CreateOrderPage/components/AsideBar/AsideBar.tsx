@@ -9,18 +9,18 @@ import styles from './AsideBar.module.scss';
 
 export default function AsideBar() {
   const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
-  const order = useSelector((state: RootState) => state.ordersSlice.order);
+  const orderItems = useSelector((state: RootState) => state.ordersSlice.orderItems);
 
   const [isVisiblePopupClear, setIsVisiblePopupClear] = useState(false);
   const [isVisiblePopupCreate, setIsVisiblePopupCreate] = useState(false);
 
   const sum = useMemo(
     () =>
-      order.reduce((acc, item) => {
+      orderItems.reduce((acc, item) => {
         const dish = dishes.find((obj) => obj.id === item.dishId);
         return acc + (dish?.price ?? 0) * item.count;
       }, 0),
-    [order, dishes]
+    [orderItems, dishes]
   );
 
   const handleClear = useCallback(() => {
@@ -47,9 +47,9 @@ export default function AsideBar() {
           <span>Ціна</span>
           <span>Загалом</span>
         </div>
-        {order.length ? (
+        {orderItems.length ? (
           <ul className={styles['list']}>
-            {order.map((obj) => (
+            {orderItems.map((obj) => (
               <OrderItem key={obj.dishId} item={obj} />
             ))}
           </ul>
@@ -66,7 +66,7 @@ export default function AsideBar() {
           btnStyle="success"
           className={styles['create-btn']}
           onClick={handleCreate}
-          disabled={!order.length}>
+          disabled={!orderItems.length}>
           Розрахувати
         </Button>
       </div>
