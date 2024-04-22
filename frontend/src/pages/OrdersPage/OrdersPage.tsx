@@ -12,11 +12,11 @@ export default function OrdersPage() {
   const orders = useSelector((state: RootState) => state.ordersSlice.orders);
 
   const ordersTodo = useMemo(
-    () => orders.filter((order) => order.status === OrderState.todo),
+    () => orders.filter((order) => order.orderState === OrderState.todo),
     [orders]
   );
   const ordersProgress = useMemo(
-    () => orders.filter((order) => order.status === OrderState.progress),
+    () => orders.filter((order) => order.orderState === OrderState.progress),
     [orders]
   );
 

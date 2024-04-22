@@ -11,17 +11,20 @@ import { DishCard } from '..';
 import styles from './DishCatalog.module.scss';
 
 export default function DishCatalog() {
-  const types = useSelector((state: RootState) => state.productsSlice.types);
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
+  const types = useSelector((state: RootState) => state.productsSlice.categories);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { type: typeValue } = useParams();
 
-  const type = useMemo(() => types.find((obj) => obj.id === typeValue), [typeValue, types]);
+  const type = useMemo(
+    () => types.find((obj) => !!typeValue && obj.id === +typeValue),
+    [typeValue, types]
+  );
 
   const displayDishes = useMemo(() => {
     if (!typeValue) return [];
-    return dishes.filter((obj) => obj.type === typeValue);
+    return dishes.filter((obj) => obj.categoryId === +typeValue);
   }, [dishes, typeValue]);
 
   return (
@@ -50,7 +53,8 @@ export default function DishCatalog() {
             {types.map((obj) => (
               <DishCard
                 key={obj.id}
-                {...obj}
+                title={obj.title}
+                image={obj.image}
                 onClick={() => navigate(`/${routeCreateOrder}/${obj.id}`)}
               />
             ))}

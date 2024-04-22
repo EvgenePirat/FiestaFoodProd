@@ -2,10 +2,11 @@ import { OrderState, Payment } from './enums';
 import { OrderItemType } from './OrderItemType';
 
 export type OrderType = {
-  id: number;
-  date: number;
-  list: OrderItemType[];
-  finalSum: number;
-  payment: Payment;
-  status: OrderState;
+  id: string;
+  number: number;
+  orderItems: OrderItemType[];
+  orderDetail: { sum: number; paymentType: Payment };
+  orderState: OrderState;
+  orderCreateDate: string;
+  orderFinishedDate: string;
 };

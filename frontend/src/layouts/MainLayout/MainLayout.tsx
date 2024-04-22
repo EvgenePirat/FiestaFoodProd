@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { loadProducts, loadTypes } from '../../redux/productsSlice';
+import { RootState, AppDispatch } from '../../redux/store';
+import { loadDishes, loadCategories } from '../../redux/dishesSlice.ts';
 import { loadOrders } from '../../redux/ordersSlice';
 
 import { Header } from '../../components';
@@ -10,19 +10,21 @@ import { Header } from '../../components';
 import styles from './MainLayout.module.scss';
 
 export default function MainLayout() {
-  const types = useSelector((state: RootState) => state.productsSlice.types);
-  const dishes = useSelector((state: RootState) => state.productsSlice.products);
-  const dispatch = useDispatch();
+  const categories = useSelector((state: RootState) => state.productsSlice.categories);
+  const dishes = useSelector((state: RootState) => state.productsSlice.dishes);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(loadTypes());
-    dispatch(loadProducts());
-    dispatch(loadOrders());
+    (async () => {
+      await dispatch(loadCategories());
+      await dispatch(loadDishes());
+      await dispatch(loadOrders());
+    })();
   }, [dispatch]);
 
   return (
     <>
-      {types.length && dishes.length ? (
+      {categories.length && dishes.length ? (
         <div className={styles['main-block']}>
           <Header />
           <main className={styles['main']}>
