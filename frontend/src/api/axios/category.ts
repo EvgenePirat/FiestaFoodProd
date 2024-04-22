@@ -7,7 +7,7 @@ export default function (instance: AxiosInstance) {
       return instance.get<CategoryType[]>('/api/Category/all');
     },
 
-    deleteCategoryById(id: number) {
+    deleteCategory(id: CategoryType['id']) {
       return instance.delete(`/api/Category/${id}`);
     },
 
