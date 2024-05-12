@@ -1,4 +1,5 @@
-﻿using Business.Models.Filter;
+﻿using Business.Models.Enums;
+using Business.Models.Filter;
 using Business.Models.Orders.Request;
 using Business.Models.Orders.Response;
 using Business.Models.Pagination;
@@ -14,6 +15,10 @@ namespace Business.Interfaces
         Task<PagedOrdersModel> GetFilteredOrdersAsync(FilterModel filter, CancellationToken ct);
 
         Task<PagedOrdersModel> GetAllOrdersAsync(PaginationModel pagination, CancellationToken ct);
+
+        Task<IEnumerable<OrderModel>> GetOrdersByDateAndStatusAsync(DateTime date, OrderState state , CancellationToken ct);
+
+        Task<IEnumerable<OrderModel>> GetOrdersByDateAsync(DateTime date, CancellationToken ct);
 
         Task<OrderModel> UpdateOrderAsync(Guid id, UpdateOrderModel model, CancellationToken ct);
 

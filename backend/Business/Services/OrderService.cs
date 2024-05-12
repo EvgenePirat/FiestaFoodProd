@@ -211,5 +211,17 @@ namespace Business.Services
 
             return order;
         }
+
+        public async Task<IEnumerable<OrderModel>> GetOrdersByDateAndStatusAsync(DateTime date, OrderState state, CancellationToken ct)
+        {
+            var orders = await _unitOfWork.OrderRepository.GetAllByDateAndStateAsync(date, (Entities.Enums.OrderState)state, ct);
+            return _mapper.Map<IEnumerable<OrderModel>>(orders);
+        }
+
+        public async Task<IEnumerable<OrderModel>> GetOrdersByDateAsync(DateTime date, CancellationToken ct)
+        {
+            var orders = await _unitOfWork.OrderRepository.GetAllByDateAsync(date, ct);
+            return _mapper.Map<IEnumerable<OrderModel>>(orders);
+        }
     }
 }
