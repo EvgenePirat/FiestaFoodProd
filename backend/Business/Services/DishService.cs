@@ -11,6 +11,8 @@ using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
 using FileStorageHandler.Interfaces;
+using FileStorageHandler.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Services
 {
@@ -20,31 +22,34 @@ namespace Business.Services
         private readonly IMapper _mapper;
         private readonly IDirectoryService _directoryService;
         private readonly IFileService _fileService;
+        private readonly IMediaHandlerService _mediaHandlerService;
 
-        public DishService(IUnitOfWork unitOfWork,IMapper mapper, IDirectoryService directoryService, IFileService fileService)
+        public DishService(IUnitOfWork unitOfWork,IMapper mapper, IDirectoryService directoryService, IFileService fileService, IMediaHandlerService mediaHandlerService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _directoryService = directoryService;
             _fileService = fileService;
+            _mediaHandlerService = mediaHandlerService;
         }
 
         public async Task<DishModel> AddDishAsync(AddDishModel model, CancellationToken ct)
         {
             var mappedModel = await CheckDishEntityExist(model, ct);
 
-            // Initialize default defaultPath for Dish
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
-            // Create a folders by path
 
-            mappedModel.Image = defaultPath;
+            if (model.File is not null)
+            {
+                List<IFormFile> files = new List<IFormFile> { model.File };
+                await _fileService.UploadFilesAsync(files, defaultPath, ct);
+            }
+
+            mappedModel.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
 
             _unitOfWork.DishRepository.Add(mappedModel);
 
             await _unitOfWork.SaveAsync(ct);
-
-            if (model.Files is not null && model.Files.Any())
-                await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
 
             return _mapper.Map<DishModel>(mappedModel);
         }
@@ -115,8 +120,11 @@ namespace Business.Services
             {
                 _unitOfWork.DishRepository.Update(dishToUpdate);
                 await _unitOfWork.SaveAsync(ct);
-                if (model.Files is not null && model.Files.Any())
-                    await _fileService.UploadFilesAsync(model.Files, defaultPath, ct);
+                if (model.File is not null)
+                {
+                    List<IFormFile> files = new List<IFormFile> { model.File };
+                    await _fileService.UploadFilesAsync(files, defaultPath, ct);
+                }
             }
             catch
             {
@@ -142,6 +150,7 @@ namespace Business.Services
         private async Task<Dish> CheckDishEntityExist(AddDishModel model, CancellationToken ct)
         {
             var mappedModel = _mapper.Map<Dish>(model);
+            mappedModel.DishIngredients = _mapper.Map<IEnumerable<DishIngredient>>(model.DishIngridients);
 
             mappedModel.Category = await _unitOfWork.CategoryRepository.GetByIdAsync(model.CategoryId, ct)
                                    ?? throw new CategoryArgumentException($"Category with this {model.CategoryId} not exist");

@@ -36,8 +36,16 @@ namespace Business.Services
         private async Task<int> SetNumberInNewOrder(CancellationToken ct)
         {
             var orders = await _unitOfWork.OrderRepository.GetAllAsync(ct);
-            var lastOrder = orders.Last();
-            return lastOrder.Number == 100 ? 1 : lastOrder.Number+1;
+
+            if(orders.Count() == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                var lastOrder = orders.Last();
+                return lastOrder.Number == 100 ? 1 : lastOrder.Number + 1;
+            }
         }
 
         public async Task<OrderModel> CreateOrderAsync(CreateOrderModel model, CancellationToken ct)
