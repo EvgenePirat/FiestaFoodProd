@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Models.Enums;
 using Business.Models.Orders.Request;
+using Business.Models.Orders.Response;
 using Business.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using WebApi.Models.Orders.Request;
 using WebApi.Models.Orders.Response;
 using WebApi.Models.PaginationsDto;
@@ -88,6 +91,38 @@ namespace WebApi.Controllers
 
             _logger.LogInformation("{controller}.{method} - Get, Get Order by filter, Result - Ok, Task ended",
                 nameof(OrderController), nameof(GetAllOrderAsync));
+
+            return Ok(mappedResult);
+        }
+
+        [HttpGet("all/{date:DateTime}&{status}")]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersByDateAndStatusAsync(DateTime date, string status, CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - Get, Get orders by date and status, Task started",
+                nameof(OrderController), nameof(GetOrdersByDateAndStatusAsync));
+
+            var result = await _orderService.GetOrdersByDateAndStatusAsync(date,Enum.Parse<OrderState>(status), ct);
+
+            var mappedResult = _mapper.Map<IEnumerable<OrderDto>>(result);
+
+            _logger.LogInformation("{controller}.{method} - Get, Get orders by date and status, Result - Ok, Task ended",
+                nameof(OrderController), nameof(GetOrdersByDateAndStatusAsync));
+
+            return Ok(mappedResult);
+        }
+
+        [HttpGet("all/{date:DateTime}")]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersByDateAsync(DateTime date, CancellationToken ct)
+        {
+            _logger.LogInformation("{controller}.{method} - Get, Get orders by date, Task started",
+                nameof(OrderController), nameof(GetOrdersByDateAndStatusAsync));
+
+            var result = await _orderService.GetOrdersByDateAsync(date, ct);
+
+            var mappedResult = _mapper.Map<IEnumerable<OrderDto>>(result);
+
+            _logger.LogInformation("{controller}.{method} - Get, Get orders by date, Result - Ok, Task ended",
+                nameof(OrderController), nameof(GetOrdersByDateAndStatusAsync));
 
             return Ok(mappedResult);
         }
