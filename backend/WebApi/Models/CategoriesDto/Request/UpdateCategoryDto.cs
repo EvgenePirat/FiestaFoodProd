@@ -6,6 +6,6 @@ namespace WebApi.Models.CategoriesDto.Request
     {
         public string Title { get; set; }
 
-        public IFormFile? FormFile { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

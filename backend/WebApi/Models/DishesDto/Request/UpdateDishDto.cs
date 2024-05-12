@@ -8,6 +8,6 @@ namespace WebApi.Models.DishesDto.Request
         public string Title { get; set; }
         public double Price { get; set; }
         public int CategoryId { get; set; }
-        public IEnumerable<IFormFile>? Files { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

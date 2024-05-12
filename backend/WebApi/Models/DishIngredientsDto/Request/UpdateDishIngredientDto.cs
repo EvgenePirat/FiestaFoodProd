@@ -5,7 +5,7 @@ namespace WebApi.Models.DishIngredientsDto.Request
 {
     public class UpdateDishIngredientDto
     {
-        public int IngredientId { get; set; }
+        public int Id { get; set; }
         public double Count { get; set; }
     }
 }
