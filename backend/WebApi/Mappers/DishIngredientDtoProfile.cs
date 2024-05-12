@@ -11,7 +11,10 @@ namespace WebApi.Mappers
         public DishIngredientDtoProfile()
         {
             CreateMap<CreateDishIngridientDto, CreateDishIngridientModel>();
-            CreateMap<DishIngredientModel, DishIngredientDto>();
+
+            CreateMap<DishIngredientModel, DishIngredientDto>()
+                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IngredientId));
+
             CreateMap<UpdateDishIngredientDto, UpdateDishIngredientModel>();
         }
     }

@@ -2,7 +2,7 @@
 {
     public class DishIngredientDto
     {
-        public int IngredientId { get; set; }
+        public int Id { get; set; }
         public double Count { get; set; }
     }
 }
