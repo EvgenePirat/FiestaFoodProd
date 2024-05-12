@@ -61,6 +61,9 @@ namespace FileStorageHandler.Services
 
         public async Task DeleteFolderByPathAsync(string path, CancellationToken ct)
         {
+            if (path.StartsWith("/"))
+                path = path.Substring(1);
+
             var fullPath = Path.Combine(_projectDirectory, path);
 
             try

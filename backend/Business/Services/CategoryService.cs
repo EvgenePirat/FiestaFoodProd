@@ -7,6 +7,7 @@ using CustomExceptions.DishCustomExceptions;
 using DataAccess.Interfaces;
 using Entities.Entities;
 using FileStorageHandler.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Services
 {
@@ -43,7 +44,13 @@ namespace Business.Services
 
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
 
-            mappedModel.Image = defaultPath;
+            if (model.File is not null)
+            {
+                List<IFormFile> files = new List<IFormFile> { model.File };
+                await _fileService.UploadFilesAsync(files, defaultPath, ct);
+            }
+
+            mappedModel.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             mappedModel.Title = model.Title;
 
             _unitOfWork.CategoryRepository.Add(mappedModel);
@@ -51,11 +58,7 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
 
             var category = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.Title, ct);
-
-            if (model.FormFile is not null)
-                await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
-
-            category.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+                
             return _mapper.Map<CategoryModel>(category);
         }
 
@@ -63,10 +66,6 @@ namespace Business.Services
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync(ct);
 
-            foreach (var category in categories)
-            {
-                category.Image = await _mediaHandlerService.GetPhotoByPathAsync(category.Image, ct);
-            }
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
         }
 
@@ -87,8 +86,11 @@ namespace Business.Services
                 _unitOfWork.CategoryRepository.Update(categoryToUpdate);
                 await _unitOfWork.SaveAsync(ct);
 
-                if (model.FormFile is not null)
-                    await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
+                if (model.File is not null)
+                {
+                    List<IFormFile> files = new List<IFormFile> { model.File };
+                    await _fileService.UploadFilesAsync(files, defaultPath, ct);
+                }
             }
             catch
             {
@@ -122,9 +124,24 @@ namespace Business.Services
 
             _unitOfWork.CategoryRepository.Delete(categoryToDelete);
 
-            await _directoryService.DeleteFolderByPathAsync(categoryToDelete.Image, ct);
+            await _directoryService.DeleteFolderByPathAsync(GetPathOnlyFolders(categoryToDelete.Image), ct);
 
             await _unitOfWork.SaveAsync(ct);
+        }
+
+        private string GetPathOnlyFolders(string defaultPath)
+        {
+            int startIndex = defaultPath.IndexOf("Media") + "Media".Length;
+
+            int endIndex = defaultPath.LastIndexOf("/");
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                string folderPath = defaultPath.Substring(startIndex, endIndex - startIndex);
+                return folderPath;
+            }
+
+            return defaultPath;
         }
     }
 }
