@@ -10,6 +10,6 @@ namespace Business.Models.Dishes.Request
         public double Price { get; set; }
         public int CategoryId { get; set; }
         public IEnumerable<CreateDishIngridientModel> DishIngridients { get; set; }
-        public IEnumerable<IFormFile>? Files { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

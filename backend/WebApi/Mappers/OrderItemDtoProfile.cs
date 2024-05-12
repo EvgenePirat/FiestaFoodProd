@@ -10,9 +10,14 @@ namespace WebApi.Mappers
     {
         public OrderItemDtoProfile()
         {
-            CreateMap<CreateOrderItemDto, CreateOrderItemModel>();
-            CreateMap<UpdateOrderItemDto, UpdateOrderItemModel>();
-            CreateMap<OrderItemModel, OrderItemDto>();
+            CreateMap<CreateOrderItemDto, CreateOrderItemModel>()
+                .ForMember(dest => dest.DishId, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<UpdateOrderItemDto, UpdateOrderItemModel>()
+                .ForMember(dest => dest.DishId, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<OrderItemModel, OrderItemDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DishId));
         }
     }
 }

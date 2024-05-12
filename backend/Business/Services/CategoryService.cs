@@ -7,6 +7,8 @@ using CustomExceptions.DishCustomExceptions;
 using DataAccess.Interfaces;
 using Entities.Entities;
 using FileStorageHandler.Interfaces;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Business.Services
 {
@@ -43,7 +45,13 @@ namespace Business.Services
 
             var defaultPath = await _directoryService.GetDefaultPathAsync(mappedModel, ct);
 
-            mappedModel.Image = defaultPath;
+            if (model.File is not null)
+            {
+                List<IFormFile> files = new List<IFormFile> { model.File };
+                await _fileService.UploadFilesAsync(files, defaultPath, ct);
+            }
+
+            mappedModel.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
             mappedModel.Title = model.Title;
 
             _unitOfWork.CategoryRepository.Add(mappedModel);
@@ -51,11 +59,7 @@ namespace Business.Services
             await _unitOfWork.SaveAsync(ct);
 
             var category = await _unitOfWork.CategoryRepository.FindByCategoryNameAsync(model.Title, ct);
-
-            if (model.FormFile is not null)
-                await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
-
-            category.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+                
             return _mapper.Map<CategoryModel>(category);
         }
 
@@ -63,10 +67,6 @@ namespace Business.Services
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync(ct);
 
-            foreach (var category in categories)
-            {
-                category.Image = await _mediaHandlerService.GetPhotoByPathAsync(category.Image, ct);
-            }
             return _mapper.Map<IEnumerable<CategoryModel>>(categories);
         }
 
@@ -75,35 +75,46 @@ namespace Business.Services
             var categoryToUpdate = await _unitOfWork.CategoryRepository.GetByIdAsync(id, ct)
                                 ?? throw new CategoryArgumentException("Category with this id not exist");
 
-            var defaultPath = string.IsNullOrEmpty(categoryToUpdate.Image)
-                ? await _directoryService.GetDefaultPathAsync(categoryToUpdate, ct)
-                : categoryToUpdate.Image;
-
-            if (categoryToUpdate.Image != model.Title)
-                await UpdateFolderAndPath(model,defaultPath,categoryToUpdate,ct);
-
             try
             {
+                if (categoryToUpdate.Title != model.Title && model.File is null)
+                {
+                    await UpdateFolderAndPath(model, categoryToUpdate.Image, categoryToUpdate, ct);
+                }
+                else
+                {
+                    await _directoryService.DeleteFolderByPathAsync(GetPathOnlyFolders(categoryToUpdate.Image), ct);
+
+                    var defaultPath = await _directoryService.GetDefaultPathAsync(categoryToUpdate, ct);
+
+                    if (model.File is not null)
+                    {
+                        List<IFormFile> files = new List<IFormFile> { model.File };
+                        await _fileService.UploadFilesAsync(files, defaultPath, ct);
+                    }
+
+                    categoryToUpdate.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+                    categoryToUpdate.Title = model.Title;
+                }
+
                 _unitOfWork.CategoryRepository.Update(categoryToUpdate);
                 await _unitOfWork.SaveAsync(ct);
-
-                if (model.FormFile is not null)
-                    await _fileService.UploadFileAsync(model.FormFile, defaultPath, ct);
             }
             catch
             {
                 if (categoryToUpdate.Title != model.Title)
-                    await _directoryService.RenameFolderAsync(defaultPath, categoryToUpdate.Title, ct);
+                    await _directoryService.RenameFolderAsync(GetPathOnlyFolders(categoryToUpdate.Image), categoryToUpdate.Title, ct);
 
                 throw new CategoryArgumentException("An error occurred while updating the Category.");
             }
-            categoryToUpdate.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
+
+            categoryToUpdate.Image = await _mediaHandlerService.GetPhotoByPathAsync(GetPathOnlyFolders(categoryToUpdate.Image), ct);
             return _mapper.Map<CategoryModel>(categoryToUpdate);
         }
 
         private async Task UpdateFolderAndPath(UpdateCategoryModel model, string defaultPath, Category categoryToUpdate, CancellationToken ct)
         {
-            await _directoryService.RenameFolderAsync(defaultPath, model.Title, ct);
+            await _directoryService.RenameFolderAsync(GetPathOnlyFolders(defaultPath), model.Title, ct);
 
             categoryToUpdate.Title = model.Title;
 
@@ -112,7 +123,7 @@ namespace Business.Services
             if (string.IsNullOrEmpty(defaultPath))
                 throw new DirectoryNotFoundException("Exception with directory (not found)");
 
-            categoryToUpdate.Image = defaultPath;
+            categoryToUpdate.Image = await _mediaHandlerService.GetPhotoByPathAsync(defaultPath, ct);
         }
 
         public async Task DeleteCategoryAsync(int id, CancellationToken ct)
@@ -122,9 +133,28 @@ namespace Business.Services
 
             _unitOfWork.CategoryRepository.Delete(categoryToDelete);
 
-            await _directoryService.DeleteFolderByPathAsync(categoryToDelete.Image, ct);
+            await _directoryService.DeleteFolderByPathAsync(GetPathOnlyFolders(categoryToDelete.Image), ct);
 
             await _unitOfWork.SaveAsync(ct);
+        }
+
+        private string GetPathOnlyFolders(string defaultPath)
+        {
+            int startIndex = defaultPath.IndexOf("Media") + "Media".Length;
+
+            int endIndex = defaultPath.LastIndexOf("/");
+
+            if (startIndex != -1 && endIndex != -1)
+            {
+                string folderPath = defaultPath.Substring(startIndex, endIndex - startIndex);
+
+                if (folderPath.StartsWith("/"))
+                    folderPath = folderPath.Substring(1);
+
+                return folderPath;
+            }
+
+            return defaultPath;
         }
     }
 }

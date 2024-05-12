@@ -6,7 +6,7 @@ namespace WebApi.Models.OrdemItems.Request
     public class CreateOrderItemDto
     {
         [Required]
-        public int DishId { get; set; }
+        public int Id { get; set; }
         [Required]
         public int Count { get; set; }
         public string? Comment { get; set; }

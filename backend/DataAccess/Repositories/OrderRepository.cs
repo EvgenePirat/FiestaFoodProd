@@ -3,6 +3,7 @@ using DataAccess.Data;
 using DataAccess.Interfaces;
 using DataAccess.Utilities;
 using Entities.Entities;
+using Entities.Enums;
 using Entities.Pagination;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,18 @@ namespace DataAccess.Repositories
     {
         public OrderRepository(StContext context) : base(context)
         {
+        }
+
+        public async Task<IEnumerable<Order>> GetAllByDateAndStateAsync(DateTime date, OrderState state, CancellationToken ct)
+        {
+            var orders = await _context.Orders.IncludeAll().Where(o => o.OrderCreateDate.Date == date.Date).Where(o => o.OrderState == state).ToListAsync();
+            return orders;
+        }
+
+        public async Task<IEnumerable<Order>> GetAllByDateAsync(DateTime date, CancellationToken ct)
+        {
+            var orders = await _context.Orders.IncludeAll().Where(o => o.OrderCreateDate.Date == date.Date).ToListAsync();
+            return orders;
         }
 
         public async Task<PaginationResult<Order>> GetAllOrdersPagination(PaginationDb pagination, CancellationToken ct)
